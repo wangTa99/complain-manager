@@ -1,0 +1,69 @@
+package com.wt.complaint.manage.api.model.enums;
+
+import com.wt.complaint.manage.api.model.resp.common.CommonOptionResp;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
+/**
+ * 交付客诉，有责无责相关枚�?
+ * @author huxiankang
+ * @date 2025/6/13
+ */
+@Getter
+@AllArgsConstructor
+public enum ResponsibleEnum {
+
+    INIT(0, "-"),// 前端需要这个选项来筛选未判责的工�?
+    RESPONSIBLE(1, "有责"),
+    NOT_RESPONSIBLE(2, "无责"),
+    PENDING(3, "待判�?);
+
+    private final Integer code;
+    private final String name;
+
+    /**
+     * 根据code获取desc
+     * @param code code
+     * @return desc
+     */
+    public static String getDescByCode(Integer code) {
+        for (ResponsibleEnum value : ResponsibleEnum.values()) {
+            if (Objects.equals(value.getCode(), code)) {
+                return value.getName();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 根据状态码code获取判责结果枚举�?
+     * @param code 状态码
+     * @return 判责结果枚举�?
+     */
+    public static ResponsibleEnum getEnumByCode(Integer code) {
+        for (ResponsibleEnum value : ResponsibleEnum.values()) {
+            if (Objects.equals(value.getCode(), code)) {
+                return value;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 获取下拉选项列表
+     * @return 下拉选项列表
+     */
+    public static List<CommonOptionResp> getCommonOptionList() {
+        return Arrays.stream(ResponsibleEnum.values()).map(value ->
+                CommonOptionResp.builder()
+                        .statusCode(value.getCode())
+                        .statusName(value.getName())
+                        .build()
+        ).collect(Collectors.toList());
+    }
+}

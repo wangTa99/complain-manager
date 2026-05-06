@@ -1,0 +1,913 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wt.complaint.manage.infrastructure.mapper.RetailComplaintMapper">
+    <resultMap id="BaseResultMap" type="com.wt.complaint.manage.infrastructure.model.RetailComplaintDO">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="dr_no" jdbcType="VARCHAR" property="drNo"/>
+        <result column="idempotent_key" jdbcType="VARCHAR" property="idempotentKey"/>
+        <result column="source" jdbcType="BIT" property="source"/>
+        <result column="trade_order_id" jdbcType="VARCHAR" property="tradeOrderId"/>
+        <result column="super_ticket_no" jdbcType="VARCHAR" property="superTicketNo"/>
+        <result column="so_no" jdbcType="VARCHAR" property="soNo"/>
+        <result column="order_status" jdbcType="TINYINT" property="orderStatus"/>
+        <result column="contact_name_c" jdbcType="VARCHAR" property="contactNameC"/>
+        <result column="contact_name_md5" jdbcType="VARCHAR" property="contactNameMd5"/>
+        <result column="contact_phone_c" jdbcType="VARCHAR" property="contactPhoneC"/>
+        <result column="contact_phone_md5" jdbcType="CHAR" property="contactPhoneMd5"/>
+        <result column="test_tag" jdbcType="TINYINT" property="testTag"/>
+        <result column="first_response_tag" jdbcType="BIT" property="firstResponseTag"/>
+        <result column="finish_tag" jdbcType="BIT" property="finishTag"/>
+        <result column="responsible" jdbcType="BIT" property="responsible"/>
+        <result column="risk_level" jdbcType="VARCHAR" property="riskLevel"/>
+        <result column="complaint_type" jdbcType="BIT" property="complaintType"/>
+        <result column="operator_position_id" jdbcType="INTEGER" property="operatorPositionId"/>
+        <result column="operator_mid" jdbcType="BIGINT" property="operatorMid"/>
+        <result column="customer_service_mid" jdbcType="BIGINT" property="customerServiceMid"/>
+        <result column="zone_id" jdbcType="INTEGER" property="zoneId"/>
+        <result column="little_zone_id" jdbcType="INTEGER" property="littleZoneId"/>
+        <result column="city_zone_id" jdbcType="INTEGER" property="cityZoneId"/>
+        <result column="city_id" jdbcType="INTEGER" property="cityId"/>
+        <result column="org_id" jdbcType="VARCHAR" property="orgId"/>
+        <result column="problem_category" jdbcType="VARCHAR" property="problemCategory"/>
+        <result column="problem_desc" jdbcType="VARCHAR" property="problemDesc"/>
+        <result column="last_category_id" jdbcType="INTEGER" property="lastCategoryId"/>
+        <result column="complaint_scene" jdbcType="VARCHAR" property="complaintScene"/>
+        <result column="last_complaint_scene_id" jdbcType="INTEGER" property="lastComplaintSceneId"/>
+        <result column="reminder_times" jdbcType="INTEGER" property="reminderTimes"/>
+        <result column="last_reminder_time" jdbcType="TIMESTAMP" property="lastReminderTime"/>
+        <result column="reassignment_times" jdbcType="INTEGER" property="reassignmentTimes"/>
+        <result column="last_reassignment_time" jdbcType="TIMESTAMP" property="lastReassignmentTime"/>
+        <result column="expected_first_response_time" jdbcType="TIMESTAMP" property="expectedFirstResponseTime"/>
+        <result column="real_first_response_time" jdbcType="TIMESTAMP" property="realFirstResponseTime"/>
+        <result column="expected_finish_time" jdbcType="TIMESTAMP" property="expectedFinishTime"/>
+        <result column="real_finish_time" jdbcType="TIMESTAMP" property="realFinishTime"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="create_mid" jdbcType="BIGINT" property="createMid"/>
+    </resultMap>
+    <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs"
+               type="com.wt.complaint.manage.infrastructure.model.RetailComplaintDO">
+        <result column="complaint_content" jdbcType="LONGVARCHAR" property="complaintContent"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, dr_no, idempotent_key, source, trade_order_id, super_ticket_no, so_no, order_status,
+        contact_name_c, contact_name_md5, contact_phone_c, contact_phone_md5,contact_gender, test_tag,
+        first_response_tag, finish_tag,
+        responsible, risk_level, complaint_type, operator_position_id, operator_mid, customer_service_mid,
+        zone_id, little_zone_id, city_zone_id, city_id, org_id, problem_category, problem_desc, last_category_id,
+        complaint_scene, last_complaint_scene_id,
+        reminder_times, last_reminder_time, reassignment_times, last_reassignment_time, expected_first_response_time,
+        real_first_response_time, expected_finish_time, real_finish_time, create_time, update_time,
+        create_mid
+    </sql>
+    <sql id="Blob_Column_List">
+        complaint_content
+    </sql>
+    <sql id="Search_Column_List">
+        dr_no,
+        contact_name_c,
+        contact_phone_c,
+        complaint_type,
+        order_status,
+        update_time,
+        risk_level,
+        problem_category,
+        problem_desc,
+        reminder_times,
+        expected_first_response_time,
+        expected_finish_time,
+        operator_mid,
+        org_id
+    </sql>
+    <sql id="Detail_Column_List">
+        dr_no,
+        source,
+        trade_order_id,
+        customer_service_mid,
+        super_ticket_no,
+        order_status,
+        contact_name_c,
+        contact_phone_c,
+        contact_gender,
+        risk_level,
+        org_id,
+        complaint_type,
+        problem_category,
+        problem_desc,
+        reminder_times,
+        reminder_flag,
+        create_time,
+        update_time,
+        reassignment_times,
+        operator_position_id,
+        operator_mid,
+        zone_id,
+        little_zone_id,
+        city_id,
+        complaint_content,
+        create_mid
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="ResultMapWithBLOBs">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from deliver_retail_complaint_order
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+        delete from deliver_retail_complaint_order
+        where id = #{id,jdbcType=BIGINT}
+    </delete>
+    <insert id="insert" parameterType="com.wt.complaint.manage.infrastructure.model.RetailComplaintDO">
+        insert into deliver_retail_complaint_order (id, dr_no, idempotent_key,
+        source, trade_order_id, super_ticket_no,
+        so_no, order_status, contact_name_c,
+        contact_name_md5, contact_phone_c, contact_phone_md5,
+        test_tag, first_response_tag, finish_tag,
+        responsible, risk_level, complaint_type, operator_position_id,
+        operator_mid, customer_service_mid, zone_id,
+        little_zone_id, city_zone_id, city_id, org_id,
+        problem_category, problem_desc, last_category_id,
+        complaint_scene, last_complaint_scene_id,
+        reminder_times, last_reminder_time, reassignment_times,
+        last_reassignment_time, expected_first_response_time,
+        real_first_response_time, expected_finish_time,
+        real_finish_time, create_time, update_time,
+        create_mid, complaint_content)
+        values (#{id,jdbcType=BIGINT}, #{drNo,jdbcType=VARCHAR}, #{idempotentKey,jdbcType=VARCHAR},
+        #{source,jdbcType=BIT}, #{tradeOrderId,jdbcType=VARCHAR}, #{superTicketNo,jdbcType=VARCHAR},
+        #{soNo,jdbcType=VARCHAR}, #{orderStatus,jdbcType=TINYINT}, #{contactNameC,jdbcType=VARCHAR},
+        #{contactNameMd5,jdbcType=VARCHAR}, #{contactPhoneC,jdbcType=VARCHAR}, #{contactPhoneMd5,jdbcType=CHAR},
+        #{testTag,jdbcType=TINYINT},
+        #{firstResponseTag,jdbcType=BIT}, #{finishTag,jdbcType=BIT}, #{responsible,jdbcType=BIT},
+        #{riskLevel,jdbcType=VARCHAR}, #{complaintType,jdbcType=BIT}, #{operatorPositionId,jdbcType=VARCHAR},
+        #{operatorMid,jdbcType=BIGINT}, #{customerServiceMid,jdbcType=BIGINT}, #{zoneId,jdbcType=INTEGER},
+        #{littleZoneId,jdbcType=INTEGER}, #{cityZoneId,jdbcType=INTEGER}, #{cityId,jdbcType=INTEGER}, #{orgId,jdbcType=VARCHAR},
+        #{problemCategory,jdbcType=VARCHAR}, #{problemDesc,jdbcType=VARCHAR}, #{lastCategoryId,jdbcType=INTEGER},
+        #{complaintScene,jdbcType=VARCHAR}, #{lastComplaintSceneId,jdbcType=INTEGER},
+        #{reminderTimes,jdbcType=INTEGER}, #{lastReminderTime,jdbcType=TIMESTAMP},
+        #{reassignmentTimes,jdbcType=INTEGER},
+        #{lastReassignmentTime,jdbcType=TIMESTAMP}, #{expectedFirstResponseTime,jdbcType=TIMESTAMP},
+        #{realFirstResponseTime,jdbcType=TIMESTAMP}, #{expectedFinishTime,jdbcType=TIMESTAMP},
+        #{realFinishTime,jdbcType=TIMESTAMP}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
+        #{createMid,jdbcType=BIGINT}, #{complaintContent,jdbcType=LONGVARCHAR})
+    </insert>
+    <insert id="insertSelective"
+            parameterType="com.wt.complaint.manage.infrastructure.model.RetailComplaintDO">
+        insert into deliver_retail_complaint_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="drNo != null">
+                dr_no,
+            </if>
+            <if test="idempotentKey != null">
+                idempotent_key,
+            </if>
+            <if test="source != null">
+                source,
+            </if>
+            <if test="tradeOrderId != null">
+                trade_order_id,
+            </if>
+            <if test="superTicketNo != null">
+                super_ticket_no,
+            </if>
+            <if test="soNo != null">
+                so_no,
+            </if>
+            <if test="orderStatus != null">
+                order_status,
+            </if>
+            <if test="contactNameC != null">
+                contact_name_c,
+            </if>
+            <if test="contactNameMd5 != null">
+                contact_name_md5,
+            </if>
+            <if test="contactPhoneC != null">
+                contact_phone_c,
+            </if>
+            <if test="contactPhoneMd5 != null">
+                contact_phone_md5,
+            </if>
+            <if test="contactGender != null">
+                contact_gender,
+            </if>
+            <if test="testTag != null">
+                test_tag,
+            </if>
+            <if test="firstResponseTag != null">
+                first_response_tag,
+            </if>
+            <if test="finishTag != null">
+                finish_tag,
+            </if>
+            <if test="responsible != null">
+                responsible,
+            </if>
+            <if test="riskLevel != null">
+                risk_level,
+            </if>
+            <if test="complaintType != null">
+                complaint_type,
+            </if>
+            <if test="operatorPositionId != null">
+                operator_position_id,
+            </if>
+            <if test="operatorMid != null">
+                operator_mid,
+            </if>
+            <if test="customerServiceMid != null">
+                customer_service_mid,
+            </if>
+            <if test="zoneId != null">
+                zone_id,
+            </if>
+            <if test="littleZoneId != null">
+                little_zone_id,
+            </if>
+            <if test="cityZoneId != null">
+                city_zone_id,
+            </if>
+            <if test="cityId != null">
+                city_id,
+            </if>
+            <if test="orgId != null">
+                org_id,
+            </if>
+            <if test="problemCategory != null">
+                problem_category,
+            </if>
+            <if test="problemDesc != null">
+                problem_desc,
+            </if>
+            <if test="lastCategoryId != null">
+                last_category_id,
+            </if>
+            <if test="complaintScene != null">
+                complaint_scene,
+            </if>
+            <if test="lastComplaintSceneId != null">
+                last_complaint_scene_id,
+            </if>
+            <if test="reminderTimes != null">
+                reminder_times,
+            </if>
+            <if test="lastReminderTime != null">
+                last_reminder_time,
+            </if>
+            <if test="reassignmentTimes != null">
+                reassignment_times,
+            </if>
+            <if test="lastReassignmentTime != null">
+                last_reassignment_time,
+            </if>
+            <if test="expectedFirstResponseTime != null">
+                expected_first_response_time,
+            </if>
+            <if test="realFirstResponseTime != null">
+                real_first_response_time,
+            </if>
+            <if test="expectedFinishTime != null">
+                expected_finish_time,
+            </if>
+            <if test="realFinishTime != null">
+                real_finish_time,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="createMid != null">
+                create_mid,
+            </if>
+            <if test="complaintContent != null">
+                complaint_content,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="drNo != null">
+                #{drNo,jdbcType=VARCHAR},
+            </if>
+            <if test="idempotentKey != null">
+                #{idempotentKey,jdbcType=VARCHAR},
+            </if>
+            <if test="source != null">
+                #{source,jdbcType=BIT},
+            </if>
+            <if test="tradeOrderId != null">
+                #{tradeOrderId,jdbcType=VARCHAR},
+            </if>
+            <if test="superTicketNo != null">
+                #{superTicketNo,jdbcType=VARCHAR},
+            </if>
+            <if test="soNo != null">
+                #{soNo,jdbcType=VARCHAR},
+            </if>
+            <if test="orderStatus != null">
+                #{orderStatus,jdbcType=TINYINT},
+            </if>
+            <if test="contactNameC != null">
+                #{contactNameC,jdbcType=VARCHAR},
+            </if>
+            <if test="contactNameMd5 != null">
+                #{contactNameMd5,jdbcType=VARCHAR},
+            </if>
+            <if test="contactPhoneC != null">
+                #{contactPhoneC,jdbcType=VARCHAR},
+            </if>
+            <if test="contactPhoneMd5 != null">
+                #{contactPhoneMd5,jdbcType=CHAR},
+            </if>
+            <if test="contactGender != null">
+                #{contactGender,jdbcType=TINYINT},
+            </if>
+            <if test="testTag != null">
+                #{testTag,jdbcType=TINYINT},
+            </if>
+            <if test="firstResponseTag != null">
+                #{firstResponseTag,jdbcType=BIT},
+            </if>
+            <if test="finishTag != null">
+                #{finishTag,jdbcType=BIT},
+            </if>
+            <if test="responsible != null">
+                #{responsible,jdbcType=BIT},
+            </if>
+            <if test="riskLevel != null">
+                #{riskLevel,jdbcType=VARCHAR},
+            </if>
+            <if test="complaintType != null">
+                #{complaintType,jdbcType=BIT},
+            </if>
+            <if test="operatorPositionId != null">
+                #{operatorPositionId,jdbcType=VARCHAR},
+            </if>
+            <if test="operatorMid != null">
+                #{operatorMid,jdbcType=BIGINT},
+            </if>
+            <if test="customerServiceMid != null">
+                #{customerServiceMid,jdbcType=BIGINT},
+            </if>
+            <if test="zoneId != null">
+                #{zoneId,jdbcType=INTEGER},
+            </if>
+            <if test="littleZoneId != null">
+                #{littleZoneId,jdbcType=INTEGER},
+            </if>
+            <if test="cityZoneId != null">
+                #{cityZoneId,jdbcType=INTEGER},
+            </if>
+            <if test="cityId != null">
+                #{cityId,jdbcType=INTEGER},
+            </if>
+            <if test="orgId != null">
+                #{orgId,jdbcType=VARCHAR},
+            </if>
+            <if test="problemCategory != null">
+                #{problemCategory,jdbcType=VARCHAR},
+            </if>
+            <if test="problemDesc != null">
+                #{problemDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="lastCategoryId != null">
+                #{lastCategoryId,jdbcType=INTEGER},
+            </if>
+            <if test="complaintScene != null">
+                #{complaintScene,jdbcType=VARCHAR},
+            </if>
+            <if test="lastComplaintSceneId != null">
+                #{lastComplaintSceneId,jdbcType=INTEGER},
+            </if>
+            <if test="reminderTimes != null">
+                #{reminderTimes,jdbcType=INTEGER},
+            </if>
+            <if test="lastReminderTime != null">
+                #{lastReminderTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="reassignmentTimes != null">
+                #{reassignmentTimes,jdbcType=INTEGER},
+            </if>
+            <if test="lastReassignmentTime != null">
+                #{lastReassignmentTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="expectedFirstResponseTime != null">
+                #{expectedFirstResponseTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="realFirstResponseTime != null">
+                #{realFirstResponseTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="expectedFinishTime != null">
+                #{expectedFinishTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="realFinishTime != null">
+                #{realFinishTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createMid != null">
+                #{createMid,jdbcType=BIGINT},
+            </if>
+            <if test="complaintContent != null">
+                #{complaintContent,jdbcType=LONGVARCHAR},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective"
+            parameterType="com.wt.complaint.manage.infrastructure.model.RetailComplaintDO">
+        update deliver_retail_complaint_order
+        <set>
+            <if test="drNo != null">
+                dr_no = #{drNo,jdbcType=VARCHAR},
+            </if>
+            <if test="idempotentKey != null">
+                idempotent_key = #{idempotentKey,jdbcType=VARCHAR},
+            </if>
+            <if test="source != null">
+                source = #{source,jdbcType=BIT},
+            </if>
+            <if test="tradeOrderId != null">
+                trade_order_id = #{tradeOrderId,jdbcType=VARCHAR},
+            </if>
+            <if test="superTicketNo != null">
+                super_ticket_no = #{superTicketNo,jdbcType=VARCHAR},
+            </if>
+            <if test="soNo != null">
+                so_no = #{soNo,jdbcType=VARCHAR},
+            </if>
+            <if test="orderStatus != null">
+                order_status = #{orderStatus,jdbcType=TINYINT},
+            </if>
+            <if test="contactNameC != null">
+                contact_name_c = #{contactNameC,jdbcType=VARCHAR},
+            </if>
+            <if test="contactNameMd5 != null">
+                contact_name_md5 = #{contactNameMd5,jdbcType=VARCHAR},
+            </if>
+            <if test="contactPhoneC != null">
+                contact_phone_c = #{contactPhoneC,jdbcType=VARCHAR},
+            </if>
+            <if test="contactPhoneMd5 != null">
+                contact_phone_md5 = #{contactPhoneMd5,jdbcType=CHAR},
+            </if>
+            <if test="testTag != null">
+                test_tag = #{testTag,jdbcType=TINYINT},
+            </if>
+            <if test="firstResponseTag != null">
+                first_response_tag = #{firstResponseTag,jdbcType=BIT},
+            </if>
+            <if test="finishTag != null">
+                finish_tag = #{finishTag,jdbcType=BIT},
+            </if>
+            <if test="responsible != null">
+                responsible = #{responsible,jdbcType=BIT},
+            </if>
+            <if test="riskLevel != null">
+                risk_level = #{riskLevel,jdbcType=VARCHAR},
+            </if>
+            <if test="complaintType != null">
+                complaint_type = #{complaintType,jdbcType=BIT},
+            </if>
+            <if test="operatorPositionId != null">
+                operator_position_id = #{operatorPositionId,jdbcType=VARCHAR},
+            </if>
+            <if test="operatorMid != null">
+                operator_mid = #{operatorMid,jdbcType=BIGINT},
+            </if>
+            <if test="customerServiceMid != null">
+                customer_service_mid = #{customerServiceMid,jdbcType=BIGINT},
+            </if>
+            <if test="zoneId != null">
+                zone_id = #{zoneId,jdbcType=INTEGER},
+            </if>
+            <if test="littleZoneId != null">
+                little_zone_id = #{littleZoneId,jdbcType=INTEGER},
+            </if>
+            <if test="cityZoneId != null">
+                city_zone_id = #{cityZoneId,jdbcType=INTEGER},
+            </if>
+            <if test="cityId != null">
+                city_id = #{cityId,jdbcType=INTEGER},
+            </if>
+            <if test="orgId != null">
+                org_id = #{orgId,jdbcType=VARCHAR},
+            </if>
+            <if test="problemCategory != null">
+                problem_category = #{problemCategory,jdbcType=VARCHAR},
+            </if>
+            <if test="problemDesc != null">
+                problem_desc = #{problemDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="lastCategoryId != null">
+                last_category_id = #{lastCategoryId,jdbcType=INTEGER},
+            </if>
+            <if test="complaintScene != null">
+                complaint_scene = #{complaintScene,jdbcType=VARCHAR},
+            </if>
+            <if test="lastComplaintSceneId != null">
+                last_complaint_scene_id = #{lastComplaintSceneId,jdbcType=INTEGER},
+            </if>
+            <if test="reminderTimes != null">
+                reminder_times = #{reminderTimes,jdbcType=INTEGER},
+            </if>
+            <if test="lastReminderTime != null">
+                last_reminder_time = #{lastReminderTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="reassignmentTimes != null">
+                reassignment_times = #{reassignmentTimes,jdbcType=INTEGER},
+            </if>
+            <if test="lastReassignmentTime != null">
+                last_reassignment_time = #{lastReassignmentTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="expectedFirstResponseTime != null">
+                expected_first_response_time = #{expectedFirstResponseTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="realFirstResponseTime != null">
+                real_first_response_time = #{realFirstResponseTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="expectedFinishTime != null">
+                expected_finish_time = #{expectedFinishTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="realFinishTime != null">
+                real_finish_time = #{realFinishTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createMid != null">
+                create_mid = #{createMid,jdbcType=BIGINT},
+            </if>
+            <if test="complaintContent != null">
+                complaint_content = #{complaintContent,jdbcType=LONGVARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs"
+            parameterType="com.wt.complaint.manage.infrastructure.model.RetailComplaintDO">
+        update deliver_retail_complaint_order
+        set dr_no = #{drNo,jdbcType=VARCHAR},
+        idempotent_key = #{idempotentKey,jdbcType=VARCHAR},
+        source = #{source,jdbcType=BIT},
+        trade_order_id = #{tradeOrderId,jdbcType=VARCHAR},
+        super_ticket_no = #{superTicketNo,jdbcType=VARCHAR},
+        so_no = #{soNo,jdbcType=VARCHAR},
+        order_status = #{orderStatus,jdbcType=TINYINT},
+        contact_name_c = #{contactNameC,jdbcType=VARCHAR},
+        contact_name_md5 = #{contactNameMd5,jdbcType=VARCHAR},
+        contact_phone_c = #{contactPhoneC,jdbcType=VARCHAR},
+        contact_phone_md5 = #{contactPhoneMd5,jdbcType=CHAR},
+        test_tag = #{testTag,jdbcType=TINYINT},
+        first_response_tag = #{firstResponseTag,jdbcType=BIT},
+        finish_tag = #{finishTag,jdbcType=BIT},
+        responsible = #{responsible,jdbcType=BIT},
+        risk_level = #{riskLevel,jdbcType=VARCHAR},
+        complaint_type = #{complaintType,jdbcType=BIT},
+        operator_position_id = #{operatorPositionId,jdbcType=VARCHAR},
+        operator_mid = #{operatorMid,jdbcType=BIGINT},
+        customer_service_mid = #{customerServiceMid,jdbcType=BIGINT},
+        zone_id = #{zoneId,jdbcType=INTEGER},
+        little_zone_id = #{littleZoneId,jdbcType=INTEGER},
+        city_zone_id = #{cityZoneId,jdbcType=INTEGER},
+        city_id = #{cityId,jdbcType=INTEGER},
+        org_id = #{orgId,jdbcType=VARCHAR},
+        problem_category = #{problemCategory,jdbcType=VARCHAR},
+        problem_desc = #{problemDesc,jdbcType=VARCHAR},
+        last_category_id = #{lastCategoryId,jdbcType=INTEGER},
+        complaint_scene = #{complaintScene,jdbcType=VARCHAR},
+        last_complaint_scene_id = #{lastComplaintSceneId,jdbcType=INTEGER},
+        reminder_times = #{reminderTimes,jdbcType=INTEGER},
+        last_reminder_time = #{lastReminderTime,jdbcType=TIMESTAMP},
+        reassignment_times = #{reassignmentTimes,jdbcType=INTEGER},
+        last_reassignment_time = #{lastReassignmentTime,jdbcType=TIMESTAMP},
+        expected_first_response_time = #{expectedFirstResponseTime,jdbcType=TIMESTAMP},
+        real_first_response_time = #{realFirstResponseTime,jdbcType=TIMESTAMP},
+        expected_finish_time = #{expectedFinishTime,jdbcType=TIMESTAMP},
+        real_finish_time = #{realFinishTime,jdbcType=TIMESTAMP},
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+        create_mid = #{createMid,jdbcType=BIGINT},
+        complaint_content = #{complaintContent,jdbcType=LONGVARCHAR}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey"
+            parameterType="com.wt.complaint.manage.infrastructure.model.RetailComplaintDO">
+        update deliver_retail_complaint_order
+        set dr_no = #{drNo,jdbcType=VARCHAR},
+        idempotent_key = #{idempotentKey,jdbcType=VARCHAR},
+        source = #{source,jdbcType=BIT},
+        trade_order_id = #{tradeOrderId,jdbcType=VARCHAR},
+        super_ticket_no = #{superTicketNo,jdbcType=VARCHAR},
+        so_no = #{soNo,jdbcType=VARCHAR},
+        order_status = #{orderStatus,jdbcType=TINYINT},
+        contact_name_c = #{contactNameC,jdbcType=VARCHAR},
+        contact_name_md5 = #{contactNameMd5,jdbcType=VARCHAR},
+        contact_phone_c = #{contactPhoneC,jdbcType=VARCHAR},
+        contact_phone_md5 = #{contactPhoneMd5,jdbcType=CHAR},
+        test_tag = #{testTag,jdbcType=TINYINT},
+        first_response_tag = #{firstResponseTag,jdbcType=BIT},
+        finish_tag = #{finishTag,jdbcType=BIT},
+        responsible = #{responsible,jdbcType=BIT},
+        risk_level = #{riskLevel,jdbcType=VARCHAR},
+        complaint_type = #{complaintType,jdbcType=BIT},
+        operator_position_id = #{operatorPositionId,jdbcType=VARCHAR},
+        operator_mid = #{operatorMid,jdbcType=BIGINT},
+        customer_service_mid = #{customerServiceMid,jdbcType=BIGINT},
+        zone_id = #{zoneId,jdbcType=INTEGER},
+        little_zone_id = #{littleZoneId,jdbcType=INTEGER},
+        city_zone_id = #{cityZoneId,jdbcType=INTEGER},
+        city_id = #{cityId,jdbcType=INTEGER},
+        org_id = #{orgId,jdbcType=VARCHAR},
+        problem_category = #{problemCategory,jdbcType=VARCHAR},
+        problem_desc = #{problemDesc,jdbcType=VARCHAR},
+        last_category_id = #{lastCategoryId,jdbcType=INTEGER},
+        complaint_scene = #{complaintScene,jdbcType=VARCHAR},
+        last_complaint_scene_id = #{lastComplaintSceneId,jdbcType=INTEGER},
+        reminder_times = #{reminderTimes,jdbcType=INTEGER},
+        last_reminder_time = #{lastReminderTime,jdbcType=TIMESTAMP},
+        reassignment_times = #{reassignmentTimes,jdbcType=INTEGER},
+        last_reassignment_time = #{lastReassignmentTime,jdbcType=TIMESTAMP},
+        expected_first_response_time = #{expectedFirstResponseTime,jdbcType=TIMESTAMP},
+        real_first_response_time = #{realFirstResponseTime,jdbcType=TIMESTAMP},
+        expected_finish_time = #{expectedFinishTime,jdbcType=TIMESTAMP},
+        real_finish_time = #{realFinishTime,jdbcType=TIMESTAMP},
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+        create_mid = #{createMid,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <sql id="selectCondition">
+        <!--选择大区-->
+        <if test="params.zoneId != null">
+            AND o.zone_id = #{params.zoneId}
+        </if>
+        <!--选择小区-->
+        <if test="params.littleZoneId != null">
+            AND o.little_zone_id = #{params.littleZoneId}
+        </if>
+        <!--选择门店-->
+        <if test="params.orgId != null">
+            AND o.org_id = #{params.orgId}
+        </if>
+        <!--投诉单号-->
+        <if test="params.drNo != null and params.drNo !=''">
+            AND o.dr_no = #{params.drNo}
+        </if>
+        <!--联系人手机号-->
+        <if test="params.contactPhoneMd5 != null and params.contactPhoneMd5 !=''">
+            AND o.contact_phone_md5 = #{params.contactPhoneMd5}
+        </if>
+        <!--催单-->
+        <if test="params.tab != null and params.tab == 0">
+            AND o.reminder_flag = 1
+        </if>
+        <!--待首�?->
+        <if test="params.tab != null and params.tab == 1">
+            AND o.order_status in (10,15)
+        </if>
+        <!--处理�?->
+        <if test="params.tab != null and params.tab == 2">
+            AND o.order_status in (20,30)
+        </if>
+        <!--即将超时-->
+        <if test="params.tab != null and params.tab == 3">
+            AND (
+            (order_status IN (10, 15) AND expected_first_response_time BETWEEN NOW() AND NOW() + INTERVAL 1 HOUR)
+            OR
+            (order_status IN (20, 30) AND expected_finish_time BETWEEN NOW() AND NOW() + INTERVAL 1 DAY)
+            )
+        </if>
+        <!--已结�?->
+        <if test="params.tab != null and params.tab == 4">
+            AND o.order_status in (50)
+        </if>
+        <!-- 权限处理 -->
+        <if test="params.afterSaleWorkbenchPermissionGroup != null">
+            <choose>
+                <!-- 大区权限 -->
+                <when test="params.afterSaleWorkbenchPermissionGroup.afterSaleWorkbenchPermissionType == 1
+                and params.afterSaleWorkbenchPermissionGroup.bigZonePositionsInfoList != null
+                and !params.afterSaleWorkbenchPermissionGroup.bigZonePositionsInfoList.isEmpty()">
+                    AND o.zone_id IN
+                    <foreach collection="params.afterSaleWorkbenchPermissionGroup.bigZonePositionsInfoList"
+                             item="item" open="(" separator="," close=")">
+                        #{item.zoneId}
+                    </foreach>
+                </when>
+
+                <!-- 小区权限 -->
+                <when test="params.afterSaleWorkbenchPermissionGroup.afterSaleWorkbenchPermissionType == 2
+                and params.afterSaleWorkbenchPermissionGroup.littleZonePositionsInfoList != null
+                and !params.afterSaleWorkbenchPermissionGroup.littleZonePositionsInfoList.isEmpty()">
+                    AND o.little_zone_id IN
+                    <foreach collection="params.afterSaleWorkbenchPermissionGroup.littleZonePositionsInfoList"
+                             item="item" open="(" separator="," close=")">
+                        #{item.zoneId}
+                    </foreach>
+                </when>
+
+                <!-- 门店权限 -->
+                <when test="params.afterSaleWorkbenchPermissionGroup.afterSaleWorkbenchPermissionType == 3
+                and params.afterSaleWorkbenchPermissionGroup.storePositionInfoList != null
+                and !params.afterSaleWorkbenchPermissionGroup.storePositionInfoList.isEmpty()">
+                    AND o.org_id IN
+                    <foreach collection="params.afterSaleWorkbenchPermissionGroup.storePositionInfoList"
+                             item="item" open="(" separator="," close=")">
+                        #{item.orgId}
+                    </foreach>
+                </when>
+            </choose>
+        </if>
+    </sql>
+    <select id="staticRetailCount"
+            parameterType="com.wt.complaint.manage.domain.api.gateway.parameter.in.StaticRetailCountGoIn"
+            resultType="java.lang.Integer">
+        SELECT
+        count( 1 )
+        FROM
+        deliver_retail_complaint_order o
+        WHERE 1=1 and o.source = 1
+        <include refid="selectCondition"/>
+    </select>
+    <select id="searchRetailComplaintList"
+            parameterType="com.wt.complaint.manage.domain.api.gateway.parameter.in.RetailComplaintListSearchGoIn"
+            resultType="com.wt.complaint.manage.infrastructure.model.RetailComplaintListSearchDetailDO">
+        select
+        <include refid="Search_Column_List"/>
+        from deliver_retail_complaint_order o
+        WHERE 1=1 and o.source = 1
+        <include refid="selectCondition"/>
+        order by o.reminder_times desc,o.expected_first_response_time asc,o.expected_finish_time asc
+    </select>
+
+    <sql id ="retailComplaintDetailCondition">
+        <!-- 权限处理 -->
+        <if test="params.afterSaleWorkbenchPermissionGroup != null">
+            <choose>
+                <!-- 大区权限 -->
+                <when test="params.afterSaleWorkbenchPermissionGroup.afterSaleWorkbenchPermissionType == 1
+                and params.afterSaleWorkbenchPermissionGroup.bigZonePositionsInfoList != null
+                and !params.afterSaleWorkbenchPermissionGroup.bigZonePositionsInfoList.isEmpty()">
+                    AND o.zone_id IN
+                    <foreach collection="params.afterSaleWorkbenchPermissionGroup.bigZonePositionsInfoList"
+                             item="item" open="(" separator="," close=")">
+                        #{item.zoneId}
+                    </foreach>
+                </when>
+
+                <!-- 小区权限 -->
+                <when test="params.afterSaleWorkbenchPermissionGroup.afterSaleWorkbenchPermissionType == 2
+                and params.afterSaleWorkbenchPermissionGroup.littleZonePositionsInfoList != null
+                and !params.afterSaleWorkbenchPermissionGroup.littleZonePositionsInfoList.isEmpty()">
+                    AND o.little_zone_id IN
+                    <foreach collection="params.afterSaleWorkbenchPermissionGroup.littleZonePositionsInfoList"
+                             item="item" open="(" separator="," close=")">
+                        #{item.zoneId}
+                    </foreach>
+                </when>
+
+                <!-- 门店权限 -->
+                <when test="params.afterSaleWorkbenchPermissionGroup.afterSaleWorkbenchPermissionType == 3
+                and params.afterSaleWorkbenchPermissionGroup.storePositionInfoList != null
+                and !params.afterSaleWorkbenchPermissionGroup.storePositionInfoList.isEmpty()">
+                    AND o.org_id IN
+                    <foreach collection="params.afterSaleWorkbenchPermissionGroup.storePositionInfoList"
+                             item="item" open="(" separator="," close=")">
+                        #{item.orgId}
+                    </foreach>
+                </when>
+            </choose>
+        </if>
+        <!--选择门店-->
+        <if test="params.orgId != null">
+            AND o.org_id = #{params.orgId}
+        </if>
+    </sql>
+    <select id="getRetailComplaintDetail"
+            parameterType="com.wt.complaint.manage.domain.api.gateway.parameter.in.RetailComplaintDetailGoIn"
+            resultType="com.wt.complaint.manage.infrastructure.model.RetailComplaintDetailDO">
+        select
+        <if test="params.useMaster != null and params.useMaster">
+            /*master*/
+        </if>
+        <include refid="Detail_Column_List"/>
+        from deliver_retail_complaint_order o
+        where o.dr_no = #{params.drNo,jdbcType=VARCHAR}
+        <include refid="retailComplaintDetailCondition"/>
+    </select>
+    <select id="getRetailHasFirstResposeRecordFlag"
+            parameterType="com.wt.complaint.manage.domain.api.gateway.parameter.in.RetailHasFirstResponseRecordFlagGoIn"
+            resultType="com.wt.complaint.manage.infrastructure.model.RetailHasFirstResposeRecordFlagDO">
+        SELECT
+        o.id
+        FROM
+        complaint_follow_process o
+        WHERE o.process_type = 'FIRST_RESPONSE' AND o.complaint_no = #{params.drNo}
+    </select>
+    <select id="findByIdempotentKey" parameterType="java.lang.String"
+            resultType="com.wt.complaint.manage.infrastructure.model.RetailComplaintDetailDO">
+        select
+        <include refid="Detail_Column_List"/>
+        from deliver_retail_complaint_order o
+        where o.idempotent_key = #{params.idempotentKey,jdbcType=VARCHAR}
+        <if test="params.useMaster != null and params.useMaster">
+            /*master*/
+        </if>
+    </select>
+    <update id="updateOrderByDrNo"
+            parameterType="com.wt.complaint.manage.domain.api.gateway.parameter.in.UpdateRetailOrderGoIn">
+        update deliver_retail_complaint_order
+        <set>
+            <if test="params.orderStatus != null">
+                order_status = #{params.orderStatus,jdbcType=TINYINT},
+            </if>
+            <if test="params.reminderTimes != null">
+                reminder_times = #{params.reminderTimes,jdbcType=INTEGER},
+            </if>
+            <if test="params.reminderFlag != null">
+                reminder_flag = #{params.reminderFlag,jdbcType=TINYINT},
+            </if>
+            <if test="params.reassignmentTimes != null">
+                reassignment_times = #{params.reassignmentTimes,jdbcType=INTEGER},
+            </if>
+            <if test="params.lastReminderTime != null">
+                last_reminder_time = #{params.lastReminderTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="params.realFirstResponseTime != null">
+                real_first_response_time = #{params.realFirstResponseTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="params.realFinishTime != null">
+                real_finish_time = #{params.realFinishTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="params.expectedResponseTime != null">
+                expected_first_response_time = #{params.expectedResponseTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="params.expectedFinishTime != null">
+                expected_finish_time = #{params.expectedFinishTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="params.operatorMid != null">
+                operator_mid = #{params.operatorMid,jdbcType=BIGINT},
+            </if>
+            <if test="params.operatorPositionId != null">
+                operator_position_id = #{params.operatorPositionId,jdbcType=INTEGER},
+            </if>
+            <if test="params.zoneId != null">
+                zone_id = #{params.zoneId},
+            </if>
+            <if test="params.littleZoneId != null">
+                little_zone_id = #{params.littleZoneId},
+            </if>
+            <if test="params.cityId != null">
+                city_id = #{params.cityId},
+            </if>
+            <if test="params.orgId != null">
+                org_id = #{params.orgId},
+            </if>
+            <if test="params.firstResponseTag != null">
+                first_response_tag = #{params.firstResponseTag},
+            </if>
+            <if test="params.finishTag != null">
+                finish_tag = #{params.finishTag},
+            </if>
+        </set>
+        where dr_no = #{params.drNo,jdbcType=VARCHAR}
+    </update>
+
+    <select id="selectFirstResponseToTimeoutList"
+            resultType="com.wt.complaint.manage.infrastructure.model.RetailComplaintDO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM deliver_retail_complaint_order
+        WHERE source = 1
+        AND order_status = 10
+        AND expected_first_response_time BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 1 HOUR)
+        order by id asc
+    </select>
+
+    <select id="selectFinishToTimeoutList"
+            resultType="com.wt.complaint.manage.infrastructure.model.RetailComplaintDO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM deliver_retail_complaint_order
+        WHERE source = 1
+        AND order_status IN (10, 15, 20, 30)
+        AND expected_finish_time BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 12 HOUR)
+        order by id asc
+    </select>
+
+</mapper>

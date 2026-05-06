@@ -1,0 +1,88 @@
+package com.wt.complaint.manage.domain.api.service.parameter.in;
+
+import com.wt.complaint.manage.domain.exception.BusinessException;
+import com.wt.complaint.manage.domain.exception.ErrorCodeEnums;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
+
+import java.math.BigDecimal;
+import java.util.List;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Slf4j
+public class OrderAddFollowUpRecordSoInV2 {
+    /**
+     * 客诉单号
+     */
+    private String complaintNo;
+
+    /**
+     * 跟进内容
+     */
+    private String followInfo;
+
+    /**
+     * 跟进人mid
+     */
+    private String followUpMid;
+
+    /**
+     * 跟进人姓�?
+     */
+    private String followUpName;
+
+    /**
+     * 登陆角色
+     */
+    private String loginRole;
+
+    /**
+     * 附件信息
+     */
+    private List<AttachmentSoIn> attachmentList;
+
+    /**
+     * 车辆行驶里程（可选）
+     */
+    private String mileage;
+
+    /**
+     * 旧版校验方法，不校验里程�?
+     */
+    public void checkAddFollowUpRecordSoIn() {
+        if (StringUtils.isEmpty(complaintNo)) {
+            log.error("complaintNo is null");
+            throw new BusinessException(ErrorCodeEnums.VALIDATE_ERROR, "请确认信息填写完整后提交");
+        }
+        if (StringUtils.isBlank(followInfo)) {
+            log.error("followInfo is null");
+            throw new BusinessException(ErrorCodeEnums.VALIDATE_ERROR, "请确认信息填写完整后提交");
+        }
+        if (this.loginRole == null) {
+            log.error("loginRole is null, complaintNo: {}, pickUpMid: {}", this.complaintNo, this.followUpMid);
+            throw new BusinessException(ErrorCodeEnums.VALIDATE_ERROR, "记录人岗位信息有�?);
+        }
+        if (mileage == null) {
+            log.error("mileage is null");
+            throw new BusinessException(ErrorCodeEnums.VALIDATE_ERROR, "车辆里程未提�?);
+        }
+        // 校验是否大于等于0，校验是�?位小�?
+        BigDecimal mileageBigDecimal = new BigDecimal(mileage);
+        if (mileageBigDecimal.compareTo(BigDecimal.ZERO) < 0) {
+            log.error("mileage must be >= 0, complaintNo:{}, mileage:{}", complaintNo, mileage);
+            throw new BusinessException(ErrorCodeEnums.VALIDATE_ERROR, "里程数需大于0");
+        }
+        if (mileageBigDecimal.scale() > 2) {
+            log.error("mileage scale invalid, complaintNo:{}, mileage:{}", complaintNo, mileage);
+            throw new BusinessException(ErrorCodeEnums.VALIDATE_ERROR, "里程数仅支持两位小数");
+        }
+    }
+
+}

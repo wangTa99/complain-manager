@@ -1,0 +1,182 @@
+{
+  "vid": "LKBQ26AADAXZDPXU4",
+  "workType": 20,
+  "soNo": "SO248521000051503",
+  "superTicketNo": "ST248241000036669",
+  "idempotentId": "28",
+  "contactName": "韩宣凇",
+  "contactTel": "18636334856",
+  "contactTitle": 1,
+  "testTag": 0,
+  "createMid": 3150387713,
+  "expand": {
+    "customerServiceMid": "3150270561",
+    "complaintInfo": [
+      {
+        "groupName": "基本信息",
+        "groupOrder": 1,
+        "fields": [
+          {
+            "id": 99,
+            "order": 1,
+            "required": 1,
+            "fieldType": 3,
+            "fieldName": "问题分类",
+            "fieldCode": "issueType",
+            "value": [
+              {
+                "code": "627",
+                "desc": "到店维修",
+                "pathId": "265/272/626/627",
+                "pathName": "售后/售后服务/到店维保/到店维修"
+              }
+            ],
+            "attachments": [
+
+            ]
+          },
+          {
+            "id": 105,
+            "order": 2,
+            "required": 1,
+            "fieldType": 2,
+            "fieldName": "门店是否跟进",
+            "fieldCode": "orgFollowTag",
+            "value": [
+              {
+                "code": "1",
+                "desc": "是"
+              }
+            ]
+          },
+          {
+            "id": 107,
+            "order": 3,
+            "required": 1,
+            "fieldType": 2,
+            "fieldName": "门店是否有责",
+            "fieldCode": "responsibility",
+            "value": [
+              {
+                "code": "1",
+                "desc": "是"
+              }
+            ],
+            "attachments": [
+
+            ]
+          },
+          {
+            "id": 108,
+            "order": 4,
+            "required": 1,
+            "fieldType": 2,
+            "fieldName": "风险等级",
+            "fieldCode": "riskLevel",
+            "value": [
+              {
+                "code": "1",
+                "desc": "l1"
+              }
+            ]
+          },
+          {
+            "id": 102,
+            "order": 5,
+            "required": 1,
+            "fieldType": 2,
+            "fieldName": "选择门店",
+            "fieldCode": "orgId",
+            "value": [
+              {
+                "code": "F1039",
+                "desc": "F1039直营店"
+              }
+            ],
+            "attachments": [
+
+            ]
+          },
+          {
+            "id": 109,
+            "order": 6,
+            "required": 1,
+            "fieldType": 4,
+            "fieldName": "问题详情",
+            "fieldCode": "problemDesc",
+            "value": [
+              {
+                "code": "",
+                "desc": "详情"
+              }
+            ],
+            "attachments": [
+
+            ]
+          },
+          {
+            "id": 10,
+            "order": 7,
+            "required": 1,
+            "fieldType": 1,
+            "fieldName": "wys测试字段1",
+            "fieldCode": "",
+            "value": [
+              {
+                "code": "",
+                "desc": "这是啥"
+              }
+            ],
+            "attachments": [
+
+            ]
+          },
+          {
+            "id": 127,
+            "order": 8,
+            "required": 1,
+            "fieldType": 2,
+            "fieldName": "投诉分类",
+            "fieldCode": "complaintType",
+            "value": [
+              {
+                "code": "2",
+                "desc": "服务投诉"
+              }
+            ],
+            "attachments": [
+
+            ]
+          }
+        ]
+      },
+      {
+        "groupName": "新分组 3",
+        "groupOrder": 3,
+        "fields": [
+          {
+            "id": 111,
+            "order": 1,
+            "required": 1,
+            "fieldType": 5,
+            "fieldName": "附件增加",
+            "fieldCode": "",
+            "value": [
+              {
+                "code": "",
+                "desc": ""
+              }
+            ],
+            "attachments": [
+              {
+                "fileName": "bigImage.png",
+                "url": "https://staging-cnbj2-fds.api.xiaomi.net/nr-upload-car-private/bigImage_ce5209e6acca475f9663e5be89702d27_1735807178459.png?GalaxyAccessKeyId\u003dAKD2BP4KL5GWSFRZHC\u0026Expires\u003d1735807480697\u0026Signature\u003dLMl1qFKPZ1J3gRJy8C4ufeHl+7M\u003d",
+                "type": 1
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

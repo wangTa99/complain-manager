@@ -1,0 +1,34 @@
+package com.wt.complaint.manage.domain.api.gateway.parameter.in;
+
+import com.wt.complaint.manage.api.model.enums.ProcessTypeEnum;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+import java.util.List;
+
+/**
+ * 客诉记录信息�?
+ * 含属性：客诉单号、客诉记录类�?
+ */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Slf4j
+public class ComplaintProcessLastGoIn {
+
+    /**
+     * 客诉单号 不能为空
+     */
+    private List<String> complaintNoList;
+
+    /**
+     * 客诉记录类型 {@link ProcessTypeEnum}
+     */
+    private String processType;
+
+
+}

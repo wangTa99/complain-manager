@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wt.complaint.manage.infrastructure.mapper.UserComplaintExpandMapper">
+
+    <resultMap id="BaseResultMap" type="com.wt.complaint.manage.infrastructure.model.UserComplaintExpandDO">
+        <id column="id" property="id"/>
+        <result column="uc_no" property="ucNo"/>
+        <result column="reminder_times" property="reminderTimes"/>
+        <result column="city_id" property="cityId"/>
+        <result column="zone_id" property="zoneId"/>
+        <result column="little_zone_id" property="littleZoneId"/>
+        <result column="service_scene" property="serviceScene"/>
+        <result column="contact_phone_suffix" property="contactPhoneSuffix"/>
+        <result column="contact_phone_md5" property="contactPhoneMd5"/>
+        <result column="contact_gender" property="contactGender"/>
+        <result column="vin_suffix" property="vinSuffix"/>
+        <result column="judge_type" property="judgeType"/>
+        <result column="car_no" property="carNo"/>
+        <result column="customer_service_mid" property="customerServiceMid"/>
+        <result column="expand" property="expand"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, uc_no, reminder_times, city_id, zone_id, little_zone_id, service_scene,
+        contact_phone_suffix, contact_phone_md5, contact_gender, vin_suffix, judge_type, car_no, customer_service_mid,
+        expand,
+        create_time, update_time
+    </sql>
+
+    <insert id="insertSelective" parameterType="com.wt.complaint.manage.infrastructure.model.UserComplaintExpandDO">
+        insert into user_complaint_expand
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ucNo != null">uc_no,</if>
+            <if test="reminderTimes != null">reminder_times,</if>
+            <if test="cityId != null">city_id,</if>
+            <if test="zoneId != null">zone_id,</if>
+            <if test="littleZoneId != null">little_zone_id,</if>
+            <if test="serviceScene != null">service_scene,</if>
+            <if test="contactPhoneSuffix != null">contact_phone_suffix,</if>
+            <if test="contactPhoneMd5 != null">contact_phone_md5,</if>
+            <if test="contactGender != null">contact_gender,</if>
+            <if test="vinSuffix != null">vin_suffix,</if>
+            <if test="judgeType != null">judge_type,</if>
+            <if test="carNo != null">car_no,</if>
+            <if test="customerServiceMid != null">customer_service_mid</if>
+            <if test="expand != null">expand,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ucNo != null">#{ucNo},</if>
+            <if test="reminderTimes != null">#{reminderTimes},</if>
+            <if test="cityId != null">#{cityId},</if>
+            <if test="zoneId != null">#{zoneId},</if>
+            <if test="littleZoneId != null">#{littleZoneId},</if>
+            <if test="serviceScene != null">#{serviceScene},</if>
+            <if test="contactPhoneSuffix != null">#{contactPhoneSuffix},</if>
+            <if test="contactPhoneMd5 != null">#{contactPhoneMd5},</if>
+            <if test="contactGender != null">#{contactGender},</if>
+            <if test="vinSuffix != null">#{vinSuffix},</if>
+            <if test="judgeType != null">#{judgeType},</if>
+            <if test="carNo != null">#{carNo},</if>
+            <if test="customerServiceMid != null">#{customerServiceMid},</if>
+            <if test="expand != null">#{expand},</if>
+        </trim>
+    </insert>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user_complaint_expand
+        where id = #{id}
+    </select>
+
+    <select id="selectByUcNo" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user_complaint_expand
+        where uc_no = #{ucNo}
+    </select>
+
+    <select id="selectByParam" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user_complaint_expand
+        <where>
+            <if test="ucNo != null">AND uc_no = #{ucNo}</if>
+            <if test="ucNoList != null and ucNoList.size > 0">
+                AND uc_no in
+                <foreach collection="ucNoList" item="ucNo" separator="," open="(" close=")">
+                    #{ucNo,jdbcType=VARCHAR}
+                </foreach>
+            </if>
+        </where>
+    </select>
+
+    <update id="updateById" parameterType="com.wt.complaint.manage.infrastructure.model.UserComplaintExpandDO">
+        update user_complaint_expand
+        <set>
+            <if test="reminderTimes != null">reminder_times = #{reminderTimes},</if>
+            <if test="cityId != null">city_id = #{cityId},</if>
+            <if test="zoneId != null">zone_id = #{zoneId},</if>
+            <if test="littleZoneId != null">little_zone_id = #{littleZoneId},</if>
+            <if test="serviceScene != null">service_scene = #{serviceScene},</if>
+            <if test="contactPhoneSuffix != null">contact_phone_suffix = #{contactPhoneSuffix},</if>
+            <if test="contactPhoneMd5 != null">contact_phone_md5 = #{contactPhoneMd5},</if>
+            <if test="vinSuffix != null">vin_suffix = #{vinSuffix},</if>
+            <if test="judgeType != null">judge_type = #{judgeType},</if>
+            <if test="customerServiceMid">customer_service_mid = #{customerServiceMid}</if>
+            <if test="expand != null">expand = #{expand},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="updateByParam">
+        update user_complaint_expand
+        <set>
+            <if test="expand.reminderTimes != null">reminder_times = #{expand.reminderTimes},</if>
+            <if test="expand.judgeType != null">judge_type = #{expand.judgeType},</if>
+        </set>
+        where uc_no = #{ucNo}
+    </update>
+
+    <update id="batchUpdateByUcNo">
+        update user_complaint_expand
+        <trim prefix="set" suffixOverrides=",">
+            <trim prefix="customer_service_mid = CASE" suffix="END,">
+                <foreach collection="expandList" item="expand">
+                    <if test="expand.customerServiceMid != null">
+                        WHEN uc_no = #{expand.ucNo,jdbcType=VARCHAR} THEN #{expand.customerServiceMid,jdbcType=BIGINT}
+                    </if>
+                </foreach>
+                ELSE customer_service_mid
+            </trim>
+        </trim>
+        where uc_no in
+        <foreach collection="expandList" item="expand" open="(" separator="," close=")">
+            #{expand.ucNo,jdbcType=VARCHAR}
+        </foreach>
+    </update>
+
+</mapper> 

@@ -1,0 +1,45 @@
+package com.wt.complaint.manage.domain.manager;
+
+import lombok.Data;
+
+import java.io.Serializable;
+
+/**
+ * UserAction是页面上按钮的抽�?
+ *
+ * @author hushengguo
+ */
+@Data
+public class UserAction implements Serializable {
+
+    /**
+     * actionKey
+     * 按钮唯一key
+     */
+    private String actionKey;
+
+    /**
+     * actionName
+     * 按钮名称,本期尚未采用
+     */
+    private String actionName;
+
+    /**
+     * 特殊判断
+     * 可以用来判断是否展示该按�?
+     */
+    private String func;
+
+    public static UserAction create(String actionKey) {
+        UserAction u = new UserAction();
+        u.setActionKey(actionKey);
+        return u;
+    }
+
+    public static UserAction create(String actionKey, String func) {
+        UserAction u = new UserAction();
+        u.setActionKey(actionKey);
+        u.setFunc(func);
+        return u;
+    }
+}

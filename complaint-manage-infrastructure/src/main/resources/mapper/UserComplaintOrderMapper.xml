@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wt.complaint.manage.infrastructure.mapper.UserComplaintOrderMapper">
+
+    <resultMap id="BaseResultMap" type="com.wt.complaint.manage.infrastructure.model.UserComplaintOrderDO">
+        <id column="id" property="id"/>
+        <result column="uc_no" property="ucNo"/>
+        <result column="uc_type" property="ucType"/>
+        <result column="idempotent_key" property="idempotentKey"/>
+        <result column="super_ticket_no" property="superTicketNo"/>
+        <result column="so_no" property="soNo"/>
+        <result column="vid" property="vid"/>
+        <result column="order_status" property="orderStatus"/>
+        <result column="org_id" property="orgId"/>
+        <result column="contact_name_c" property="contactNameC"/>
+        <result column="contact_phone_c" property="contactPhoneC"/>
+        <result column="test_tag" property="testTag"/>
+        <result column="operator_mid" property="operatorMid"/>
+        <result column="complaint_content" property="complaintContent"/>
+        <result column="finish_time" property="finishTime"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="create_mid" property="createMid"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, uc_no, uc_type, idempotent_key, super_ticket_no, so_no, vid, order_status, org_id,
+        contact_name_c, contact_phone_c, test_tag, operator_mid, complaint_content, finish_time,
+        create_time, update_time, create_mid
+    </sql>
+
+    <insert id="insertSelective" parameterType="com.wt.complaint.manage.infrastructure.model.UserComplaintOrderDO">
+        insert into user_complaint_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="ucNo != null">uc_no,</if>
+            <if test="ucType != null">uc_type,</if>
+            <if test="idempotentKey != null">idempotent_key,</if>
+            <if test="superTicketNo != null">super_ticket_no,</if>
+            <if test="soNo != null">so_no,</if>
+            <if test="vid != null">vid,</if>
+            <if test="orderStatus != null">order_status,</if>
+            <if test="orgId != null">org_id,</if>
+            <if test="contactNameC != null">contact_name_c,</if>
+            <if test="contactPhoneC != null">contact_phone_c,</if>
+            <if test="testTag != null">test_tag,</if>
+            <if test="operatorMid != null">operator_mid,</if>
+            <if test="complaintContent != null">complaint_content,</if>
+            <if test="finishTime != null">finish_time,</if>
+            <if test="createMid != null">create_mid,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="ucNo != null">#{ucNo},</if>
+            <if test="ucType != null">#{ucType},</if>
+            <if test="idempotentKey != null">#{idempotentKey},</if>
+            <if test="superTicketNo != null">#{superTicketNo},</if>
+            <if test="soNo != null">#{soNo},</if>
+            <if test="vid != null">#{vid},</if>
+            <if test="orderStatus != null">#{orderStatus},</if>
+            <if test="orgId != null">#{orgId},</if>
+            <if test="contactNameC != null">#{contactNameC},</if>
+            <if test="contactPhoneC != null">#{contactPhoneC},</if>
+            <if test="testTag != null">#{testTag},</if>
+            <if test="operatorMid != null">#{operatorMid},</if>
+            <if test="complaintContent != null">#{complaintContent},</if>
+            <if test="finishTime != null">#{finishTime},</if>
+            <if test="createMid != null">#{createMid},</if>
+        </trim>
+    </insert>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user_complaint_order
+        where id = #{id}
+    </select>
+
+    <select id="selectByUcNo" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user_complaint_order
+        where uc_no = #{ucNo}
+    </select>
+
+    <select id="selectByIdempotentKey" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user_complaint_order
+        where idempotent_key = #{idempotentKey}
+    </select>
+
+    <select id="selectByParam" resultMap="BaseResultMap">
+        select
+        <if test = "master != null and master == true">/*master*/</if>
+        <include refid="Base_Column_List"/>
+        from user_complaint_order
+        <where>
+            <if test="ucNoList != null and ucNoList.size > 0">
+                uc_no in
+                <foreach collection="ucNoList" item="item" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="stNoList != null and stNoList.size > 0">
+                super_ticket_no in
+                <foreach collection="stNoList" item="item" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="ucNo != null">and uc_no = #{ucNo}</if>
+            <if test="ucType != null">and uc_type = #{ucType}</if>
+            <if test="idempotentKey != null">and idempotent_key = #{idempotentKey}</if>
+        </where>
+    </select>
+
+    <update id="updateById" parameterType="com.wt.complaint.manage.infrastructure.model.UserComplaintOrderDO">
+        update user_complaint_order
+        <set>
+            <if test="ucType != null">uc_type = #{ucType},</if>
+            <if test="superTicketNo != null">super_ticket_no = #{superTicketNo},</if>
+            <if test="soNo != null">so_no = #{soNo},</if>
+            <if test="vid != null">vid = #{vid},</if>
+            <if test="orderStatus != null">order_status = #{orderStatus},</if>
+            <if test="orgId != null">org_id = #{orgId},</if>
+            <if test="contactNameC != null">contact_name_c = #{contactNameC},</if>
+            <if test="contactPhoneC != null">contact_phone_c = #{contactPhoneC},</if>
+            <if test="testTag != null">test_tag = #{testTag},</if>
+            <if test="operatorMid != null">operator_mid = #{operatorMid},</if>
+            <if test="complaintContent != null">complaint_content = #{complaintContent},</if>
+            <if test="finishTime != null">finish_time = #{finishTime},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="updateByParam">
+        update user_complaint_order
+        <set>
+            <if test="param.ucType != null">uc_type = #{param.ucType},</if>
+            <if test="param.superTicketNo != null">super_ticket_no = #{param.superTicketNo},</if>
+            <if test="param.soNo != null">so_no = #{param.soNo},</if>
+            <if test="param.vid != null">vid = #{param.vid},</if>
+            <if test="param.orderStatus != null">order_status = #{param.orderStatus},</if>
+            <if test="param.orgId != null">org_id = #{param.orgId},</if>
+            <if test="param.contactNameC != null">contact_name_c = #{param.contactNameC},</if>
+            <if test="param.contactPhoneC != null">contact_phone_c = #{param.contactPhoneC},</if>
+            <if test="param.testTag != null">test_tag = #{param.testTag},</if>
+            <if test="param.operatorMid != null">operator_mid = #{param.operatorMid},</if>
+            <if test="param.complaintContent != null">complaint_content = #{param.complaintContent},</if>
+            <if test="param.finishTime != null">finish_time = #{param.finishTime},</if>
+        </set>
+        where uc_no = #{ucNo}
+    </update>
+
+    <sql id="selectByParamCondition">
+        <where>
+            <if test="params.ucType != null and params.ucType != '' ">
+                and co.uc_type = #{params.ucType,jdbcType=VARCHAR}
+            </if>
+            <if test="params.ucNo != null and params.ucNo != '' ">
+                and co.uc_no = #{params.ucNo,jdbcType=VARCHAR}
+            </if>
+            <if test="params.carNo != null and params.carNo != ''">
+                and ce.car_no = #{params.carNo,jdbcType=VARCHAR}
+            </if>
+            <if test="params.vin != null and params.vin != '' ">
+                and co.vid = #{params.vin,jdbcType=VARCHAR}
+            </if>
+            <if test="params.contactPhone != null and params.contactPhone != ''">
+                and ce.contact_phone_md5 = #{params.contactPhone,jdbcType=VARCHAR}
+            </if>
+            <if test="params.orderStatusList != null and params.orderStatusList.size() > 0">
+                and co.order_status in
+                <foreach collection="params.orderStatusList" item="item" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="params.zoneIdList != null and params.zoneIdList.size() > 0">
+                and ce.zone_id in
+                <foreach collection="params.zoneIdList" item="item" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="params.cityList != null and params.cityList.size() > 0">
+                and ce.city_id in
+                <foreach collection="params.cityList" item="item" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="params.orgIdList != null and params.orgIdList.size() > 0">
+                and co.org_id in
+                <foreach collection="params.orgIdList" item="item" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="params.createTimeStart != null and params.createTimeStart !=''">
+                and co.create_time <![CDATA[>=]]> #{params.createTimeStart, jdbcType=VARCHAR}
+            </if>
+            <if test="params.createTimeEnd != null and params.createTimeEnd != ''">
+                and co.create_time <![CDATA[<=]]> #{params.createTimeEnd, jdbcType=VARCHAR}
+            </if>
+            <if test="params.finishTimeStart != null and params.finishTimeStart != ''">
+                and co.finish_time <![CDATA[>=]]> #{params.finishTimeStart, jdbcType=VARCHAR}
+            </if>
+            <if test="params.finishTimeEnd != null and params.finishTimeEnd != ''">
+                and co.finish_time <![CDATA[<=]]> #{params.finishTimeEnd, jdbcType=VARCHAR}
+            </if>
+            <if test="params.afterSaleWorkbenchPermissionGroup != null">
+                <choose>
+                    <when test="params.afterSaleWorkbenchPermissionGroup.afterSaleWorkbenchPermissionType != null and params.afterSaleWorkbenchPermissionGroup.afterSaleWorkbenchPermissionType == 1">
+                        <if test="params.afterSaleWorkbenchPermissionGroup.bigZonePositionsInfoList != null and params.afterSaleWorkbenchPermissionGroup.bigZonePositionsInfoList.size > 0">
+                            and ce.zone_id in
+                            <foreach collection="params.afterSaleWorkbenchPermissionGroup.bigZonePositionsInfoList" item="item" index="index" open="(" separator="," close=")">
+                                #{item.zoneId}
+                            </foreach>
+                        </if>
+                    </when>
+                    <when test="params.afterSaleWorkbenchPermissionGroup.afterSaleWorkbenchPermissionType != null and params.afterSaleWorkbenchPermissionGroup.afterSaleWorkbenchPermissionType == 2">
+                        <if test="params.afterSaleWorkbenchPermissionGroup.littleZonePositionsInfoList != null and params.afterSaleWorkbenchPermissionGroup.littleZonePositionsInfoList.size > 0">
+                            and ce.little_zone_id in
+                            <foreach collection="params.afterSaleWorkbenchPermissionGroup.littleZonePositionsInfoList" item="item" index="index" open="(" separator="," close=")">
+                                #{item.zoneId}
+                            </foreach>
+                        </if>
+                    </when>
+                </choose>
+            </if>
+            <if test="params.testTag != null">
+                and co.test_tag = #{params.testTag,jdbcType=INTEGER}
+            </if>
+        </where>
+    </sql>
+
+    <select id="selectPageByParam" parameterType="com.wt.complaint.manage.domain.api.service.parameter.in.UserComplaintListSearchGoIn"
+            resultType="com.wt.complaint.manage.infrastructure.model.UserComplaintOrderDetailDO">
+        SELECT
+        co.uc_no,
+        co.super_ticket_no,
+        co.so_no,
+        ce.car_no,
+        co.vid,
+        co.contact_name_c,
+        co.contact_phone_c,
+        ce.service_scene,
+        co.order_status,
+        co.org_id,
+        co.operator_mid,
+        co.create_time,
+        ce.reminder_times,
+        ce.contact_gender,
+        co.finish_time
+        FROM
+        user_complaint_order co
+        JOIN user_complaint_expand ce ON co.uc_no = ce.uc_no
+        <include refid="selectByParamCondition"/>
+        order by co.id desc
+    </select>
+
+    <select id="selectDetailByUcNo" parameterType="java.lang.String"
+            resultType="com.wt.complaint.manage.domain.api.service.parameter.out.UserComplaintOrderDetailSoOut">
+        SELECT
+        co.id,
+        co.uc_no,
+        co.uc_type,
+        co.super_ticket_no,
+        co.so_no,
+        ce.car_no,
+        co.vid,
+        co.order_status,
+        co.contact_name_c,
+        co.contact_phone_c,
+        ce.service_scene,
+        co.org_id,
+        co.operator_mid,
+        co.create_time,
+        co.finish_time,
+        co.create_mid,
+        ce.reminder_times,
+        ce.contact_gender,
+        co.complaint_content,
+        ce.zone_id,
+        ce.little_zone_id,
+        ce.customer_service_mid
+        FROM
+        user_complaint_order co
+        JOIN user_complaint_expand ce ON co.uc_no = ce.uc_no
+        where co.uc_no = #{ucNo}
+    </select>
+</mapper>

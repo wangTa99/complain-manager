@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wt.complaint.manage.infrastructure.mapper.UserConsultOrderMapper">
+
+    <resultMap id="BaseResultMap" type="com.wt.complaint.manage.infrastructure.model.UserConsultOrderDO">
+        <id column="id" property="id"/>
+        <result column="consult_no" property="consultNo"/>
+        <result column="consult_type" property="consultType"/>
+        <result column="super_ticket_no" property="superTicketNo"/>
+        <result column="so_no" property="soNo"/>
+        <result column="idempotent_key" property="idempotentKey"/>
+        <result column="vid" property="vid"/>
+        <result column="car_no" property="carNo"/>
+        <result column="car_type" property="carType"/>
+        <result column="problem_desc" property="problemDesc"/>
+        <result column="order_status" property="orderStatus"/>
+        <result column="reminder_times" property="reminderTimes"/>
+        <result column="priority" property="priority"/>
+        <result column="org_id" property="orgId"/>
+        <result column="contact_name_c" property="contactNameC"/>
+        <result column="contact_phone_c" property="contactPhoneC"/>
+        <result column="test_tag" property="testTag"/>
+        <result column="operator_mid" property="operatorMid"/>
+        <result column="expecting_back_time" property="expectingBackTime"/>
+        <result column="finish_time" property="finishTime"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="create_mid" property="createMid"/>
+        <result column="handle_result" property="handleResult"/>
+        <result column="vin_sufix" property="vinSufix"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, consult_no, consult_type, super_ticket_no, so_no, idempotent_key, vid, car_no,
+        car_type, problem_desc, order_status, reminder_times, priority, org_id, contact_name_c,
+        contact_phone_c, test_tag, operator_mid, expecting_back_time, finish_time, create_time,
+        update_time, create_mid, handle_result, vin_sufix
+    </sql>
+
+    <insert id="insertSelective" parameterType="com.wt.complaint.manage.infrastructure.model.UserConsultOrderDO">
+        insert into user_consult_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="consultNo != null">consult_no,</if>
+            <if test="consultType != null">consult_type,</if>
+            <if test="superTicketNo != null">super_ticket_no,</if>
+            <if test="soNo != null">so_no,</if>
+            <if test="idempotentKey != null">idempotent_key,</if>
+            <if test="vid != null">vid,</if>
+            <if test="carNo != null">car_no,</if>
+            <if test="carType != null">car_type,</if>
+            <if test="problemDesc != null">problem_desc,</if>
+            <if test="orderStatus != null">order_status,</if>
+            <if test="reminderTimes != null">reminder_times,</if>
+            <if test="priority != null">priority,</if>
+            <if test="orgId != null">org_id,</if>
+            <if test="contactNameC != null">contact_name_c,</if>
+            <if test="contactPhoneC != null">contact_phone_c,</if>
+            <if test="testTag != null">test_tag,</if>
+            <if test="operatorMid != null">operator_mid,</if>
+            <if test="expectingBackTime != null">expecting_back_time,</if>
+            <if test="finishTime != null">finish_time,</if>
+            <if test="createMid != null">create_mid,</if>
+            <if test="handleResult != null">handle_result,</if>
+            <if test="vinSufix != null">vin_sufix,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="consultNo != null">#{consultNo},</if>
+            <if test="consultType != null">#{consultType},</if>
+            <if test="superTicketNo != null">#{superTicketNo},</if>
+            <if test="soNo != null">#{soNo},</if>
+            <if test="idempotentKey != null">#{idempotentKey},</if>
+            <if test="vid != null">#{vid},</if>
+            <if test="carNo != null">#{carNo},</if>
+            <if test="carType != null">#{carType},</if>
+            <if test="problemDesc != null">#{problemDesc},</if>
+            <if test="orderStatus != null">#{orderStatus},</if>
+            <if test="reminderTimes != null">#{reminderTimes},</if>
+            <if test="priority != null">#{priority},</if>
+            <if test="orgId != null">#{orgId},</if>
+            <if test="contactNameC != null">#{contactNameC},</if>
+            <if test="contactPhoneC != null">#{contactPhoneC},</if>
+            <if test="testTag != null">#{testTag},</if>
+            <if test="operatorMid != null">#{operatorMid},</if>
+            <if test="expectingBackTime != null">#{expectingBackTime},</if>
+            <if test="finishTime != null">#{finishTime},</if>
+            <if test="createMid != null">#{createMid},</if>
+            <if test="handleResult != null">#{handleResult},</if>
+            <if test="vinSufix != null">#{vinSufix},</if>
+        </trim>
+    </insert>
+
+    <select id="selectById" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user_consult_order
+        where id = #{id}
+    </select>
+
+    <select id="selectByConsultNo" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user_consult_order
+        where consult_no = #{consultNo}
+    </select>
+
+    <select id="selectByIdempotentKey" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from user_consult_order
+        where idempotent_key = #{idempotentKey}
+    </select>
+
+    <select id="selectByParam" resultMap="BaseResultMap">
+        select
+        <if test = "master != null and master == true">/*master*/</if>
+        <include refid="Base_Column_List"/>
+        from user_consult_order
+        <where>
+            <if test="consultNoList != null and consultNoList.size > 0">
+                consult_no in
+                <foreach collection="consultNoList" item="item" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="stNoList != null and stNoList.size > 0">
+                super_ticket_no in
+                <foreach collection="stNoList" item="item" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="consultNo != null">and consult_no = #{consultNo}</if>
+            <if test="superTicketNo != null">and super_ticket_no = #{superTicketNo}</if>
+            <if test="consultType != null">and consult_type = #{consultType}</if>
+            <if test="idempotentKey != null">and idempotent_key = #{idempotentKey}</if>
+            <if test="vid != null">and vid = #{vid}</if>
+            <if test="orderStatus != null">and order_status = #{orderStatus}</if>
+        </where>
+    </select>
+
+    <update id="updateById" parameterType="com.wt.complaint.manage.infrastructure.model.UserConsultOrderDO">
+        update user_consult_order
+        <set>
+            <if test="consultType != null">consult_type = #{consultType},</if>
+            <if test="superTicketNo != null">super_ticket_no = #{superTicketNo},</if>
+            <if test="soNo != null">so_no = #{soNo},</if>
+            <if test="vid != null">vid = #{vid},</if>
+            <if test="carNo != null">car_no = #{carNo},</if>
+            <if test="carType != null">car_type = #{carType},</if>
+            <if test="problemDesc != null">problem_desc = #{problemDesc},</if>
+            <if test="orderStatus != null">order_status = #{orderStatus},</if>
+            <if test="reminderTimes != null">reminder_times = #{reminderTimes},</if>
+            <if test="priority != null">priority = #{priority},</if>
+            <if test="orgId != null">org_id = #{orgId},</if>
+            <if test="contactNameC != null">contact_name_c = #{contactNameC},</if>
+            <if test="contactPhoneC != null">contact_phone_c = #{contactPhoneC},</if>
+            <if test="testTag != null">test_tag = #{testTag},</if>
+            <if test="operatorMid != null">operator_mid = #{operatorMid},</if>
+            <if test="expectingBackTime != null">expecting_back_time = #{expectingBackTime},</if>
+            <if test="finishTime != null">finish_time = #{finishTime},</if>
+            <if test="handleResult != null">handle_result = #{handleResult},</if>
+        </set>
+        where id = #{id}
+    </update>
+
+    <update id="updateByParam">
+        update user_consult_order
+        <set>
+            <if test="param.consultType != null">consult_type = #{param.consultType},</if>
+            <if test="param.superTicketNo != null">super_ticket_no = #{param.superTicketNo},</if>
+            <if test="param.soNo != null">so_no = #{param.soNo},</if>
+            <if test="param.vid != null">vid = #{param.vid},</if>
+            <if test="param.carNo != null">car_no = #{param.carNo},</if>
+            <if test="param.carType != null">car_type = #{param.carType},</if>
+            <if test="param.problemDesc != null">problem_desc = #{param.problemDesc},</if>
+            <if test="param.orderStatus != null">order_status = #{param.orderStatus},</if>
+            <if test="param.reminderTimes != null">reminder_times = #{param.reminderTimes},</if>
+            <if test="param.priority != null">priority = #{param.priority},</if>
+            <if test="param.orgId != null">org_id = #{param.orgId},</if>
+            <if test="param.contactNameC != null">contact_name_c = #{param.contactNameC},</if>
+            <if test="param.contactPhoneC != null">contact_phone_c = #{param.contactPhoneC},</if>
+            <if test="param.testTag != null">test_tag = #{param.testTag},</if>
+            <if test="param.operatorMid != null">operator_mid = #{param.operatorMid},</if>
+            <if test="param.expectingBackTime != null">expecting_back_time = #{param.expectingBackTime},</if>
+            <if test="param.finishTime != null">finish_time = #{param.finishTime},</if>
+            <if test="param.handleResult != null">handle_result = #{param.handleResult},</if>
+            <if test="param.finishDesc != null">finish_desc = #{param.finishDesc},</if>
+        </set>
+        where consult_no = #{consultNo}
+    </update>
+
+    <!-- 按门店id列表统计各状态数�?-->
+    <select id="countStatisticsByOrgId" resultType="com.wt.complaint.manage.domain.model.ConsultStatusCountInfo">
+        SELECT order_status AS orderStatus,COUNT(*) AS cnt
+        FROM user_consult_order
+        <where>
+            <if test="orgId != null">
+                org_id  = #{orgId}
+            </if>
+            <if test="mid != null">
+                AND operator_mid = #{mid}
+            </if>
+        </where>
+        GROUP BY order_status
+    </select>
+
+    <!-- PAD零售通：分页查询 count（key 模糊匹配 consult_no/car_no/vid，无 consultNo 精准匹配�?-->
+    <select id="countPadPageByParam" resultType="long">
+        SELECT COUNT(*)
+        FROM user_consult_order
+        <include refid="Pad_List_Where_Clause"/>
+    </select>
+
+    <!-- PAD零售通：分页查询列表 -->
+    <select id="padPageByParam" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM user_consult_order
+        <include refid="Pad_List_Where_Clause"/>
+        ORDER BY create_time DESC
+        <if test="pageOffset != null and pageSize != null">
+            LIMIT #{pageSize} OFFSET #{pageOffset}
+        </if>
+    </select>
+
+    <!-- 售后工作台：分页查询 count -->
+    <select id="countWebPageByParam" resultType="long">
+        SELECT COUNT(*)
+        FROM user_consult_order
+        <include refid="Web_List_Where_Clause"/>
+    </select>
+
+    <!-- 售后工作台：分页查询列表 -->
+    <select id="webPageByParam" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM user_consult_order
+        <include refid="Web_List_Where_Clause"/>
+        ORDER BY create_time DESC
+        <if test="pageOffset != null and pageSize != null">
+            LIMIT #{pageSize} OFFSET #{pageOffset}
+        </if>
+    </select>
+    <select id="findList" resultType="com.wt.complaint.manage.domain.model.UserConsultOrderInfo">
+        select
+        <include refid="Base_Column_List"/>
+        from user_consult_order
+        <where>
+            <if test="orgIdList != null and orgIdList.size() > 0">
+                org_id IN
+                <foreach collection="orgIdList" item="item" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+
+            <if test="consultStatusList != null and consultStatusList.size()>0">
+                and order_status in
+                <foreach collection="consultStatusList" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+
+        </where>
+    </select>
+
+    <!-- PAD零售�?WHERE 条件：key  consult_no 精确搜索/car_no 精确搜索/vid 模糊匹配 -->
+    <sql id="Pad_List_Where_Clause">
+        <where>
+            <if test="orgIdList != null and orgIdList.size() > 0">
+                org_id IN
+                <foreach collection="orgIdList" item="item" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="orderStatus != null">
+                AND order_status = #{orderStatus}
+            </if>
+            <if test="operatorMid != null">
+                AND operator_mid = #{operatorMid}
+            </if>
+            <if test="key != null and key != ''">
+                AND (consult_no = #{key}
+                  OR car_no  = #{key}
+                  OR vin_sufix = #{key})
+            </if>
+        </where>
+    </sql>
+
+    <!-- 售后工作�?WHERE 条件 -->
+    <sql id="Web_List_Where_Clause">
+        <where>
+            <if test="orgIdList != null and orgIdList.size() > 0">
+                org_id IN
+                <foreach collection="orgIdList" item="item" separator="," open="(" close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="consultNo != null and consultNo != ''">
+                AND consult_no = #{consultNo}
+            </if>
+            <if test="orderStatus != null">
+                AND order_status = #{orderStatus}
+            </if>
+            <if test="consultType != null">
+                AND consult_type = #{consultType}
+            </if>
+            <if test="handleResult != null">
+                AND handle_result = #{handleResult}
+            </if>
+            <if test="vin != null and vin != ''">
+                AND vin_sufix  = RIGHT(#{vin}, 6)
+            </if>
+            <if test="urgencyLevel != null">
+                AND priority = #{urgencyLevel}
+            </if>
+            <if test="createTimeStart != null and createTimeStart != ''">
+                and   create_time &gt;=  #{createTimeStart}
+            </if>
+            <if test="createTimeEnd != null and createTimeEnd != ''">
+                and   create_time &lt;=  #{createTimeEnd}
+            </if>
+            <if test="finishTimeStart != null and finishTimeStart != ''">
+                and   finish_time &gt;=  #{finishTimeStart}
+            </if>
+            <if test="finishTimeEnd != null and finishTimeEnd != ''">
+                and   finish_time &lt;=  #{finishTimeEnd}
+            </if>
+        </where>
+    </sql>
+
+</mapper>

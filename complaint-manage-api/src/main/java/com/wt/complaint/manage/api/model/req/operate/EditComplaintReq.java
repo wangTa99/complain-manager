@@ -1,0 +1,33 @@
+package com.wt.complaint.manage.api.model.req.operate;
+
+import com.xiaomi.mone.docs.annotations.dubbo.ApiDocClassDefine;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class EditComplaintReq implements Serializable {
+
+    private static final long serialVersionUID = 1919699885886279612L;
+
+    @ApiDocClassDefine(value = "complaintNo", description = "客诉单号", required = true)
+    private String complaintNo;
+
+    @ApiDocClassDefine(value = "complaint", description = "投诉场景,模板字段")
+    private FieldValue complaint;
+
+    @ApiDocClassDefine(value = "riskLevel", description = "风险等级, 1, 2, 3, 4 (code)")
+    private String riskLevel;
+
+    @ApiDocClassDefine(value = "mediaInvolved", description = "是否涉媒 0-�?1-�?)
+    private String mediaInvolved;
+
+    @ApiDocClassDefine(value = "mediaLink", description = "涉媒链接")
+    private String mediaLink;
+}

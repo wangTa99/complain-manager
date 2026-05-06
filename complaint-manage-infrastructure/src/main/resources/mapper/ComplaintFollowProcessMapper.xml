@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wt.complaint.manage.infrastructure.mapper.ComplaintFollowProcessMapper">
+
+    <resultMap id="BaseResultMap" type="com.wt.complaint.manage.infrastructure.model.ComplaintFollowProcessDO">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="complaintNo" column="complaint_no" jdbcType="VARCHAR"/>
+            <result property="processType" column="process_type" jdbcType="VARCHAR"/>
+            <result property="processInstanceId" column="process_instance_id" jdbcType="VARCHAR"/>
+            <result property="processContent" column="process_content" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,complaint_no,process_type,process_instance_id,
+        process_content,create_time
+    </sql>
+    <insert id="insertSelective">
+        insert into complaint_follow_process
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="complaintNo != null">
+                complaint_no,
+            </if>
+            <if test="processType != null">
+                process_type,
+            </if>
+            <if test="processInstanceId != null">
+                process_instance_id,
+            </if>
+            <if test="processContent != null">
+                process_content,
+            </if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="complaintNo != null">
+                #{complaintNo,jdbcType=VARCHAR},
+            </if>
+            <if test="processType != null">
+                #{processType},
+            </if>
+            <if test="processInstanceId != null">
+                #{processInstanceId},
+            </if>
+            <if test="processContent != null">
+                #{processContent},
+            </if>
+        </trim>
+    </insert>
+    <select id="selectByComplaintNo"
+            resultType="com.wt.complaint.manage.infrastructure.model.ComplaintFollowProcessDO">
+        select * from complaint_follow_process where complaint_no = #{complaintNo} order by id
+    </select>
+    <select id="selectListByParam"
+            resultType="com.wt.complaint.manage.infrastructure.model.ComplaintFollowProcessDO">
+        select
+        <if test="useMaster != null and useMaster">
+            /*master*/
+        </if>
+        <include refid="Base_Column_List"/>
+        from complaint_follow_process where 1=1
+        <if test="complaintNo != null">
+            and complaint_no = #{complaintNo}
+        </if>
+        <if test="processInstanceId != null">
+            and process_instance_id = #{processInstanceId}
+        </if>
+        <if test="processTypeList != null">
+            and process_type in
+            <foreach collection="processTypeList" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        order by create_time desc
+    </select>
+    <select id="selectLastApplyFinishRecordByParam" resultType="com.wt.complaint.manage.infrastructure.model.ComplaintFollowProcessDO">
+        SELECT
+        c.*
+        FROM
+        complaint_follow_process c
+        JOIN ( SELECT complaint_no, MAX( id ) AS id FROM complaint_follow_process WHERE process_type = 'APPLY_FINISH' GROUP BY complaint_no ) latest ON ( c.complaint_no = latest.complaint_no AND c.id = latest.id )
+        WHERE
+        c.process_type = 'APPLY_FINISH'
+        <if test="complaintNoList != null">
+            and c.complaint_no in
+            <foreach collection="complaintNoList" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+
+    <!-- 批量查询最新一次提交复盘跟进记录：子查询按 complaint_no �?MAX(id)，再�?id 取完整记�?-->
+    <select id="selectLastSubmitReviewRecordByParam" resultType="com.wt.complaint.manage.infrastructure.model.ComplaintFollowProcessDO">
+        SELECT c.*
+        FROM complaint_follow_process c
+        JOIN (
+            SELECT complaint_no, MAX(id) AS id
+            FROM complaint_follow_process
+            WHERE process_type = 'SUBMIT_REVIEW'
+            <if test="complaintNoList != null and complaintNoList.size() > 0">
+                AND complaint_no IN
+                <foreach collection="complaintNoList" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            GROUP BY complaint_no
+        ) latest ON c.id = latest.id
+        WHERE c.process_type = 'SUBMIT_REVIEW'
+    </select>
+
+    <select id="selectLastProcessByParam"
+            resultType="com.wt.complaint.manage.infrastructure.model.ComplaintFollowProcessDO">
+        SELECT t.complaint_no, t.process_type, t.process_content, t.create_time
+        FROM complaint_follow_process t
+        INNER JOIN (
+            SELECT complaint_no, MAX(create_time) AS max_time
+            FROM complaint_follow_process
+            WHERE
+                 complaint_no in
+                <foreach collection="complaintNoList" item="item" index="index" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+                <if test="processType != null">
+                    AND process_type = #{processType}
+                </if>
+            GROUP BY complaint_no
+        ) grouped
+        ON t.complaint_no = grouped.complaint_no AND t.create_time = grouped.max_time
+        WHERE
+            t.complaint_no in
+            <foreach collection="complaintNoList" item="item" index="index" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        <if test="processType != null">
+            AND process_type = #{processType}
+        </if>
+    </select>
+    <select id="selectByProcessInstanceId"
+            resultType="com.wt.complaint.manage.infrastructure.model.ComplaintFollowProcessDO">
+        select * from complaint_follow_process where process_instance_id = #{processInstanceId} order by id
+    </select>
+
+    <select id="selectNeedFixDeliverProcessList" resultMap="BaseResultMap">
+        select id,process_content from `complaint_follow_process`
+        where complaint_no like 'DR%' and (process_content LIKE '%交付邀约主�?' or process_content LIKE '%86%')
+    </select>
+
+    <update id="batchUpdateProcessContentById">
+        UPDATE complaint_follow_process
+        <trim prefix="SET" suffixOverrides=",">
+            <trim prefix="process_content = CASE" suffix="END,">
+                <foreach collection="updateList" item="item">
+                    <if test="item.processContent != null">
+                        WHEN id = #{item.id,jdbcType=BIGINT} THEN #{item.processContent,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+                ELSE process_content
+            </trim>
+        </trim>
+        WHERE id IN
+        <foreach collection="updateList" item="item" open="(" separator="," close=")">
+            #{item.id,jdbcType=BIGINT}
+        </foreach>
+    </update>
+
+</mapper>

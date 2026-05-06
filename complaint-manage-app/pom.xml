@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.wt</groupId>
+        <artifactId>complaint-manage</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <artifactId>complaint-manage-app</artifactId>
+    <version>${complaint-manage-app-version}</version>
+
+    <dependencies>
+        <dependency>
+            <artifactId>complaint-manage-api</artifactId>
+            <groupId>com.wt</groupId>
+            <version>${complaint-manage-api-version}</version>
+        </dependency>
+        <dependency>
+            <artifactId>complaint-manage-domain</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>dubbo-server-registry</artifactId>
+                    <groupId>com.xiaomi.mone</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>simpleclient</artifactId>
+                    <groupId>io.prometheus</groupId>
+                </exclusion>
+            </exclusions>
+            <groupId>com.wt</groupId>
+            <version>${complaint-manage-domain-version}</version>
+        </dependency>
+        <!--dubbo rpc依赖-->
+        <dependency>
+            <artifactId>dubbo</artifactId>
+            <groupId>org.apache.dubbo</groupId>
+        </dependency>
+        <dependency>
+            <groupId>com.xiaomi.mone</groupId>
+            <artifactId>miapi-doc-annos</artifactId>
+            <version>2.7.12-mone-v20-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.xiaomi.mone</groupId>
+            <artifactId>dubbo-docs-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.xiaomi.nr</groupId>
+            <artifactId>nr-job-core</artifactId>
+            <version>2.6.0-SNAPSHOT</version>
+            <exclusions>
+                <!-- 排除 POM 无效的传递依赖（本工程未使用�?-->
+                <exclusion>
+                    <groupId>com.alibaba.cola</groupId>
+                    <artifactId>cola-component-statemachine</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>com.wt</groupId>
+            <artifactId>complaint-manage-infrastructure</artifactId>
+            <version>${complaint-manage-infrastructure-version}</version>
+            <scope>compile</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>jackson-annotations</artifactId>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>simpleclient</artifactId>
+                    <groupId>io.prometheus</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.poi/poi -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi</artifactId>
+            <version>4.1.2</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>4.1.2</version>
+        </dependency>
+
+        <!-- mapstruct -->
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct-processor</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mapstruct</groupId>
+            <artifactId>mapstruct</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>commons-collections</groupId>
+            <artifactId>commons-collections</artifactId>
+            <version>3.2.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.rocketmq</groupId>
+            <artifactId>rocketmq-spring-boot-starter</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

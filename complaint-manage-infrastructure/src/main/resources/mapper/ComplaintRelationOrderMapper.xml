@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wt.complaint.manage.infrastructure.mapper.ComplaintRelationOrderMapper">
+
+    <resultMap id="BaseResultMap" type="com.wt.complaint.manage.infrastructure.model.ComplaintRelationOrderDO">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="complaintNo" column="complaint_no" jdbcType="VARCHAR"/>
+            <result property="bizNo" column="biz_no" jdbcType="VARCHAR"/>
+            <result property="bizType" column="biz_type" jdbcType="TINYINT"/>
+            <result property="bizExtendInfo" column="biz_extend_info" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,complaint_no,biz_no,
+        biz_type,biz_extend_info,create_time
+    </sql>
+    <insert id="insertSelective"
+            parameterType="com.wt.complaint.manage.infrastructure.model.ComplaintRelationOrderDO">
+        INSERT INTO complaint_relation_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="complaintNo != null">
+                complaint_no,
+            </if>
+            <if test="bizNo != null">
+                biz_no,
+            </if>
+            <if test="bizType != null">
+                biz_type,
+            </if>
+            <if test="bizExtendInfo != null">
+                biz_extend_info,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="complaintNo != null">
+                #{complaintNo,jdbcType=VARCHAR},
+            </if>
+            <if test="bizNo != null">
+                #{bizNo,jdbcType=VARCHAR},
+            </if>
+            <if test="bizType != null">
+                #{bizType,jdbcType=TINYINT},
+            </if>
+            <if test="bizExtendInfo != null">
+                #{bizExtendInfo,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateByBizNoSelective" parameterType="com.wt.complaint.manage.infrastructure.model.ComplaintRelationOrderDO">
+        UPDATE complaint_relation_order
+        <set>
+            <if test="complaintNo != null">
+                complaint_no = #{complaintNo,jdbcType=VARCHAR},
+            </if>
+            <if test="bizNo != null">
+                biz_no = #{bizNo,jdbcType=VARCHAR},
+            </if>
+            <if test="bizType != null">
+                biz_type = #{bizType,jdbcType=TINYINT},
+            </if>
+            <if test="bizExtendInfo != null">
+                biz_extend_info = #{bizExtendInfo,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        WHERE id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="selectList"
+            resultType="com.wt.complaint.manage.infrastructure.model.ComplaintRelationOrderDO">
+        select
+        <if test="master != null and master == true">
+            /*master*/
+        </if>
+        <include refid="Base_Column_List"/>
+        from complaint_relation_order
+        <where>
+            <if test = "complaintNoList != null and complaintNoList.size > 0">
+                complaint_no in
+                <foreach collection="complaintNoList" item="complaintNo" separator="," open="(" close=")">
+                    #{complaintNo}
+                </foreach>
+            </if>
+            <if test = "bizNoList != null and bizNoList.size > 0">
+                biz_no in
+                <foreach collection="bizNoList" item="bizNo" separator="," open="(" close=")">
+                    #{bizNo}
+                </foreach>
+            </if>
+        </where>
+        order by id desc
+    </select>
+</mapper>

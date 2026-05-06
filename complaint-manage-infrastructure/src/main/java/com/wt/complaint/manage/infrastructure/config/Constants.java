@@ -1,0 +1,42 @@
+package com.wt.complaint.manage.infrastructure.config;
+
+/**
+ * @author zhangzheyang
+ * @date 2025/6/16
+ */
+public class Constants {
+
+    public static final String AUTHORIZATION = "Authorization";
+    /**
+     * 飞书租户token redis key
+     */
+    public static final String LARK_ACCESS_TOKEN_REDIS = "com:lark:access:token";
+
+    /**
+     * 查询有效用户最大页大小
+     */
+    public static final Integer FILTER_VALID_USER_MAX_PAGESIZE = 50;
+
+    /**
+     * 飞书，获取租户token
+     */
+    public static final String LARK_TENANT_ACCESS_TOKEN =
+            "https://open.feishu.cn/open-apis/auth/v3/tenant_access_token/internal";
+    /**
+     * 飞书-创建群聊
+     */
+    public static final String LARK_CREATE_CHAT = "https://open.feishu.cn/open-apis/im/v1/chats";
+    /**
+     * 飞书-发消�?
+     */
+    public static final String LARK_SEND_MESSAGE = "https://open.feishu.cn/open-apis/im/v1/messages";
+    /**
+     * 飞书-筛选有效用�?
+     */
+    public static final String FILTER_VALID_USER = "https://open.feishu.cn/open-apis/contact/v3/users/batch_get_id";
+
+    private Constants() {
+        throw new AssertionError("工具类禁止实例化");
+    }
+
+}

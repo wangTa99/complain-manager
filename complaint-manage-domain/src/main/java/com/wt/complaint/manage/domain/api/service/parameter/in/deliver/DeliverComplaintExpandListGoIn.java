@@ -1,0 +1,16 @@
+package com.wt.complaint.manage.domain.api.service.parameter.in.deliver;
+
+import com.xiaomi.mone.docs.annotations.dubbo.ApiDocClassDefine;
+import lombok.Data;
+
+/**
+ * 交付零售客诉单扩展表实体�?
+ */
+@Data
+public class DeliverComplaintExpandListGoIn {
+    @ApiDocClassDefine(value = "offset", description = "偏移�?)
+    private Integer offset;
+
+    @ApiDocClassDefine(value = "pageSize", description = "每页大小, 默认�?0,最�?00,最�?")
+    private Integer pageSize;
+}

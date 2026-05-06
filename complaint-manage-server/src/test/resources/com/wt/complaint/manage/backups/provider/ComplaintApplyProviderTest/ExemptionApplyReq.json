@@ -1,0 +1,19 @@
+{
+  "complaintNo": "TS248191003051628",
+  "applyOrgId": "F1039",
+  "applyReason": "不是我的锅",
+  "attachmentList": [
+    {
+      "url": "https://staging-cnbj2-fds.api.xiaomi.net/nr-upload-car-private/005b69b6-eb24-4811-9287-e5d66f33c269_c75ae8b3-88b3-4755-8d4d-1e7d7feb1dba.jpg?GalaxyAccessKeyId=AKD2BP4KL5GWSFRZHC&Expires=1735785101507&Signature=4KrezG0zAG1oN2y7s/z0bXHVpmY=",
+      "id": 766898,
+      "type": 1,
+      "fileName": "005b69b6-eb24-4811-9287-e5d66f33c269.jpg"
+    },
+    {
+      "url": "https://staging-cnbj2-fds.api.xiaomi.net/nr-upload-car-private/1730893157931-test%20(2)_fd01d07f-4f16-45ef-be45-eb569f8c95bb.pdf?GalaxyAccessKeyId=AKD2BP4KL5GWSFRZHC&Expires=1735785107106&Signature=yqMG1WB0+qM83eVN+bPkUGHiB+s=",
+      "id": 766899,
+      "type": 5,
+      "fileName": "1730893157931-test (2).pdf"
+    }
+  ]
+}

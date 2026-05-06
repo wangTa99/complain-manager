@@ -1,0 +1,580 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wt.complaint.manage.infrastructure.mapper.DeliverComplaintMapper">
+
+    <resultMap id="BaseResultMap" type="com.wt.complaint.manage.infrastructure.model.DeliverComplaintDO">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="drNo" column="dr_no" jdbcType="VARCHAR"/>
+        <result property="idempotentKey" column="idempotent_key" jdbcType="VARCHAR"/>
+        <result property="source" column="source" jdbcType="TINYINT"/>
+        <result property="tradeOrderId" column="trade_order_id" jdbcType="VARCHAR"/>
+        <result property="superTicketNo" column="super_ticket_no" jdbcType="VARCHAR"/>
+        <result property="soNo" column="so_no" jdbcType="VARCHAR"/>
+        <result property="orderStatus" column="order_status" jdbcType="TINYINT"/>
+        <result property="contactNameC" column="contact_name_c" jdbcType="VARCHAR"/>
+        <result property="contactNameMd5" column="contact_name_md5" jdbcType="VARCHAR"/>
+        <result property="contactPhoneC" column="contact_phone_c" jdbcType="VARCHAR"/>
+        <result property="contactPhoneMd5" column="contact_phone_md5" jdbcType="CHAR"/>
+        <result property="testTag" column="test_tag" jdbcType="TINYINT"/>
+        <result property="firstResponseTag" column="first_response_tag" jdbcType="TINYINT"/>
+        <result property="finishTag" column="finish_tag" jdbcType="TINYINT"/>
+        <result property="responsible" column="responsible" jdbcType="TINYINT"/>
+        <result property="riskLevel" column="risk_level" jdbcType="INTEGER"/>
+        <result property="complaintType" column="complaint_type" jdbcType="TINYINT"/>
+        <result property="operatorPositionId" column="operator_position_id" jdbcType="INTEGER"/>
+        <result property="operatorMid" column="operator_mid" jdbcType="BIGINT"/>
+        <result property="customerServiceMid" column="customer_service_mid" jdbcType="BIGINT"/>
+        <result property="complaintContent" column="complaint_content" jdbcType="VARCHAR"/>
+        <result property="zoneId" column="zone_id" jdbcType="INTEGER"/>
+        <result property="littleZoneId" column="little_zone_id" jdbcType="INTEGER"/>
+        <result property="cityZoneId" column="city_zone_id" jdbcType="INTEGER"/>
+        <result property="cityId" column="city_id" jdbcType="INTEGER"/>
+        <result property="orgId" column="org_id" jdbcType="VARCHAR"/>
+        <result property="problemCategory" column="problem_category" jdbcType="VARCHAR"/>
+        <result property="lastCategoryId" column="last_category_id" jdbcType="INTEGER"/>
+        <result property="complaintScene" column="complaint_scene" jdbcType="VARCHAR"/>
+        <result property="lastComplaintSceneId" column="last_complaint_scene_id" jdbcType="INTEGER"/>
+        <result property="reminderTimes" column="reminder_times" jdbcType="INTEGER"/>
+        <result property="lastReminderTime" column="last_reminder_time" jdbcType="TIMESTAMP"/>
+        <result property="reassignmentTimes" column="reassignment_times" jdbcType="INTEGER"/>
+        <result property="lastReassignmentTime" column="last_reassignment_time" jdbcType="TIMESTAMP"/>
+        <result property="expectedFirstResponseTime" column="expected_first_response_time" jdbcType="TIMESTAMP"/>
+        <result property="realFirstResponseTime" column="real_first_response_time" jdbcType="TIMESTAMP"/>
+        <result property="expectedFinishTime" column="expected_finish_time" jdbcType="TIMESTAMP"/>
+        <result property="realFinishTime" column="real_finish_time" jdbcType="TIMESTAMP"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="createMid" column="create_mid" jdbcType="BIGINT"/>
+        <result property="problemDesc" column="problem_desc" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id ,dr_no ,idempotent_key ,source,trade_order_id ,super_ticket_no ,so_no ,order_status ,contact_name_c ,
+        contact_name_md5 ,contact_phone_c ,contact_phone_md5 ,test_tag ,first_response_tag ,finish_tag ,responsible ,
+        risk_level ,complaint_type ,operator_position_id ,operator_mid ,customer_service_mid ,
+        complaint_content ,
+        zone_id ,little_zone_id ,city_zone_id ,city_id ,org_id ,problem_category ,last_category_id ,reminder_times ,
+        complaint_scene ,last_complaint_scene_id ,
+        last_reminder_time ,reassignment_times ,last_reassignment_time ,expected_first_response_time ,
+        real_first_response_time ,expected_finish_time ,real_finish_time ,create_time ,update_time ,create_mid
+        ,problem_desc
+    </sql>
+
+    <sql id="Base_Column_List_Without_Text">
+        id ,dr_no ,idempotent_key ,source,trade_order_id ,super_ticket_no ,so_no ,order_status ,contact_name_c ,
+        contact_name_md5 ,contact_phone_c ,contact_phone_md5 ,test_tag ,first_response_tag ,finish_tag ,responsible ,
+        risk_level ,complaint_type ,operator_position_id ,operator_mid ,customer_service_mid ,
+        zone_id ,little_zone_id ,city_zone_id ,city_id ,org_id ,problem_category ,last_category_id ,reminder_times ,
+        complaint_scene ,last_complaint_scene_id ,
+        last_reminder_time ,reassignment_times ,last_reassignment_time ,expected_first_response_time ,
+        real_first_response_time ,expected_finish_time ,real_finish_time ,create_time ,update_time ,create_mid
+        ,problem_desc
+    </sql>
+
+    <update id="updateOrderStatus">
+        UPDATE deliver_retail_complaint_order
+        SET order_status = #{orderStatus}
+        WHERE dr_no = #{drNo}
+    </update>
+
+    <update id="updateByDrNo">
+        UPDATE deliver_retail_complaint_order
+        <set>
+            <if test="idempotentKey != null">idempotent_key = #{idempotentKey},</if>
+            <if test="source != null">source = #{source},</if>
+            <if test="tradeOrderId != null">trade_order_id = #{tradeOrderId},</if>
+            <if test="superTicketNo != null">super_ticket_no = #{superTicketNo},</if>
+            <if test="soNo != null">so_no = #{soNo},</if>
+            <if test="orderStatus != null">order_status = #{orderStatus},</if>
+            <if test="contactNameC != null">contact_name_c = #{contactNameC},</if>
+            <if test="contactNameMd5 != null">contact_name_md5 = #{contactNameMd5},</if>
+            <if test="contactPhoneC != null">contact_phone_c = #{contactPhoneC},</if>
+            <if test="contactPhoneMd5 != null">contact_phone_md5 = #{contactPhoneMd5},</if>
+            <if test="testTag != null">test_tag = #{testTag},</if>
+            <if test="firstResponseTag != null">first_response_tag = #{firstResponseTag},</if>
+            <if test="finishTag != null">finish_tag = #{finishTag},</if>
+            <if test="responsible != null">responsible = #{responsible},</if>
+            <if test="riskLevel != null">risk_level = #{riskLevel},</if>
+            <if test="complaintType != null">complaint_type = #{complaintType},</if>
+            <if test="operatorPositionId != null">operator_position_id = #{operatorPositionId},</if>
+            <if test="operatorMid != null">operator_mid = #{operatorMid},</if>
+            <if test="customerServiceMid != null">customer_service_mid = #{customerServiceMid},</if>
+            <if test="complaintContent != null">complaint_content = #{complaintContent},</if>
+            <if test="zoneId != null">zone_id = #{zoneId},</if>
+            <if test="littleZoneId != null">little_zone_id = #{littleZoneId},</if>
+            <if test="cityZoneId != null">city_zone_id = #{cityZoneId},</if>
+            <if test="cityId != null">city_id = #{cityId},</if>
+            <if test="orgId != null">org_id = #{orgId},</if>
+            <if test="problemCategory != null">problem_category = #{problemCategory},</if>
+            <if test="problemDesc != null">problem_desc = #{problemDesc},</if>
+            <if test="lastCategoryId != null">last_category_id = #{lastCategoryId},</if>
+            <if test="complaintScene != null">complaint_scene = #{complaintScene},</if>
+            <if test="lastComplaintSceneId != null">last_complaint_scene_id = #{lastComplaintSceneId},</if>
+            <if test="reminderTimes != null">reminder_times = #{reminderTimes},</if>
+            <if test="lastReminderTime != null">last_reminder_time = #{lastReminderTime},</if>
+            <if test="reassignmentTimes != null">reassignment_times = #{reassignmentTimes},</if>
+            <if test="lastReassignmentTime != null">last_reassignment_time = #{lastReassignmentTime},</if>
+            <if test="expectedFirstResponseTime != null">expected_first_response_time = #{expectedFirstResponseTime},</if>
+            <if test="realFirstResponseTime != null">real_first_response_time = #{realFirstResponseTime},</if>
+            <if test="expectedFinishTime != null">expected_finish_time = #{expectedFinishTime},</if>
+            <if test="realFinishTime != null">real_finish_time = #{realFinishTime},</if>
+            <if test="createMid != null">create_mid = #{createMid},</if>
+        </set>
+        WHERE dr_no = #{drNo}
+
+    </update>
+
+    <select id="selectListByCondition"
+            resultType="com.wt.complaint.manage.infrastructure.model.DeliverComplaintDO">
+        SELECT
+        <if test="useMaster != null and useMaster">
+            /*master*/
+        </if>
+        <include refid="Base_Column_List"/>
+        FROM deliver_retail_complaint_order
+        <include refid="Common_Where_Condition"/>
+        <!--数据权限-->
+        <include refid="Common_Data_Permission_Condition"/>
+        ORDER BY  reminder_times DESC, risk_level DESC,create_time DESC
+        <if test="offset != null and pageSize != null">
+            LIMIT #{offset}, #{pageSize}
+        </if>
+
+    </select>
+
+
+    <select id="selectCountByCondition" resultType="java.lang.Long">
+        SELECT
+        count(*)
+        FROM deliver_retail_complaint_order
+        <include refid="Common_Where_Condition"/>
+        <!--数据权限-->
+        <include refid="Common_Data_Permission_Condition"/>
+    </select>
+
+    <select id="selectByDrNo" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List_Without_Text"/>
+        FROM deliver_retail_complaint_order
+        WHERE dr_no = #{drNo}
+        LIMIT 1
+    </select>
+
+    <select id="selectByDrNoList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM deliver_retail_complaint_order
+        WHERE dr_no IN
+        <foreach collection="drNoList" item="drNo" open="(" separator="," close=")">
+            #{drNo}
+        </foreach>
+    </select>
+
+    <select id="selectByStNoList" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List_Without_Text"/>
+        FROM deliver_retail_complaint_order
+        WHERE super_ticket_no IN
+        <foreach collection="stNoList" item="stNo" open="(" separator="," close=")">
+            #{stNo}
+        </foreach>
+    </select>
+
+    <sql id="Common_Data_Permission_Condition">
+        <!--数据权限-->
+        <if test="permissionZoneId != null and permissionZoneId.size() > 0">
+            AND zone_id IN
+            <foreach collection="permissionZoneId" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="permissionLittleZoneId != null and permissionLittleZoneId.size() > 0">
+            AND little_zone_id IN
+            <foreach collection="permissionLittleZoneId" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="permissionOrgId != null and permissionOrgId.size() > 0">
+            AND org_id IN
+            <foreach collection="permissionOrgId" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+        <if test="permissionOperatorMid != null and permissionOperatorMid.size() > 0">
+            AND operator_mid IN
+            <foreach collection="permissionOperatorMid" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+    </sql>
+
+
+    <sql id="Common_Where_Condition">
+        <where>
+            source = 0
+            <if test="orgIds != null and orgIds.size() > 0">
+                AND org_id IN
+                <foreach collection="orgIds" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="testTag != null">
+                AND test_tag = #{testTag}
+            </if>
+            <if test="drNo != null and drNo != ''">
+                AND dr_no = #{drNo}
+            </if>
+            <if test="tradeOrderId != null and tradeOrderId != ''">
+                AND trade_order_id = #{tradeOrderId}
+            </if>
+            <if test="contactNameMd5 != null and contactNameMd5 != ''">
+                AND contact_name_md5 = #{contactNameMd5}
+            </if>
+            <if test="contactPhoneMd5 != null and contactPhoneMd5 != ''">
+                AND contact_phone_md5 = #{contactPhoneMd5}
+            </if>
+            <if test="riskLevel != null and riskLevel.size() > 0">
+                AND risk_level IN
+                <foreach collection="riskLevel" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="lastComplaintSceneId != null and lastComplaintSceneId.size() > 0">
+                AND last_complaint_scene_id IN
+                <foreach collection="lastComplaintSceneId" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="lastCategoryId != null and lastCategoryId.size() > 0">
+                AND last_category_id IN
+                <foreach collection="lastCategoryId" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="orderStatus != null and orderStatus.size() > 0">
+                AND order_status IN
+                <foreach collection="orderStatus" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="responsible != null and responsible.size() > 0">
+                AND responsible IN
+                <foreach collection="responsible" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="operatorPositionId != null and operatorPositionId.size() > 0">
+                AND operator_position_id IN
+                <foreach collection="operatorPositionId" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="operatorMid != null and operatorMid.size() > 0">
+                AND operator_mid IN
+                <foreach collection="operatorMid" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="reminderTimes != null and reminderTimes.size() > 0">
+                AND ( reminder_times IN
+                <foreach collection="reminderTimes" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+                <if test="reminderTimes != null and reminderTimes.contains(2)">
+                    OR reminder_times <![CDATA[>]]> 2
+                </if>
+                )
+            </if>
+            <if test="firstResponseTag != null">
+                AND first_response_tag = #{firstResponseTag}
+            </if>
+            <if test="finishTag != null">
+                AND finish_tag = #{finishTag}
+            </if>
+            <if test="createTimeStart != null and createTimeStart != ''">
+                AND create_time <![CDATA[>=]]> #{createTimeStart}
+            </if>
+            <if test="createTimeEnd != null and createTimeEnd != ''">
+                AND create_time <![CDATA[<=]]> #{createTimeEnd}
+            </if>
+            <if test="realFirstResponseTimeStart != null and realFirstResponseTimeStart != ''">
+                AND real_first_response_time <![CDATA[>=]]> #{realFirstResponseTimeStart}
+            </if>
+            <if test="realFirstResponseTimeEnd != null and realFirstResponseTimeEnd != ''">
+                AND real_first_response_time <![CDATA[<=]]> #{realFirstResponseTimeEnd}
+            </if>
+            <if test="realFinishTimeStart != null and realFinishTimeStart != ''">
+                AND real_finish_time <![CDATA[>=]]> #{realFinishTimeStart}
+            </if>
+            <if test="realFinishTimeEnd != null and realFinishTimeEnd != ''">
+                AND real_finish_time <![CDATA[<=]]> #{realFinishTimeEnd}
+            </if>
+            <if test="onlyUnfinished != null and onlyUnfinished">
+                AND responsible in (0, 3)
+            </if>
+        </where>
+    </sql>
+
+    <select id="selectStatisticsItems"
+            resultType="com.wt.complaint.manage.domain.bo.DeliverStatisticsItemBO">
+        SELECT
+            COUNT(CASE WHEN order_status = 10 THEN 1 ELSE NULL END) AS pendingFirstResponseCount,
+            COUNT(CASE WHEN order_status = 20 THEN 1 ELSE NULL END) AS handlingCount,
+            COUNT(CASE WHEN responsible = 3 AND order_status = 50 THEN 1 ELSE NULL END) AS pendingResponsibilityCount,
+            COUNT(CASE WHEN reminder_times > 0 and order_status!= 50 THEN 1 ELSE NULL END) AS remindCount,
+            COUNT(CASE WHEN order_status = 10 and first_response_tag = 1 THEN 1 ELSE NULL END) AS firstResponseTimeoutCount,
+            COUNT(CASE WHEN order_status != 50 and finish_tag = 1 THEN 1 ELSE NULL END) AS finishTimeoutCount
+        FROM deliver_retail_complaint_order
+        <where>
+            source = 0
+            <if test="orgIds != null and orgIds.size() > 0">
+                AND org_id IN
+                <foreach collection="orgIds" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="testTag != null">
+                AND test_tag = #{testTag}
+            </if>
+            <!--数据权限-->
+            <include refid="Common_Data_Permission_Condition"/>
+        </where>
+
+
+    </select>
+    <select id="selectDetail"
+            resultType="com.wt.complaint.manage.infrastructure.model.DeliverComplaintDO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM deliver_retail_complaint_order
+        where dr_no = #{drNo}
+        <!--数据权限-->
+        <include refid="Common_Data_Permission_Condition"/>
+    </select>
+
+    <update id="batchUpdateByDrNo">
+        UPDATE deliver_retail_complaint_order
+        <trim prefix="SET" suffixOverrides=",">
+            <trim prefix="customer_service_mid = CASE" suffix="END,">
+                <foreach collection="updateParamList" item="updateParam">
+                    <if test="updateParam.customerServiceMid != null">
+                        WHEN dr_no = #{updateParam.drNo,jdbcType=VARCHAR} THEN #{updateParam.customerServiceMid,jdbcType=BIGINT}
+                    </if>
+                </foreach>
+                ELSE customer_service_mid
+            </trim>
+        </trim>
+        WHERE dr_no IN
+        <foreach collection="updateParamList" item="updateParam" open="(" separator="," close=")">
+            #{updateParam.drNo,jdbcType=VARCHAR}
+        </foreach>
+    </update>
+
+    <select id="selectFirstResponseToTimeoutList"
+            resultType="com.wt.complaint.manage.infrastructure.model.DeliverComplaintDO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM deliver_retail_complaint_order
+        WHERE source = 0
+        AND order_status = 10
+        AND expected_first_response_time BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 1 HOUR)
+        order by id asc
+    </select>
+
+    <select id="selectFinishToTimeoutList"
+            resultType="com.wt.complaint.manage.infrastructure.model.DeliverComplaintDO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM deliver_retail_complaint_order
+        WHERE source = 0
+        AND order_status IN (10, 20)
+        AND expected_finish_time BETWEEN NOW() AND DATE_ADD(NOW(), INTERVAL 12 HOUR)
+        order by id asc
+    </select>
+
+    <select id="selectHasFirstResponseTimeOutTagList" resultType="java.lang.String">
+        SELECT dr_no FROM
+        deliver_retail_complaint_order
+        WHERE
+        first_response_tag = 0
+        AND ( real_first_response_time <![CDATA[>]]> expected_first_response_time )
+        and create_time <![CDATA[>]]> SUBDATE(now(), INTERVAL 3 MONTH)
+        <if test="orgId != null">
+            and org_id = #{orgId}
+        </if>
+        <if test="complaintNoList != null and complaintNoList.size()>0">
+            and dr_no in
+            <foreach collection="complaintNoList" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="complaintStatusList != null and complaintStatusList.size()>0">
+            and order_status in
+            <foreach collection="complaintStatusList" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        order by id asc
+    </select>
+
+    <select id="selectNotHasFirstResponseTimeOutTagList" resultType="java.lang.String">
+        SELECT dr_no FROM
+        deliver_retail_complaint_order
+        WHERE
+        first_response_tag = 0 and real_first_response_time = '1970-08-02 00:00:00' AND expected_first_response_time <![CDATA[<]]> now()
+        and create_time <![CDATA[>]]> SUBDATE(now(), INTERVAL 3 MONTH)
+        <if test="orgId != null">
+            and org_id = #{orgId}
+        </if>
+        <if test="complaintNoList != null and complaintNoList.size()>0">
+            and dr_no in
+            <foreach collection="complaintNoList" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="complaintStatusList != null and complaintStatusList.size()>0">
+            and order_status in
+            <foreach collection="complaintStatusList" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        order by id asc
+    </select>
+
+    <select id="selectHasFinishTimeOutTagList" resultType="java.lang.String">
+        SELECT dr_no FROM
+        deliver_retail_complaint_order
+        WHERE
+        finish_tag = 0
+        AND ( real_finish_time <![CDATA[>]]> expected_finish_time )
+        and create_time <![CDATA[>]]> SUBDATE(now(), INTERVAL 3 MONTH)
+        <if test="orgId != null">
+            and org_id = #{orgId}
+        </if>
+        <if test="complaintNoList != null and complaintNoList.size()>0">
+            and dr_no in
+            <foreach collection="complaintNoList" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="complaintStatusList != null and complaintStatusList.size()>0">
+            and order_status in
+            <foreach collection="complaintStatusList" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        order by id asc
+    </select>
+
+    <select id="selectNotHasFinishTimeOutTagList" resultType="java.lang.String">
+        SELECT dr_no FROM
+        deliver_retail_complaint_order
+        WHERE
+        finish_tag = 0 and real_finish_time = '1970-08-02 00:00:00' AND expected_finish_time <![CDATA[<]]> now()
+        and create_time <![CDATA[>]]> SUBDATE(now(), INTERVAL 3 MONTH)
+        <if test="orgId != null">
+            and org_id = #{orgId}
+        </if>
+        <if test="complaintNoList != null and complaintNoList.size()>0">
+            and dr_no in
+            <foreach collection="complaintNoList" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        <if test="complaintStatusList != null and complaintStatusList.size()>0">
+            and order_status in
+            <foreach collection="complaintStatusList" item="item" open="(" close=")" separator=",">
+                #{item}
+            </foreach>
+        </if>
+        order by id asc
+    </select>
+
+    <select id="selectEmptyComplaintScene"
+            resultType="com.wt.complaint.manage.infrastructure.model.DeliverComplaintDO">
+        select dr_no, complaint_content
+        from deliver_retail_complaint_order
+        where source = 0 and last_complaint_scene_id = 0
+    </select>
+
+    <select id="selectByPageGoIn"
+            resultType="com.wt.complaint.manage.infrastructure.model.DeliverComplaintDO">
+        select dr_no, org_id, zone_id, little_zone_id, city_zone_id, city_id
+        from deliver_retail_complaint_order
+        where source = 0
+        <if test="offset != null and pageSize != null">
+            LIMIT #{offset}, #{pageSize}
+        </if>
+    </select>
+
+    <update id="batchUpdateComplaintSceneByDrNo">
+        UPDATE deliver_retail_complaint_order
+        <trim prefix="SET" suffixOverrides=",">
+            <trim prefix="complaint_scene = CASE" suffix="END,">
+                <foreach collection="updateList" item="item">
+                    <if test="item.complaintScene != null">
+                        WHEN dr_no = #{item.drNo,jdbcType=VARCHAR} THEN #{item.complaintScene,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+                ELSE complaint_scene
+            </trim>
+            <trim prefix="last_complaint_scene_id = CASE" suffix="END,">
+                <foreach collection="updateList" item="item">
+                    <if test="item.lastComplaintSceneId != null">
+                        WHEN dr_no = #{item.drNo,jdbcType=VARCHAR} THEN #{item.lastComplaintSceneId,jdbcType=INTEGER}
+                    </if>
+                </foreach>
+                ELSE last_complaint_scene_id
+            </trim>
+        </trim>
+        WHERE dr_no IN
+        <foreach collection="updateList" item="item" open="(" separator="," close=")">
+            #{item.drNo,jdbcType=VARCHAR}
+        </foreach>
+    </update>
+
+    <update id="batchUpdateCityZoneIdByDrNo">
+        UPDATE deliver_retail_complaint_order
+        <trim prefix="SET" suffixOverrides=",">
+            <trim prefix="zone_id = CASE" suffix="END,">
+                <foreach collection="updateList" item="item">
+                    <if test="item.zoneId != null">
+                        WHEN dr_no = #{item.drNo,jdbcType=VARCHAR} THEN #{item.zoneId,jdbcType=INTEGER}
+                    </if>
+                </foreach>
+                ELSE zone_id
+            </trim>
+            <trim prefix="little_zone_id = CASE" suffix="END,">
+                <foreach collection="updateList" item="item">
+                    <if test="item.littleZoneId != null">
+                        WHEN dr_no = #{item.drNo,jdbcType=VARCHAR} THEN #{item.littleZoneId,jdbcType=INTEGER}
+                    </if>
+                </foreach>
+                ELSE little_zone_id
+            </trim>
+            <trim prefix="city_zone_id = CASE" suffix="END,">
+                <foreach collection="updateList" item="item">
+                    <if test="item.cityZoneId != null">
+                        WHEN dr_no = #{item.drNo,jdbcType=VARCHAR} THEN #{item.cityZoneId,jdbcType=INTEGER}
+                    </if>
+                </foreach>
+                ELSE city_zone_id
+            </trim>
+            <trim prefix="city_id = CASE" suffix="END,">
+                <foreach collection="updateList" item="item">
+                    <if test="item.cityId != null">
+                        WHEN dr_no = #{item.drNo,jdbcType=VARCHAR} THEN #{item.cityId,jdbcType=INTEGER}
+                    </if>
+                </foreach>
+                ELSE city_id
+            </trim>
+        </trim>
+        WHERE dr_no IN
+        <foreach collection="updateList" item="item" open="(" separator="," close=")">
+            #{item.drNo,jdbcType=VARCHAR}
+        </foreach>
+    </update>
+
+</mapper>

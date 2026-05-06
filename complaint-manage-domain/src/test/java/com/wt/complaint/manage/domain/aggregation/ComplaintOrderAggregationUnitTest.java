@@ -1,0 +1,554 @@
+package com.wt.complaint.manage.domain.aggregation;
+
+import com.wt.complaint.manage.api.model.enums.ComplaintStatusEnum;
+import com.wt.complaint.manage.api.model.enums.MediaInvolvedEnum;
+import com.wt.complaint.manage.api.model.enums.RiskLevelEnum;
+import com.wt.complaint.manage.domain.api.enums.ComplaintTypeEnum;
+import com.wt.complaint.manage.domain.api.gateway.parameter.in.ComplaintFollowProcessGoIn;
+import com.wt.complaint.manage.domain.api.gateway.parameter.in.ComplaintOrderInfoGoIn;
+import com.wt.complaint.manage.domain.api.service.parameter.in.ComplaintOrderUpgradeSoIn;
+import com.wt.complaint.manage.domain.api.service.parameter.in.FieldValueSoIn;
+import com.wt.complaint.manage.domain.api.service.parameter.in.OrderAddFollowUpRecordSoInV2;
+import com.wt.complaint.manage.domain.api.service.parameter.in.OrderEditComplaintSoIn;
+import com.wt.complaint.manage.domain.exception.BusinessException;
+import com.wt.complaint.manage.domain.testutil.TestDataBuilder;
+import org.junit.jupiter.api.Test;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+/**
+ * ComplaintOrderAggregation单元测试
+ * 测试领域聚合纯业务逻辑（无外部依赖�?
+ *
+ * @author zhangzheyang
+ * @date 2026/01/28
+ */
+public class ComplaintOrderAggregationUnitTest {
+
+    // ============ upgradeComplaintOrder 升级投诉单测�?============
+
+    /**
+     * 测试升级投诉�?- 从待申请结案状态升级，状态改为待首响
+     */
+    @Test
+    void testUpgradeComplaintOrder_StatusChange_FromApplyFinish() {
+        // 准备数据
+        String complaintNo = "C001";
+        ComplaintOrderInfoGoIn orderInfo = TestDataBuilder.buildComplaintOrderInfoGoIn(
+                complaintNo, ComplaintTypeEnum.PRODUCT_RISK.getCode());
+        orderInfo.setStatus(ComplaintStatusEnum.APPLY_FINISH_PENDING.getCode());
+        
+        ComplaintOrderAggregation aggregation = ComplaintOrderAggregationFactory.getComplaintOrderAggregation(orderInfo);
+        
+        ComplaintOrderUpgradeSoIn soIn = TestDataBuilder.buildComplaintOrderUpgradeSoIn(
+                complaintNo, ComplaintTypeEnum.PRODUCT_COMPLAINT.getCode());
+        
+        // 执行
+        aggregation.upgradeComplaintOrder(soIn);
+        
+        // 验证
+        ComplaintOrderInfoGoIn result = aggregation.getComplaintOrderInfoGoIn();
+        assertNotNull(result);
+        assertEquals(ComplaintStatusEnum.FIRST_RESPONSE_PENDING.getCode(), result.getStatus());
+        assertNotNull(result.getUpgradeTime());
+    }
+
+    /**
+     * 测试升级投诉�?- 投诉类型字段更新成功
+     */
+    @Test
+    void testUpgradeComplaintOrder_ComplaintTypeUpdate_Success() {
+        // 准备数据
+        String complaintNo = "C002";
+        ComplaintOrderInfoGoIn orderInfo = TestDataBuilder.buildComplaintOrderInfoGoIn(
+                complaintNo, ComplaintTypeEnum.PRODUCT_RISK.getCode());
+        
+        ComplaintOrderAggregation aggregation = ComplaintOrderAggregationFactory.getComplaintOrderAggregation(orderInfo);
+        
+        ComplaintOrderUpgradeSoIn soIn = TestDataBuilder.buildComplaintOrderUpgradeSoIn(
+                complaintNo, ComplaintTypeEnum.SERVICE_COMPLAINT.getCode());
+        
+        // 执行
+        aggregation.upgradeComplaintOrder(soIn);
+        
+        // 验证
+        ComplaintOrderInfoGoIn result = aggregation.getComplaintOrderInfoGoIn();
+        assertNotNull(result);
+        assertEquals(ComplaintTypeEnum.SERVICE_COMPLAINT.getCode(), result.getComplaintType());
+        assertNotNull(result.getComplaintContent());
+        assertTrue(result.getComplaintContent().contains(ComplaintTypeEnum.SERVICE_COMPLAINT.getDesc()));
+    }
+
+    /**
+     * 测试升级投诉�?- 非产品风险类型抛异常
+     */
+    @Test
+    void testUpgradeComplaintOrder_NotProductRisk_ThrowException() {
+        // 准备数据
+        String complaintNo = "C003";
+        ComplaintOrderInfoGoIn orderInfo = TestDataBuilder.buildComplaintOrderInfoGoIn(
+                complaintNo, ComplaintTypeEnum.SERVICE_COMPLAINT.getCode()); // 非产品风�?
+        
+        ComplaintOrderAggregation aggregation = ComplaintOrderAggregationFactory.getComplaintOrderAggregation(orderInfo);
+        
+        ComplaintOrderUpgradeSoIn soIn = TestDataBuilder.buildComplaintOrderUpgradeSoIn(
+                complaintNo, ComplaintTypeEnum.PRODUCT_COMPLAINT.getCode());
+        
+        // 执行并验�?- 应抛出异�?
+        BusinessException exception = assertThrows(BusinessException.class, () -> {
+            aggregation.upgradeComplaintOrder(soIn);
+        });
+        
+        assertTrue(exception.getMessage().contains("不是产品风险"));
+    }
+
+    /**
+     * 测试升级投诉�?- 构建升级信息成功
+     */
+    @Test
+    void testUpgradeComplaintOrder_BuildUpgradeInfo_Success() {
+        // 准备数据
+        String complaintNo = "C004";
+        ComplaintOrderInfoGoIn orderInfo = TestDataBuilder.buildComplaintOrderInfoGoIn(
+                complaintNo, ComplaintTypeEnum.PRODUCT_RISK.getCode());
+        
+        ComplaintOrderAggregation aggregation = ComplaintOrderAggregationFactory.getComplaintOrderAggregation(orderInfo);
+        
+        ComplaintOrderUpgradeSoIn soIn = TestDataBuilder.buildComplaintOrderUpgradeSoIn(
+                complaintNo, ComplaintTypeEnum.PRODUCT_COMPLAINT.getCode());
+        soIn.setUpgradeReason("测试升级原因");
+        
+        // 执行
+        aggregation.upgradeComplaintOrder(soIn);
+        
+        // 验证
+        assertNotNull(aggregation.getUpgradeInfo());
+        assertNotNull(aggregation.getComplaintFollowProcessGoIn());
+        assertEquals(complaintNo, aggregation.getComplaintFollowProcessGoIn().getComplaintNo());
+    }
+
+    /**
+     * 测试升级投诉�?- 不设置门店处理人 operatorMid（v-zhengshuiguang 4dd1463�?
+     */
+    @Test
+    void testUpgradeComplaintOrder_DoesNotSetOperatorMid() {
+        String complaintNo = "C004B";
+        ComplaintOrderInfoGoIn orderInfo = TestDataBuilder.buildComplaintOrderInfoGoIn(
+                complaintNo, ComplaintTypeEnum.PRODUCT_RISK.getCode());
+        orderInfo.setOperatorMid(9999L);
+
+        ComplaintOrderAggregation aggregation = ComplaintOrderAggregationFactory.getComplaintOrderAggregation(orderInfo);
+        ComplaintOrderUpgradeSoIn soIn = TestDataBuilder.buildComplaintOrderUpgradeSoIn(
+                complaintNo, ComplaintTypeEnum.PRODUCT_COMPLAINT.getCode());
+        soIn.setOperatorMid(1001L);
+
+        aggregation.upgradeComplaintOrder(soIn);
+
+        ComplaintOrderInfoGoIn result = aggregation.getComplaintOrderInfoGoIn();
+        assertNotNull(result);
+        assertNull(result.getOperatorMid());
+    }
+
+    // ============ editComplaint 编辑客诉单测�?============
+
+    /**
+     * 测试编辑客诉�?- 投诉场景变更构建记录
+     */
+    @Test
+    void testEditComplaint_ComplaintSceneChanged_BuildRecord() {
+        // 准备数据
+        String complaintNo = "C005";
+        ComplaintOrderInfoGoIn orderInfo = TestDataBuilder.buildComplaintOrderInfoGoIn(
+                complaintNo, ComplaintTypeEnum.PRODUCT_RISK.getCode());
+        
+        ComplaintOrderAggregation aggregation = ComplaintOrderAggregationFactory.getComplaintOrderAggregation(orderInfo);
+        
+        OrderEditComplaintSoIn soIn = TestDataBuilder.buildOrderEditComplaintSoIn(complaintNo);
+        FieldValueSoIn newComplaint = TestDataBuilder.buildFieldValueSoIn(
+                "SC002", "售后体验", "2/3/4", "售后/售后体验/售后体验");
+        soIn.setComplaint(newComplaint);
+        
+        // 执行
+        aggregation.editComplaint(soIn);
+        
+        // 验证
+        assertNotNull(aggregation.getComplaintOrderInfoGoIn());
+        assertNotNull(aggregation.getComplaintFollowProcessGoIn());
+        String processContent = aggregation.getComplaintFollowProcessGoIn().getProcessContent();
+        assertNotNull(processContent);
+    }
+
+    /**
+     * 测试编辑客诉�?- 风险等级变更构建记录
+     */
+    @Test
+    void testEditComplaint_RiskLevelChanged_BuildRecord() {
+        // 准备数据
+        String complaintNo = "C006";
+        ComplaintOrderInfoGoIn orderInfo = TestDataBuilder.buildComplaintOrderInfoGoIn(
+                complaintNo, ComplaintTypeEnum.PRODUCT_RISK.getCode());
+        orderInfo.setRiskLevel(RiskLevelEnum.LEVEL_1.getCode()); // 初始L1
+        
+        ComplaintOrderAggregation aggregation = ComplaintOrderAggregationFactory.getComplaintOrderAggregation(orderInfo);
+        
+        OrderEditComplaintSoIn soIn = TestDataBuilder.buildOrderEditComplaintSoIn(complaintNo);
+        // 设置complaint字段避免NPE（保持原值不变）
+        FieldValueSoIn sameComplaint = TestDataBuilder.buildFieldValueSoIn(
+                "SC001", "交车体验", "1/2/3", "交付/交车体验/交车体验");
+        soIn.setComplaint(sameComplaint);
+        soIn.setRiskLevel(String.valueOf(RiskLevelEnum.LEVEL_2.getCode())); // 改为L2
+        
+        // 执行
+        aggregation.editComplaint(soIn);
+        
+        // 验证
+        ComplaintOrderInfoGoIn result = aggregation.getComplaintOrderInfoGoIn();
+        assertNotNull(result);
+        assertEquals(RiskLevelEnum.LEVEL_2.getCode(), result.getRiskLevel());
+        
+        ComplaintFollowProcessGoIn followProcess = aggregation.getComplaintFollowProcessGoIn();
+        assertNotNull(followProcess);
+        assertNotNull(followProcess.getProcessContent());
+    }
+
+    /**
+     * 测试编辑客诉�?- 涉媒信息变更构建记录
+     */
+    @Test
+    void testEditComplaint_MediaInvolvedChanged_BuildRecord() {
+        // 准备数据
+        String complaintNo = "C007";
+        ComplaintOrderInfoGoIn orderInfo = TestDataBuilder.buildComplaintOrderInfoGoIn(
+                complaintNo, ComplaintTypeEnum.SERVICE_COMPLAINT.getCode());
+        orderInfo.setMediaInvolved(MediaInvolvedEnum.NO.getCode()); // 初始不涉�?
+        
+        ComplaintOrderAggregation aggregation = ComplaintOrderAggregationFactory.getComplaintOrderAggregation(orderInfo);
+        
+        OrderEditComplaintSoIn soIn = TestDataBuilder.buildOrderEditComplaintSoIn(complaintNo);
+        // 设置complaint字段避免NPE（保持原值不变）
+        FieldValueSoIn sameComplaint = TestDataBuilder.buildFieldValueSoIn(
+                "SC001", "交车体验", "1/2/3", "交付/交车体验/交车体验");
+        soIn.setComplaint(sameComplaint);
+        soIn.setMediaInvolved(String.valueOf(MediaInvolvedEnum.YES.getCode())); // 改为涉媒
+        
+        // 执行
+        aggregation.editComplaint(soIn);
+        
+        // 验证
+        ComplaintOrderInfoGoIn result = aggregation.getComplaintOrderInfoGoIn();
+        assertNotNull(result);
+        assertEquals(MediaInvolvedEnum.YES.getCode(), result.getMediaInvolved());
+    }
+
+    /**
+     * 测试编辑客诉�?- 涉媒链接变更构建记录
+     */
+    @Test
+    void testEditComplaint_MediaLinkChanged_BuildRecord() {
+        // 准备数据
+        String complaintNo = "C008";
+        ComplaintOrderInfoGoIn orderInfo = TestDataBuilder.buildComplaintOrderInfoGoIn(
+                complaintNo, ComplaintTypeEnum.PRODUCT_RISK.getCode());
+        orderInfo.setMediaLink(""); // 初始无链�?
+        
+        ComplaintOrderAggregation aggregation = ComplaintOrderAggregationFactory.getComplaintOrderAggregation(orderInfo);
+        
+        OrderEditComplaintSoIn soIn = TestDataBuilder.buildOrderEditComplaintSoIn(complaintNo);
+        // 设置complaint字段避免NPE（保持原值不变）
+        FieldValueSoIn sameComplaint = TestDataBuilder.buildFieldValueSoIn(
+                "SC001", "交车体验", "1/2/3", "交付/交车体验/交车体验");
+        soIn.setComplaint(sameComplaint);
+        soIn.setMediaLink("http://test.com"); // 设置链接
+        
+        // 执行
+        aggregation.editComplaint(soIn);
+        
+        // 验证
+        ComplaintOrderInfoGoIn result = aggregation.getComplaintOrderInfoGoIn();
+        assertNotNull(result);
+        assertEquals("http://test.com", result.getMediaLink());
+    }
+
+    /**
+     * 测试编辑客诉�?- 所有字段无变更返回null
+     */
+    @Test
+    void testEditComplaint_NoFieldChanged_ReturnNull() {
+        // 准备数据
+        String complaintNo = "C009";
+        ComplaintOrderInfoGoIn orderInfo = TestDataBuilder.buildComplaintOrderInfoGoIn(
+                complaintNo, ComplaintTypeEnum.PRODUCT_RISK.getCode());
+        
+        ComplaintOrderAggregation aggregation = ComplaintOrderAggregationFactory.getComplaintOrderAggregation(orderInfo);
+        
+        OrderEditComplaintSoIn soIn = TestDataBuilder.buildOrderEditComplaintSoIn(complaintNo);
+        // 不设置任何变更字�?
+        
+        // 执行
+        aggregation.editComplaint(soIn);
+        
+        // 验证 - 无变更应该设置为null
+        assertNull(aggregation.getComplaintOrderInfoGoIn());
+        assertNull(aggregation.getComplaintFollowProcessGoIn());
+    }
+
+    /**
+     * 测试编辑客诉�?- 多字段变更构建多条记�?
+     */
+    @Test
+    void testEditComplaint_MultipleFieldsChanged_BuildMultipleRecords() {
+        // 准备数据
+        String complaintNo = "C010";
+        ComplaintOrderInfoGoIn orderInfo = TestDataBuilder.buildComplaintOrderInfoGoIn(
+                complaintNo, ComplaintTypeEnum.PRODUCT_RISK.getCode());
+        orderInfo.setRiskLevel(RiskLevelEnum.LEVEL_1.getCode());
+        orderInfo.setMediaInvolved(MediaInvolvedEnum.NO.getCode());
+        orderInfo.setMediaLink("");
+        
+        ComplaintOrderAggregation aggregation = ComplaintOrderAggregationFactory.getComplaintOrderAggregation(orderInfo);
+        
+        OrderEditComplaintSoIn soIn = TestDataBuilder.buildOrderEditComplaintSoIn(complaintNo);
+        // 设置多个字段变更
+        FieldValueSoIn newComplaint = TestDataBuilder.buildFieldValueSoIn(
+                "SC002", "售后体验", "2/3/4", "售后/售后体验/售后体验");
+        soIn.setComplaint(newComplaint);
+        soIn.setRiskLevel(String.valueOf(RiskLevelEnum.LEVEL_3.getCode()));
+        soIn.setMediaInvolved(String.valueOf(MediaInvolvedEnum.YES.getCode()));
+        soIn.setMediaLink("http://media.test.com");
+        
+        // 执行
+        aggregation.editComplaint(soIn);
+        
+        // 验证 - 应该有多个字段变�?
+        ComplaintOrderInfoGoIn result = aggregation.getComplaintOrderInfoGoIn();
+        assertNotNull(result);
+        assertEquals(RiskLevelEnum.LEVEL_3.getCode(), result.getRiskLevel());
+        assertEquals(MediaInvolvedEnum.YES.getCode(), result.getMediaInvolved());
+        assertEquals("http://media.test.com", result.getMediaLink());
+        
+        ComplaintFollowProcessGoIn followProcess = aggregation.getComplaintFollowProcessGoIn();
+        assertNotNull(followProcess);
+        assertNotNull(followProcess.getProcessContent());
+    }
+
+    // ============ buildXxxChange 变更描述构建测试 ============
+    // 注意：这些方法是private的，通过editComplaint间接测试
+
+    /**
+     * 测试投诉场景变更返回描述
+     */
+    @Test
+    void testBuildComplaintTypeChange_Changed_ReturnDescription() {
+        // 准备数据
+        String complaintNo = "C011";
+        ComplaintOrderInfoGoIn orderInfo = TestDataBuilder.buildComplaintOrderInfoGoIn(
+                complaintNo, ComplaintTypeEnum.PRODUCT_RISK.getCode());
+        
+        ComplaintOrderAggregation aggregation = ComplaintOrderAggregationFactory.getComplaintOrderAggregation(orderInfo);
+        
+        OrderEditComplaintSoIn soIn = TestDataBuilder.buildOrderEditComplaintSoIn(complaintNo);
+        FieldValueSoIn newComplaint = TestDataBuilder.buildFieldValueSoIn(
+                "SC999", "新场�?, "9/9/9", "新路�?新场�?新场�?);
+        soIn.setComplaint(newComplaint);
+        
+        // 执行
+        aggregation.editComplaint(soIn);
+        
+        // 验证 - 应该有变更描�?
+        ComplaintFollowProcessGoIn followProcess = aggregation.getComplaintFollowProcessGoIn();
+        assertNotNull(followProcess);
+        assertNotNull(followProcess.getProcessContent());
+        assertTrue(followProcess.getProcessContent().contains("更新"));
+    }
+
+    /**
+     * 测试投诉场景无变更返回null
+     */
+    @Test
+    void testBuildComplaintTypeChange_NoChange_ReturnNull() {
+        // 准备数据
+        String complaintNo = "C012";
+        ComplaintOrderInfoGoIn orderInfo = TestDataBuilder.buildComplaintOrderInfoGoIn(
+                complaintNo, ComplaintTypeEnum.PRODUCT_RISK.getCode());
+        
+        ComplaintOrderAggregation aggregation = ComplaintOrderAggregationFactory.getComplaintOrderAggregation(orderInfo);
+        
+        OrderEditComplaintSoIn soIn = TestDataBuilder.buildOrderEditComplaintSoIn(complaintNo);
+        // 设置相同的投诉场�?
+        FieldValueSoIn sameComplaint = TestDataBuilder.buildFieldValueSoIn(
+                "SC001", "交车体验", "1/2/3", "交付/交车体验/交车体验");
+        soIn.setComplaint(sameComplaint);
+        
+        // 执行
+        aggregation.editComplaint(soIn);
+        
+        // 验证 - 无变更应该设置为null
+        assertNull(aggregation.getComplaintOrderInfoGoIn());
+        assertNull(aggregation.getComplaintFollowProcessGoIn());
+    }
+
+    /**
+     * 测试风险等级变更返回描述
+     */
+    @Test
+    void testBuildRiskLevelChange_Changed_ReturnDescription() {
+        // 准备数据
+        String complaintNo = "C013";
+        ComplaintOrderInfoGoIn orderInfo = TestDataBuilder.buildComplaintOrderInfoGoIn(
+                complaintNo, ComplaintTypeEnum.PRODUCT_RISK.getCode());
+        orderInfo.setRiskLevel(RiskLevelEnum.LEVEL_1.getCode());
+        
+        ComplaintOrderAggregation aggregation = ComplaintOrderAggregationFactory.getComplaintOrderAggregation(orderInfo);
+        
+        OrderEditComplaintSoIn soIn = TestDataBuilder.buildOrderEditComplaintSoIn(complaintNo);
+        // 设置complaint字段避免NPE（保持原值不变）
+        FieldValueSoIn sameComplaint = TestDataBuilder.buildFieldValueSoIn(
+                "SC001", "交车体验", "1/2/3", "交付/交车体验/交车体验");
+        soIn.setComplaint(sameComplaint);
+        soIn.setRiskLevel(String.valueOf(RiskLevelEnum.LEVEL_4.getCode()));
+        
+        // 执行
+        aggregation.editComplaint(soIn);
+        
+        // 验证
+        ComplaintFollowProcessGoIn followProcess = aggregation.getComplaintFollowProcessGoIn();
+        assertNotNull(followProcess);
+        assertTrue(followProcess.getProcessContent().contains("L1"));
+        assertTrue(followProcess.getProcessContent().contains("L4"));
+    }
+
+    /**
+     * 测试涉媒变更返回描述
+     */
+    @Test
+    void testBuildMediaInvolvedChange_Changed_ReturnDescription() {
+        // 准备数据
+        String complaintNo = "C014";
+        ComplaintOrderInfoGoIn orderInfo = TestDataBuilder.buildComplaintOrderInfoGoIn(
+                complaintNo, ComplaintTypeEnum.PRODUCT_RISK.getCode());
+        orderInfo.setMediaInvolved(MediaInvolvedEnum.NO.getCode());
+        
+        ComplaintOrderAggregation aggregation = ComplaintOrderAggregationFactory.getComplaintOrderAggregation(orderInfo);
+        
+        OrderEditComplaintSoIn soIn = TestDataBuilder.buildOrderEditComplaintSoIn(complaintNo);
+        // 设置complaint字段避免NPE（保持原值不变）
+        FieldValueSoIn sameComplaint = TestDataBuilder.buildFieldValueSoIn(
+                "SC001", "交车体验", "1/2/3", "交付/交车体验/交车体验");
+        soIn.setComplaint(sameComplaint);
+        soIn.setMediaInvolved(String.valueOf(MediaInvolvedEnum.YES.getCode()));
+        
+        // 执行
+        aggregation.editComplaint(soIn);
+        
+        // 验证
+        ComplaintFollowProcessGoIn followProcess = aggregation.getComplaintFollowProcessGoIn();
+        assertNotNull(followProcess);
+        assertTrue(followProcess.getProcessContent().contains("�?));
+        assertTrue(followProcess.getProcessContent().contains("�?));
+    }
+
+    /**
+     * 测试涉媒链接从空更新返回描述
+     */
+    @Test
+    void testBuildMediaLinkChange_FromEmpty_ReturnDescription() {
+        // 准备数据
+        String complaintNo = "C015";
+        ComplaintOrderInfoGoIn orderInfo = TestDataBuilder.buildComplaintOrderInfoGoIn(
+                complaintNo, ComplaintTypeEnum.PRODUCT_RISK.getCode());
+        orderInfo.setMediaLink(""); // 初始为空
+        
+        ComplaintOrderAggregation aggregation = ComplaintOrderAggregationFactory.getComplaintOrderAggregation(orderInfo);
+        
+        OrderEditComplaintSoIn soIn = TestDataBuilder.buildOrderEditComplaintSoIn(complaintNo);
+        // 设置complaint字段避免NPE（保持原值不变）
+        FieldValueSoIn sameComplaint = TestDataBuilder.buildFieldValueSoIn(
+                "SC001", "交车体验", "1/2/3", "交付/交车体验/交车体验");
+        soIn.setComplaint(sameComplaint);
+        soIn.setMediaLink("http://new.link.com");
+        
+        // 执行
+        aggregation.editComplaint(soIn);
+        
+        // 验证
+        ComplaintFollowProcessGoIn followProcess = aggregation.getComplaintFollowProcessGoIn();
+        assertNotNull(followProcess);
+        assertTrue(followProcess.getProcessContent().contains("http://new.link.com"));
+    }
+
+    // ============ addFollowUpRecordV2 跟进记录V2测试 ============
+
+    /**
+     * 测试跟进记录V2 - 首响状态更�?
+     */
+    @Test
+    void testAddFollowUpRecordV2_FirstResponse_StatusUpdate() {
+        // 准备数据
+        String complaintNo = "C016";
+        ComplaintOrderInfoGoIn orderInfo = TestDataBuilder.buildComplaintOrderInfoGoIn(
+                complaintNo, ComplaintTypeEnum.PRODUCT_RISK.getCode());
+        orderInfo.setStatus(ComplaintStatusEnum.FIRST_RESPONSE_PENDING.getCode());
+        
+        ComplaintOrderAggregation aggregation = ComplaintOrderAggregationFactory.getComplaintOrderAggregation(orderInfo);
+        
+        OrderAddFollowUpRecordSoInV2 soIn = TestDataBuilder.buildOrderAddFollowUpRecordSoInV2(complaintNo);
+        
+        // 执行
+        aggregation.addFollowUpRecordV2(soIn);
+        
+        // 验证
+        ComplaintOrderInfoGoIn result = aggregation.getComplaintOrderInfoGoIn();
+        assertNotNull(result);
+        assertEquals(ComplaintStatusEnum.APPLY_FINISH_PENDING.getCode(), result.getStatus());
+        assertNotNull(result.getFirstResponseTime());
+    }
+
+    /**
+     * 测试跟进记录V2 - 非首响不更新状�?
+     */
+    @Test
+    void testAddFollowUpRecordV2_NotFirstResponse_NoUpdate() {
+        // 准备数据
+        String complaintNo = "C017";
+        ComplaintOrderInfoGoIn orderInfo = TestDataBuilder.buildComplaintOrderInfoGoIn(
+                complaintNo, ComplaintTypeEnum.PRODUCT_RISK.getCode());
+        orderInfo.setStatus(ComplaintStatusEnum.APPLY_FINISH_PENDING.getCode());
+        
+        ComplaintOrderAggregation aggregation = ComplaintOrderAggregationFactory.getComplaintOrderAggregation(orderInfo);
+        
+        OrderAddFollowUpRecordSoInV2 soIn = TestDataBuilder.buildOrderAddFollowUpRecordSoInV2(complaintNo);
+        
+        // 执行
+        aggregation.addFollowUpRecordV2(soIn);
+        
+        // 验证 - 非首响不更新客诉�?
+        assertNull(aggregation.getComplaintOrderInfoGoIn());
+        assertNotNull(aggregation.getComplaintFollowProcessGoIn());
+    }
+
+    /**
+     * 测试跟进记录V2 - 里程字段正确保存
+     */
+    @Test
+    void testAddFollowUpRecordV2_WithMileage_SaveCorrectly() {
+        // 准备数据
+        String complaintNo = "C018";
+        ComplaintOrderInfoGoIn orderInfo = TestDataBuilder.buildComplaintOrderInfoGoIn(
+                complaintNo, ComplaintTypeEnum.PRODUCT_RISK.getCode());
+        orderInfo.setStatus(ComplaintStatusEnum.FIRST_RESPONSE_PENDING.getCode());
+        
+        ComplaintOrderAggregation aggregation = ComplaintOrderAggregationFactory.getComplaintOrderAggregation(orderInfo);
+        
+        OrderAddFollowUpRecordSoInV2 soIn = TestDataBuilder.buildOrderAddFollowUpRecordSoInV2(complaintNo);
+        soIn.setMileage("12345.67");
+        
+        // 执行
+        aggregation.addFollowUpRecordV2(soIn);
+        
+        // 验证
+        ComplaintFollowProcessGoIn followProcess = aggregation.getComplaintFollowProcessGoIn();
+        assertNotNull(followProcess);
+        assertNotNull(followProcess.getProcessContent());
+        assertTrue(followProcess.getProcessContent().contains("12345.67"));
+    }
+}

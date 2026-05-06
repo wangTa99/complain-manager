@@ -1,0 +1,322 @@
+package com.wt.complaint.manage.app.providerimpl;
+
+import com.wt.commons.utils.StringUtils;
+import com.wt.complaint.manage.api.model.req.AddKindPointsDistributionRecordReq;
+import com.wt.complaint.manage.api.model.req.FollowRecordReq;
+import com.wt.complaint.manage.api.model.req.FollowRecordReqV2;
+import com.wt.complaint.manage.api.model.req.operate.*;
+import com.wt.complaint.manage.api.model.resp.operate.*;
+import com.wt.complaint.manage.api.provider.ComplaintOperateProvider;
+import com.wt.complaint.manage.app.convert.ComplaintOperateConvert;
+import com.wt.complaint.manage.domain.api.service.interfaces.ComplaintOperateService;
+import com.wt.complaint.manage.domain.api.service.interfaces.DeliverComplaintService;
+import com.wt.complaint.manage.domain.api.service.interfaces.UserComplaintOperateService;
+import com.wt.complaint.manage.domain.api.service.parameter.in.*;
+import com.wt.complaint.manage.domain.api.service.parameter.out.*;
+import com.wt.complaint.manage.domain.api.service.parameter.out.operate.SubmitReviewSoOut;
+import com.wt.complaint.manage.domain.exception.BusinessException;
+import com.wt.complaint.manage.domain.exception.ErrorCodeEnums;
+import com.wt.complaint.manage.domain.constant.CommonConst;
+import com.wt.nr.common.utils.GsonUtil;
+import com.xiaomi.mone.docs.annotations.dubbo.ApiDoc;
+import com.xiaomi.youpin.infra.rpc.Result;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.BooleanUtils;
+import org.apache.dubbo.config.annotation.DubboService;
+import org.apache.dubbo.rpc.RpcContext;
+
+import javax.annotation.Resource;
+import java.util.Objects;
+
+@Slf4j
+@DubboService(timeout = 3000, group = "${dubbo.group}", version = "1.0")
+public class ComplaintOperateProviderImpl implements ComplaintOperateProvider {
+    @Resource
+    private ComplaintOperateService complaintOperateService;
+
+    @Resource
+    private UserComplaintOperateService userComplaintOperateService;
+
+    @Resource
+    private DeliverComplaintService deliverComplaintService;
+
+    @Override
+    public Result<CreateComplaintOrderResp> createComplaintOrder(CreateComplaintOrderReq req) {
+        CreateComplaintOrderResp resp = new CreateComplaintOrderResp();
+        try {
+            log.info("createComplaintOrder req:{}", GsonUtil.toJson(req));
+            ComplaintOrderCreateSoIn soIn = ComplaintOperateConvert.INSTANCE.toSoIn(req);
+            log.info("createComplaintOrder soIn:{}", GsonUtil.toJson(soIn));
+            ComplaintOrderCreateSoOut complaintOrder = complaintOperateService.createComplaintOrder(soIn);
+            log.info("createComplaintOrder complaintOrder:{}", GsonUtil.toJson(complaintOrder));
+            resp.setWorkNo(complaintOrder.getComplaintNo());
+            log.info("createComplaintOrder resp:{}", GsonUtil.toJson(resp));
+            return Result.success(resp);
+        } catch (BusinessException e) {
+            log.warn("ComplaintOperateProviderImpl.createComplaintOrder fail, req:{}", GsonUtil.toJson(req), e);
+            return Result.fail(e.getErrorCode(), e.getMessage());
+        } catch (Exception e) {
+            log.error("ComplaintOperateProviderImpl.createComplaintOrder error, req:{}", GsonUtil.toJson(req), e);
+            return Result.fail(ErrorCodeEnums.INTERNAL_ERROR.getErrorCode(), e.getMessage());
+        }
+
+    }
+
+    @Override
+    @ApiDoc(value = "/mtop/proretailcarpad/complaint/operate/pickUpOrder", name = "接单（投诉单�?,
+            description = "接单 路径�?mtop/proretailcarpad/complaint/operate/pickUpOrder")
+    public Result<PickUpOrderResp> pickUpOrder(PickUpOrderReq req) {
+        PickUpOrderResp resp = new PickUpOrderResp();
+        try {
+            log.info("ComplaintOperateProviderImpl.pickUpOrder req:{}", GsonUtil.toJson(req));
+            // 填充登陆人信�?
+            String roleStr = RpcContext.getContext().getAttachment(CommonConst.RPC_CONTEXT_CURR_ROLE);
+            String miID = RpcContext.getContext().getAttachment(CommonConst.RPC_CONTEXT_UPC_MID);
+            OrderPickUpSoIn soIn = ComplaintOperateConvert.INSTANCE.toSoIn(req);
+            soIn.setPickUpMid(miID);
+            soIn.setLoginRole(roleStr);
+            OrderPickUpSoOut soOut = complaintOperateService.pickUpOrder(soIn);
+            resp = ComplaintOperateConvert.INSTANCE.toResp(soOut);
+            return Result.success(resp);
+        } catch (BusinessException e) {
+            log.warn("ComplaintOperateProviderImpl.pickUpOrder fail, req:{}", GsonUtil.toJson(req), e);
+            return Result.fail(e.getErrorCode(), e.getMessage());
+        } catch (Exception e) {
+            log.error("ComplaintOperateProviderImpl.pickUpOrder error, req:{}", GsonUtil.toJson(req), e);
+            return Result.fail(ErrorCodeEnums.INTERNAL_ERROR.getErrorCode(), e.getMessage());
+        }
+    }
+
+    @Override
+    @ApiDoc(value = "/mtop/proretailcarpad/complaint/operate/updateHandler", name = "改派处理�?, description = "改派处理�?路径�?mtop/proretailcarpad/complaint/operate/updateHandler")
+    public Result<UpdateHandlerResp> updateHandler(UpdateHandlerReq req) {
+        try {
+            log.info("ComplaintOperateProviderImpl.updateHandler req:{}", GsonUtil.toJson(req));
+            // 填充登陆人信�?
+            String roleStr = RpcContext.getContext().getAttachment(CommonConst.RPC_CONTEXT_CURR_ROLE);
+            String miID = RpcContext.getContext().getAttachment(CommonConst.RPC_CONTEXT_UPC_MID);
+            OrderUpdateHandlerSoIn soIn = ComplaintOperateConvert.INSTANCE.toSoIn(req);
+            soIn.setDispatcherMid(miID);
+            soIn.setLoginRole(roleStr);
+            OrderUpdateHandlerSoOut soOut = complaintOperateService.updateHandler(soIn);
+            return Result.success(ComplaintOperateConvert.INSTANCE.toResp(soOut));
+        } catch (BusinessException e) {
+            log.warn("ComplaintOperateProviderImpl.updateHandler fail, req:{}", GsonUtil.toJson(req), e);
+            return Result.fail(e.getErrorCode(), e.getMessage());
+        }  catch (Exception e) {
+            log.error("ComplaintOperateProviderImpl.updateHandler error, req:{}", GsonUtil.toJson(req), e);
+            return Result.fail(ErrorCodeEnums.INTERNAL_ERROR.getErrorCode(), e.getMessage());
+        }
+    }
+
+    /**
+     * 客诉二期上线一段时间后，删除此接口
+     */
+    @Deprecated
+    @Override
+    @ApiDoc(value = "/mtop/proretailcarpad/complaint/operate/addFollowRecord", name = "添加跟进记录", description = "添加跟进记录，路径：/mtop/proretailcarpad/complaint/operate/addFollowRecord")
+    public Result<AddFollowRecordResp> addFollowRecord(FollowRecordReq req) {
+        try {
+            log.info("ComplaintOperateProviderImpl.addFollowRecord req:{}", GsonUtil.toJson(req));
+            // 填充登陆人信�?
+            String roleStr = RpcContext.getContext().getAttachment(CommonConst.RPC_CONTEXT_CURR_ROLE);
+            String miID = RpcContext.getContext().getAttachment(CommonConst.RPC_CONTEXT_UPC_MID);
+            OrderAddFollowUpRecordSoIn soIn = ComplaintOperateConvert.INSTANCE.toSoIn(req);
+            soIn.setFollowUpMid(miID);
+            soIn.setLoginRole(roleStr);
+            OrderFollowUpRecordSoOut orderFollowUpRecordSoOut = complaintOperateService.addFollowUpRecords(soIn);
+            return Result.success(ComplaintOperateConvert.INSTANCE.toResp(orderFollowUpRecordSoOut));
+        } catch (BusinessException e) {
+            log.warn("ComplaintOperateProviderImpl.addFollowRecord fail, req:{}", GsonUtil.toJson(req), e);
+            return Result.fail(e.getErrorCode(), e.getMessage());
+        } catch (Exception e) {
+            log.error("ComplaintOperateProviderImpl.addFollowRecord error, req:{}", GsonUtil.toJson(req), e);
+            return Result.fail(ErrorCodeEnums.INTERNAL_ERROR.getErrorCode(), e.getMessage());
+        }
+    }
+
+    @Override
+    @ApiDoc(value = "/mtop/proretailcarpad/complaint/operate/addFollowRecordV2",
+            name = "添加跟进记录V2", description = "添加跟进记录V2，支持车辆行驶里�?)
+    public Result<AddFollowRecordResp> addFollowRecordV2(FollowRecordReqV2 req) {
+        try {
+            log.info("ComplaintOperateProviderImpl.addFollowRecordV2 req:{}", GsonUtil.toJson(req));
+            String roleStr = RpcContext.getContext().getAttachment(CommonConst.RPC_CONTEXT_CURR_ROLE);
+            String miID = RpcContext.getContext().getAttachment(CommonConst.RPC_CONTEXT_UPC_MID);
+
+            OrderAddFollowUpRecordSoInV2 soIn = ComplaintOperateConvert.INSTANCE.toSoIn(req);
+            soIn.setFollowUpMid(miID);
+            soIn.setLoginRole(roleStr);
+            OrderFollowUpRecordSoOut orderFollowUpRecordSoOut = complaintOperateService.addFollowUpRecordsV2(soIn);
+            return Result.success(ComplaintOperateConvert.INSTANCE.toResp(orderFollowUpRecordSoOut));
+        } catch (BusinessException e) {
+            log.warn("ComplaintOperateProviderImpl.addFollowRecordV2 fail, req:{}", GsonUtil.toJson(req), e);
+            return Result.fail(e.getErrorCode(), e.getMessage());
+        } catch (Exception e) {
+            log.error("ComplaintOperateProviderImpl.addFollowRecordV2 error, req:{}", GsonUtil.toJson(req), e);
+            return Result.fail(ErrorCodeEnums.INTERNAL_ERROR.getErrorCode(), e.getMessage());
+        }
+    }
+
+    @Override
+    public Result<AddDistributionRecordResp> addKindPointsDistributionRecord(AddKindPointsDistributionRecordReq req) {
+        try {
+            log.info("ComplaintOperateProviderImpl.addKindPointsDistributionRecord req:{}", GsonUtil.toJson(req));
+            OrderAddDistributionRecordSoIn soIn = ComplaintOperateConvert.INSTANCE.toSoIn(req);
+            OrderAddDistributionRecordSoOut orderAddDistributionRecordSoOut = complaintOperateService.addDistributionRecords(soIn);
+            return Result.success(ComplaintOperateConvert.INSTANCE.toResp(orderAddDistributionRecordSoOut));
+        } catch (BusinessException e) {
+            log.warn("ComplaintOperateProviderImpl.addKindPointsDistributionRecord fail, req:{}", GsonUtil.toJson(req), e);
+            return Result.fail(e.getErrorCode(), e.getMessage());
+        } catch (Exception e) {
+            log.error("ComplaintOperateProviderImpl.addKindPointsDistributionRecord error, req:{}", GsonUtil.toJson(req), e);
+            return Result.fail(ErrorCodeEnums.INTERNAL_ERROR.getErrorCode(), e.getMessage());
+        }
+
+    }
+
+    @Override
+    @ApiDoc(value = "/mtop/car_cs/complaint/operate/remindOrder", name = "催单", description = "催单，提供给客服工作台，路径�?mtop/car_cs/complaint/operate/remindOrder")
+    public Result<RemindOrderResp> remindOrder(RemindOrderReq req) {
+        try {
+            String miID = RpcContext.getContext().getAttachment(CommonConst.RPC_CONTEXT_UPC_MID);
+            OrderRemindSoIn soIn = ComplaintOperateConvert.INSTANCE.toSoIn(req);
+            soIn.setReminderMid(miID);
+            log.info("ComplaintOperateProviderImpl.remindOrder req:{}", GsonUtil.toJson(soIn));
+            OrderRemindSoOut orderRemindSoOut = complaintOperateService.remindOrder(soIn);
+            return Result.success(ComplaintOperateConvert.INSTANCE.toResp(orderRemindSoOut));
+        } catch (BusinessException e) {
+            log.warn("ComplaintOperateProviderImpl.remindOrder fail, req:{}", GsonUtil.toJson(req), e);
+            return Result.fail(e.getErrorCode(), e.getMessage());
+        }  catch (Exception e) {
+            log.error("ComplaintOperateProviderImpl.remindOrder error, req:{}", GsonUtil.toJson(req), e);
+            return Result.fail(ErrorCodeEnums.INTERNAL_ERROR.getErrorCode(), e.getMessage());
+        }
+
+    }
+
+    @Override
+    @ApiDoc(value = "/mtop/car_cs/complaint/operate/updateCustomerService", name = "修改客服跟进�?, description = "修改客服跟进人，提供给客服工作台，路径：/mtop/car_cs/complaint/operate/updateCustomerService")
+    public Result<UpdateCustomerServiceResp> updateCustomerService(UpdateCustomerServiceReq req) {
+        try {
+            log.info("ComplaintOperateProviderImpl.updateCustomerService req:{}", GsonUtil.toJson(req));
+            // 更新投诉单的客服跟进�?
+            OrderUpdateCustomerServiceSoIn soIn = ComplaintOperateConvert.INSTANCE.toSoIn(req);
+            OrderUpdateCustomerServiceSoOut ucSoOut = userComplaintOperateService.updateCustomer(soIn);
+            // 更新客诉单的客服跟进�?
+            OrderUpdateCustomerServiceSoOut complaintSoOut = complaintOperateService.updateCustomerService(soIn);
+
+            // 交付零售客诉单批量更新客服跟进人
+            Boolean deliverRetailUpdateResult = deliverComplaintService.updateCustomer(soIn);
+
+            // 任一单更新成功则返回成功
+            if (ucSoOut.getUpdateResult()
+                    || complaintSoOut.getUpdateResult()
+                    || BooleanUtils.isTrue(deliverRetailUpdateResult)) {
+                UpdateCustomerServiceResp resp = new UpdateCustomerServiceResp();
+                resp.setResult("success");
+                return Result.success(resp);
+            }
+            throw new BusinessException(ErrorCodeEnums.BUS_ERROR, "未找到对应客诉类单号，更新客服跟进人失败");
+        } catch (BusinessException e) {
+            log.warn("ComplaintOperateProviderImpl.updateCustomerService fail, req:{}", GsonUtil.toJson(req), e);
+            return Result.fail(e.getErrorCode(), e.getMessage());
+        }  catch (Exception e) {
+            log.error("ComplaintOperateProviderImpl.updateCustomerService error, req:{}", GsonUtil.toJson(req), e);
+            return Result.fail(ErrorCodeEnums.INTERNAL_ERROR.getErrorCode(), "内部异常");
+        }
+    }
+
+    @Override
+    @ApiDoc(value = "/mtop/proretailcarpad/complaint/operate/upgradeComplaint", name = "升级投诉", description = "升级投诉，路径：/mtop/proretailcarpad/complaint/operate/upgradeComplaint�?mtop/car_cs/complaint/upgradeComplaint")
+    public Result<UpdateCustomerServiceResp> upgradeComplaint(ComplaintOrderUpgradeReq req) {
+        try {
+            String miID = RpcContext.getContext().getAttachment(CommonConst.RPC_CONTEXT_UPC_MID);
+            log.info("upgradeComplaintOrder req:{}, mid={}", GsonUtil.toJson(req), miID);
+            ComplaintOrderUpgradeSoIn soIn = ComplaintOperateConvert.INSTANCE.toSoIn(req);
+            if (StringUtils.isNotEmpty(miID)) {
+                soIn.setOperatorMid(Long.valueOf(miID));
+            }
+            log.info("upgradeComplaintOrder soIn:{}", GsonUtil.toJson(soIn));
+            UpdateCustomerServiceResp resp = new UpdateCustomerServiceResp();
+            OrderUpdateHandlerSoOut ucSoOut = complaintOperateService.upgradeComplaintOrder(soIn);
+            log.info("upgradeComplaintOrder complaintOrder:{}", GsonUtil.toJson(ucSoOut));
+            
+            String result = Objects.nonNull(ucSoOut) ? ucSoOut.getResult() : "FAIL";
+            resp.setResult(result);
+            
+            if (Objects.nonNull(ucSoOut)) {
+                log.info("upgradeComplaintOrder resp:{}", GsonUtil.toJson(resp));
+            } else {
+                log.warn("upgradeComplaintOrder resp:{}", GsonUtil.toJson(resp));
+            }
+            return Result.success(resp);
+        } catch (BusinessException e) {
+            log.warn("ComplaintOperateProviderImpl.upgradeComplaintOrder fail, req:{}", GsonUtil.toJson(req), e);
+            return Result.fail(e.getErrorCode(), e.getMessage());
+        } catch (Exception e) {
+            log.error("ComplaintOperateProviderImpl.upgradeComplaintOrder error, req:{}", GsonUtil.toJson(req), e);
+            return Result.fail(ErrorCodeEnums.INTERNAL_ERROR.getErrorCode(), "内部异常");
+        }
+
+    }
+
+    @Override
+    @ApiDoc(value = "/mtop/car_cs/complaint/operate/editComplaint",
+            name = "编辑客诉�?, description = "客服工作台：/mtop/car_cs/complaint/operate/editComplaint")
+    public Result<EditComplaintResp> editComplaint(EditComplaintReq req) {
+        try {
+            log.info("ComplaintOperateProviderImpl.editComplaint req:{}", GsonUtil.toJson(req));
+            // 填充登陆人信�?
+            String miID = RpcContext.getContext().getAttachment(CommonConst.RPC_CONTEXT_UPC_MID);
+            OrderEditComplaintSoIn soIn = ComplaintOperateConvert.INSTANCE.toSoIn(req);
+            if (StringUtils.isNotEmpty(miID)) {
+                soIn.setOperateMid(Long.valueOf(miID));
+            } else {
+                throw new BusinessException(ErrorCodeEnums.VALIDATE_ERROR, "未获取到当前登录人mid");
+            }
+            log.info("ComplaintOperateProviderImpl.editComplaint soIn:{}", GsonUtil.toJson(soIn));
+            OrderEditComplaintSoOut soOut = complaintOperateService.editComplaint(soIn);
+            EditComplaintResp resp = ComplaintOperateConvert.INSTANCE.toResp(soOut);
+            log.info("ComplaintOperateProviderImpl.editComplaint resp:{}", GsonUtil.toJson(resp));
+            return Result.success(resp);
+        } catch (BusinessException e) {
+            log.warn("ComplaintOperateProviderImpl.editComplaint fail, req:{}", GsonUtil.toJson(req), e);
+            return Result.fail(e.getErrorCode(), e.getMessage());
+        } catch (Exception e) {
+            log.error("ComplaintOperateProviderImpl.editComplaint error, req:{}", GsonUtil.toJson(req), e);
+            return Result.fail(ErrorCodeEnums.INTERNAL_ERROR.getErrorCode(), "编辑客诉单失�?);
+        }
+    }
+
+    @Override
+    @ApiDoc(value = "/mtop/proretailcarpad/complaint/operate/submitReview", name = "提交复盘",
+            description = "提交复盘（客诉三期），路径：/mtop/proretailcarpad/complaint/operate/submitReview")
+    public Result<SubmitReviewResp> submitReview(SubmitReviewReq req) {
+        try {
+            log.info("ComplaintOperateProviderImpl.submitReview req:{}", GsonUtil.toJson(req));
+            if (StringUtils.isEmpty(req.getComplaintNo())) {
+                throw new BusinessException(ErrorCodeEnums.VALIDATE_ERROR, "投诉单号不能为空");
+            }
+            if (StringUtils.isEmpty(req.getReviewMaterial())) {
+                throw new BusinessException(ErrorCodeEnums.VALIDATE_ERROR, "复盘材料不能为空");
+            }
+            String miID = RpcContext.getContext().getAttachment(CommonConst.RPC_CONTEXT_UPC_MID);
+            SubmitReviewSoIn soIn = ComplaintOperateConvert.INSTANCE.toSoIn(req);
+            if (StringUtils.isNotEmpty(miID)) {
+                soIn.setOperatorMid(Long.valueOf(miID));
+            } else {
+                throw new BusinessException(ErrorCodeEnums.VALIDATE_ERROR, "当前用户未登�? 请登�?");
+            }
+            SubmitReviewSoOut soOut = complaintOperateService.submitReview(soIn);
+            return Result.success(ComplaintOperateConvert.INSTANCE.toResp(soOut));
+        } catch (BusinessException e) {
+            log.warn("ComplaintOperateProviderImpl.submitReview fail, req:{}", GsonUtil.toJson(req), e);
+            return Result.fail(e.getErrorCode(), e.getMessage());
+        } catch (Exception e) {
+            log.error("ComplaintOperateProviderImpl.submitReview error, req:{}", GsonUtil.toJson(req), e);
+            return Result.fail(ErrorCodeEnums.INTERNAL_ERROR.getErrorCode(), "内部异常");
+        }
+    }
+
+}

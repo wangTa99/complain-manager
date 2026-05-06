@@ -1,0 +1,3 @@
+ConsumerInvokeStaticsFilter=com.wt.proretail.newcommon.starter.aopfilter.outer.DubboConsumerInvokeStaticFilter
+RpcContextFilter=com.wt.proretail.newcommon.account.filter.RpcContextFilter
+LogUserInfoFilter=com.wt.proretail.newcommon.logplus.LogUserInfoFilter

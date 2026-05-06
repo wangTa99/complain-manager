@@ -1,0 +1,551 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <parent>
+        <artifactId>proretail-dependency</artifactId>
+        <groupId>com.wt</groupId>
+        <version>1.1.0-dubbo2712-v14-SNAPSHOT</version>
+    </parent>
+
+    <artifactId>complaint-manage</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <modelVersion>4.0.0</modelVersion>
+
+    <modules>
+        <module>complaint-manage-api</module>
+        <module>complaint-manage-domain</module>
+        <module>complaint-manage-infrastructure</module>
+        <module>complaint-manage-app</module>
+        <module>complaint-manage-server</module>
+    </modules>
+
+    <properties>
+        <complaint-manage-api-version>1.7.16-SNAPSHOT</complaint-manage-api-version>
+        <complaint-manage-domain-version>1.7.16-SNAPSHOT</complaint-manage-domain-version>
+        <complaint-manage-infrastructure-version>1.7.16-SNAPSHOT</complaint-manage-infrastructure-version>
+        <complaint-manage-app-version>1.7.16-SNAPSHOT</complaint-manage-app-version>
+        <complaint-manage-server-version>1.7.16-SNAPSHOT</complaint-manage-server-version>
+        <guide.api.version>2.1.0-RELEASE</guide.api.version>
+        <gis.api.version>1.0.13-SNAPSHOT</gis.api.version>
+        <nr.job.api>2.6.0-SNAPSHOT</nr.job.api>
+        <nr.job.core>2.6.0-SNAPSHOT</nr.job.core>
+        <service.order.api.version>1.2.6-SNAPSHOT</service.order.api.version>
+        <proretail.commmon.mailutil>1.0.2-RELEASE</proretail.commmon.mailutil>
+        <display.api>1.0-SNAPSHOT</display.api>
+        <xmstore-purchase-app>1.2.7-RELEASE</xmstore-purchase-app>
+        <newcommon.keycenter.version>keycenter3x-1.0.0-SNAPSHOT</newcommon.keycenter.version>
+        <newcommon.keycenter.youpinlog.version>1.0.0-RELEASE</newcommon.keycenter.youpinlog.version>
+        <newcommon.feishu.version>1.1.0-SNAPSHOT</newcommon.feishu.version>
+        <newcommon.allinone.version>1.1.6-freemaker-plus-SNAPSHOT</newcommon.allinone.version>
+        <dubbo.docs.core.version>2.7.12-mone-v10-SNAPSHOT</dubbo.docs.core.version>
+        <miapi.docs.annos.version>2.7.12-mone-v20-SNAPSHOT</miapi.docs.annos.version>
+        <lombok.mapstruct.binding.version>0.2.0</lombok.mapstruct.binding.version>
+        <mapstruct.version>1.4.2.Final</mapstruct.version>
+        <druid.version>1.2.8</druid.version>
+        <mybatis-plus.version>3.3.2</mybatis-plus.version>
+        <commons.util.version>3.6-SP10</commons.util.version>
+        <generator-api.version>1.0.0-SNAPSHOT</generator-api.version>
+        <cis-api.version>1.0.21-SNAPSHOT</cis-api.version>
+        <keycenter.agent.client.version>3.4.7.4</keycenter.agent.client.version>
+        <maindata-api.version>1.9.1-SNAPSHOT</maindata-api.version>
+        <nr.eiam.common.version>2.0.1-SNAPSHOT</nr.eiam.common.version>
+        <pagehelper.version>1.4.6</pagehelper.version>
+        <car.warranty.policy.api.version>1.1.1-RELEASE</car.warranty.policy.api.version>
+        <message.hub.sdk.version>1.0.3-SNAPSHOT</message.hub.sdk.version>
+        <soc.api.version>1.7.9-SNAPSHOT</soc.api.version>
+        <order.api.version>1.7.47-RELEASE</order.api.version>
+        <rocketmq.sdk.version>2.2.0-mdh2.2.24-RELEASE</rocketmq.sdk.version>
+        <car.service.privacy.version>1.0.3-RELEASE</car.service.privacy.version>
+        <!--单测相关-->
+        <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
+        <maven-surefire-plugin.version>3.2.2</maven-surefire-plugin.version>
+        <junit.version>5.5.2</junit.version>
+        <mockito.version>4.11.0</mockito.version>
+        <byte-buddy.version>1.12.19</byte-buddy.version>
+        <delivery.core.version>1.2.3-RELEASE</delivery.core.version>
+    </properties>
+
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <artifactId>dubbo</artifactId>
+                <groupId>org.apache.dubbo</groupId>
+                <version>3.3.4-mone-v6-SNAPSHOT</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba.nacos</groupId>
+                <artifactId>nacos-client</artifactId>
+                <version>2.1.2-XIAOMI</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba.nacos</groupId>
+                <artifactId>nacos-spring-context</artifactId>
+                <version>1.1.1</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba.spring</groupId>
+                <artifactId>spring-context-support</artifactId>
+                <version>1.0.11</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>dubbo-registry-nacos</artifactId>
+                <version>1.2.1-mone-v2-SNAPSHOT</version>
+            </dependency>
+
+
+            <dependency>
+                <artifactId>netty-common</artifactId>
+                <groupId>io.netty</groupId>
+                <version>4.1.48.Final</version>
+            </dependency>
+            <dependency>
+                <groupId>io.netty</groupId>
+                <artifactId>netty-all</artifactId>
+                <version>4.1.58.Final</version>
+            </dependency>
+            <dependency>
+                <groupId>com.xiaomi.mone</groupId>
+                <artifactId>dubbo-docs-core</artifactId>
+                <version>${dubbo.docs.core.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.apache.dubbo</groupId>
+                        <artifactId>dubbo</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <groupId>com.xiaomi.mone</groupId>
+                <artifactId>miapi-doc-annos</artifactId>
+                <version>${miapi.docs.annos.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.wt</groupId>
+                <artifactId>proretail-newcommon-all-in-one</artifactId>
+                <version>${newcommon.allinone.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <artifactId>jackson-databind</artifactId>
+                        <groupId>com.fasterxml.jackson.core</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>simpleclient</artifactId>
+                        <groupId>io.prometheus</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>simpleclient_common</artifactId>
+                        <groupId>io.prometheus</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <artifactId>jackson-core</artifactId>
+                        <groupId>com.fasterxml.jackson.core</groupId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>slf4j-log4j12</artifactId>
+                    </exclusion>
+                    <!-- 排除 POM 无效的传递依�?cola-component-statemachine:4.3.1 -->
+                    <exclusion>
+                        <groupId>com.alibaba.cola</groupId>
+                        <artifactId>cola-component-statemachine</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+            <dependency>
+                <artifactId>feishu-new-spring-boot-starter</artifactId>
+                <groupId>com.wt</groupId>
+                <version>${newcommon.feishu.version}</version>
+            </dependency>
+            <dependency>
+                <artifactId>keycenter-new-spring-boot-starter</artifactId>
+                <groupId>com.wt</groupId>
+                <version>${newcommon.keycenter.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.wt</groupId>
+                <artifactId>keycenter-youpinlog-proretail-spring-boot-starter</artifactId>
+                <version>${newcommon.keycenter.youpinlog.version}</version>
+            </dependency>
+            <dependency>
+                <artifactId>proretail-common-account</artifactId>
+                <groupId>com.wt</groupId>
+                <version>1.6.4-SNAPSHOT</version>
+            </dependency>
+
+            <!--mapstruct相关依赖-->
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct</artifactId>
+                <version>${mapstruct.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mapstruct</groupId>
+                <artifactId>mapstruct-processor</artifactId>
+                <version>${mapstruct.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+
+            <!-- 用于引入JacksonUtil -->
+            <dependency>
+                <groupId>com.wt.commons</groupId>
+                <artifactId>commons-util</artifactId>
+                <version>${commons.util.version}</version>
+            </dependency>
+
+            <dependency>
+                <artifactId>nr-order-id-generator-api</artifactId>
+                <groupId>com.xiaomi.nr</groupId>
+                <version>${generator-api.version}</version>
+            </dependency>
+
+            <dependency>
+                <artifactId>cis-api</artifactId>
+                <groupId>com.xiaomi.nr</groupId>
+                <version>${cis-api.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.xiaomi</groupId>
+                <artifactId>keycenter-agent-client</artifactId>
+                <version>${keycenter.agent.client.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.wt</groupId>
+                <artifactId>maindata-api</artifactId>
+                <version>${maindata-api.version}</version>
+            </dependency>
+
+            <!--  组织中台,相关角色枚举 -->
+            <dependency>
+                <groupId>com.xiaomi.nr</groupId>
+                <artifactId>nr-eiam-common</artifactId>
+                <version>${nr.eiam.common.version}</version>
+            </dependency>
+
+            <!-- 分页工具 -->
+            <dependency>
+                <groupId>com.github.pagehelper</groupId>
+                <artifactId>pagehelper-spring-boot-starter</artifactId>
+                <version>${pagehelper.version}</version>
+            </dependency>
+
+            <!-- 车辆质保及车辆信息依赖包 -->
+            <dependency>
+                <groupId>com.wt.car</groupId>
+                <artifactId>car-warranty-policy-api</artifactId>
+                <version>${car.warranty.policy.api.version}</version>
+            </dependency>
+
+            <!-- 消息中台 -->
+            <dependency>
+                <groupId>com.xiaomi.nr</groupId>
+                <artifactId>message-hub-sdk</artifactId>
+                <version>${message.hub.sdk.version}</version>
+            </dependency>
+
+            <!-- soc-api -->
+            <dependency>
+                <artifactId>soc-api</artifactId>
+                <groupId>com.wt.car.soc</groupId>
+                <version>${soc.api.version}</version>
+            </dependency>
+            <dependency>
+                <artifactId>soc-gw-api</artifactId>
+                <groupId>com.wt.car.soc-gw</groupId>
+                <version>1.3-SNAPSHOT</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>com.xiaomi.micar</groupId>
+                <artifactId>club-api</artifactId>
+                <version>1.0.1</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.wt</groupId>
+                <artifactId>proretail-car-cluebench-api</artifactId>
+                <version>1.0.2-SNAPSHOT</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.xiaomi.car</groupId>
+                <artifactId>car-delivery-core-work</artifactId>
+                <version>1.0.1-RELEASE</version>
+            </dependency>
+
+            <!-- newretail-bpm-api -->
+            <dependency>
+                <groupId>com.xiaomi.newretail</groupId>
+                <artifactId>bpm-api</artifactId>
+                <version>1.0.3-SNAPSHOT</version>
+            </dependency>
+
+            <!--回调返回结果Result�?->
+            <dependency>
+                <groupId>com.xiaomi.youpin</groupId>
+                <artifactId>youpin-infra-rpc</artifactId>
+                <version>2.0.0-CNZONE-SNAPSHOT</version>
+            </dependency>
+
+            <!--验签需加上auth，如果有冲突可尝试将dubbo-tools-autoconfigure去除-->
+            <dependency>
+                <groupId>com.xiaomi.newretail</groupId>
+                <artifactId>nr-dubbo-auth</artifactId>
+                <version>2.0-SNAPSHOT</version>
+            </dependency>
+
+            <!-- 单测相关 -->
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter</artifactId>
+                <version>${junit.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-api</artifactId>
+                <version>${junit.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-junit-jupiter</artifactId>
+                <version>${mockito.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>${mockito.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-inline</artifactId>
+                <version>${mockito.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>net.bytebuddy</groupId>
+                <artifactId>byte-buddy</artifactId>
+                <version>${byte-buddy.version}</version>
+            </dependency>
+
+            <!-- 安全漏洞修复，升级部分依赖版�?-->
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>5.8.25</version>
+            </dependency>
+            <dependency>
+                <groupId>org.yaml</groupId>
+                <artifactId>snakeyaml</artifactId>
+                <version>2.4</version>
+            </dependency>
+            <dependency>
+                <groupId>com.xiaomi.nr</groupId>
+                <artifactId>order-api</artifactId>
+                <version>${order.api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.xiaomi.car</groupId>
+                <artifactId>car-delivery-core-api</artifactId>
+                <version>${delivery.core.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.rocketmq</groupId>
+                <artifactId>rocketmq-spring-boot-starter</artifactId>
+                <version>${rocketmq.sdk.version}</version>
+            </dependency>
+            <dependency>
+                <artifactId>fastjson</artifactId>
+                <groupId>com.alibaba</groupId>
+                <version>1.2.83</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>2.9.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.wt.car.common</groupId>
+                <artifactId>car-service-privacy-api</artifactId>
+                <version>${car.service.privacy.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <!-- spring-boot单测基类 -->
+        <dependency>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <version>2.2.1.RELEASE</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-junit-jupiter</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-inline</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+    <distributionManagement>
+        <repository>
+            <id>central</id>
+            <name>maven-release-virtual</name>
+            <url>https://pkgs.d.xiaomi.net/artifactory/maven-release-virtual</url>
+        </repository>
+        <snapshotRepository>
+            <id>snapshots</id>
+            <name>maven-snapshot-virtual</name>
+            <url>https://pkgs.d.xiaomi.net/artifactory/maven-snapshot-virtual</url>
+        </snapshotRepository>
+    </distributionManagement>
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <compilerArguments>
+                        <sourcepath>${project.basedir}/src/main/java</sourcepath>
+                    </compilerArguments>
+                    <encoding>UTF-8</encoding>
+                    <fork>true</fork>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <verbose>true</verbose>
+
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                        <!-- 必须要加, 否则生成不了 MapperImpl 实现�?-->
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${mapstruct.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                            <version>${lombok.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok-mapstruct-binding</artifactId>
+                            <version>${lombok.mapstruct.binding.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+                <groupId>org.apache.maven.plugins</groupId>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${jacoco-maven-plugin.version}</version>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-surefire-plugin.version}</version>
+                <configuration>
+                    <excludes>
+                        <!-- 排除整个�?-->
+                        <exclude>**/com/xiaomi/cnzone/complaint/manage/backups/**</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+
+        </plugins>
+    </build>
+
+    <profiles>
+
+        <profile>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <id>dev</id>
+        </profile>
+        <profile>
+            <id>staging</id>
+        </profile>
+        <profile>
+            <id>preview</id>
+        </profile>
+        <profile>
+            <id>c3</id>
+        </profile>
+        <profile>
+            <id>job</id>
+        </profile>
+    </profiles>
+
+</project>

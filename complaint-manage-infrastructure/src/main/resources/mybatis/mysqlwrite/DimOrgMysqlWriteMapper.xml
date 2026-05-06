@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wt.complaint.manage.infrastructure.outer.mysqlwrite.DimOrgMysqlWriteMapper">
+    <select id="loadAll2"
+        resultType="com.wt.complaint.manage.infrastructure.outer.mysqlwrite.dato.DimOrgResult">
+        SELECT *
+        FROM dim_org
+        WHERE 0=0
+        limit 2
+    </select>
+</mapper>

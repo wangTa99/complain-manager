@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wt.complaint.manage.infrastructure.mapper.DeliverComplaintExpandMapper">
+
+    <resultMap id="BaseResultMap" type="com.wt.complaint.manage.infrastructure.model.DeliverComplaintExpandDO">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="drNo" column="dr_no" jdbcType="VARCHAR"/>
+        <result property="chatId" column="chat_id" jdbcType="VARCHAR"/>
+        <result property="chatName" column="chat_name" jdbcType="VARCHAR"/>
+        <result property="createChatFailReason" column="create_chat_fail_reason" jdbcType="VARCHAR"/>
+        <result property="clueId" column="clue_id" jdbcType="BIGINT"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, dr_no, chat_id, chat_name, create_chat_fail_reason,clue_id, create_time, update_time
+    </sql>
+
+    <insert id="insertSelective" parameterType="com.wt.complaint.manage.infrastructure.model.DeliverComplaintExpandDO">
+        INSERT INTO deliver_retail_complaint_expand
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="drNo != null and drNo != ''">
+                dr_no,
+            </if>
+            <if test="chatId != null and chatId != ''">
+                chat_id,
+            </if>
+            <if test="chatName != null and chatName != ''">
+                chat_name,
+            </if>
+            <if test="createChatFailReason != null and createChatFailReason != ''">
+                create_chat_fail_reason,
+            </if>
+            <if test="clueId != null">
+                clue_id,
+            </if>
+            create_time,
+            update_time,
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=BIGINT},
+            </if>
+            <if test="drNo != null and drNo != ''">
+                #{drNo,jdbcType=VARCHAR},
+            </if>
+            <if test="chatId != null and chatId != ''">
+                #{chatId,jdbcType=VARCHAR},
+            </if>
+            <if test="chatName != null and chatName != ''">
+                #{chatName,jdbcType=VARCHAR},
+            </if>
+            <if test="createChatFailReason != null and createChatFailReason != ''">
+                #{createChatFailReason,jdbcType=VARCHAR},
+            </if>
+            <if test="clueId != null">
+                #{clueId,jdbcType=BIGINT},
+            </if>
+            NOW(),
+            NOW(),
+        </trim>
+    </insert>
+
+    <update id="updateSelective" parameterType="com.wt.complaint.manage.infrastructure.model.DeliverComplaintExpandDO">
+        UPDATE deliver_retail_complaint_expand
+        <set>
+            <if test="chatId != null and chatId != ''">
+                chat_id = #{chatId,jdbcType=VARCHAR},
+            </if>
+            <if test="chatName != null and chatName != ''">
+                chat_name = #{chatName,jdbcType=VARCHAR},
+            </if>
+            <if test="createChatFailReason != null and createChatFailReason != ''">
+                create_chat_fail_reason = #{createChatFailReason,jdbcType=VARCHAR},
+            </if>
+            <if test="clueId != null">
+                clue_id = #{clueId,jdbcType=BIGINT},
+            </if>
+            update_time = NOW()
+        </set>
+        WHERE dr_no = #{drNo,jdbcType=VARCHAR}
+    </update>
+
+    <update id="updateBatchSelective" parameterType="java.util.List">
+        UPDATE deliver_retail_complaint_expand
+        <trim prefix="SET" suffixOverrides=",">
+            <trim prefix="chat_id = CASE" suffix="END,">
+                <foreach collection="list" item="item">
+                    <if test="item.chatId != null">
+                        WHEN id = #{item.id} THEN #{item.chatId}
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        WHERE id IN
+        <foreach collection="list" item="item" open="(" close=")" separator=",">
+            #{item.id}
+        </foreach>
+    </update>
+
+    <select id="selectDetailByDrNo" resultMap="BaseResultMap" parameterType="java.lang.String">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM deliver_retail_complaint_expand
+        WHERE dr_no = #{drNo,jdbcType=VARCHAR}
+    </select>
+
+    <select id="selectCount" resultType="java.lang.Integer">
+        SELECT
+        COUNT(*)
+        FROM deliver_retail_complaint_expand
+        WHERE chat_id IS NOT NULL AND chat_id !=''
+    </select>
+
+    <select id="selectList" resultMap="BaseResultMap" parameterType="com.wt.complaint.manage.infrastructure.model.DeliverComplaintExpandListDO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM deliver_retail_complaint_expand
+        WHERE chat_id IS NOT NULL AND chat_id !=''
+        ORDER BY create_time DESC
+        LIMIT #{offset}, #{pageSize}
+    </select>
+</mapper>

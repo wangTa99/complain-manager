@@ -1,0 +1,1030 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wt.complaint.manage.infrastructure.mapper.ComplaintOrderMapper">
+    <resultMap id="BaseResultMap" type="com.wt.complaint.manage.infrastructure.model.ComplaintOrderDO">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="idempotentKey" column="idempotent_key" jdbcType="VARCHAR"/>
+            <result property="complaintNo" column="complaint_no" jdbcType="VARCHAR"/>
+            <result property="complaintType" column="complaint_type" jdbcType="INTEGER"/>
+            <result property="riskLevel" column="risk_level" jdbcType="INTEGER"/>
+            <result property="vid" column="vid" jdbcType="VARCHAR"/>
+            <result property="carNo" column="car_no" jdbcType="VARCHAR"/>
+            <result property="carType" column="car_type" jdbcType="VARCHAR"/>
+            <result property="responsibility" column="responsibility" jdbcType="TINYINT"/>
+            <result property="superTicketNo" column="super_ticket_no" jdbcType="VARCHAR"/>
+            <result property="soNo" column="so_no" jdbcType="VARCHAR"/>
+            <result property="orgId" column="org_id" jdbcType="VARCHAR"/>
+            <result property="contactNameC" column="contact_name_c" jdbcType="VARCHAR"/>
+            <result property="contactGender" column="contact_gender" jdbcType="TINYINT"/>
+            <result property="contactPhoneC" column="contact_phone_c" jdbcType="VARCHAR"/>
+            <result property="contactPhoneSufix" column="contact_phone_sufix" jdbcType="INTEGER"/>
+            <result property="vinSufix" column="vin_sufix" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="TINYINT"/>
+            <result property="problemDesc" column="problem_desc" jdbcType="VARCHAR"/>
+            <result property="complaintContent" column="complaint_content" jdbcType="VARCHAR"/>
+            <result property="reminderTimes" column="reminder_times" jdbcType="INTEGER"/>
+            <result property="customerServiceMid" column="customer_service_mid" jdbcType="BIGINT"/>
+            <result property="operatorMid" column="operator_mid" jdbcType="BIGINT"/>
+            <result property="createMid" column="create_mid" jdbcType="BIGINT"/>
+            <result property="finishTime" column="finish_time" jdbcType="TIMESTAMP"/>
+            <result property="firstResponseTime" column="first_response_time" jdbcType="TIMESTAMP"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+            <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+            <result property="cityId" column="city_id" jdbcType="VARCHAR"/>
+            <result property="zoneId" column="zone_id" jdbcType="VARCHAR"/>
+            <result property="littleZoneId" column="little_zone_id" jdbcType="VARCHAR"/>
+            <result property="testTag" column="test_tag" jdbcType="TINYINT"/>
+            <result property="problemCategory" column="problem_category" jdbcType="VARCHAR"/>
+            <result property="userDemand" column="user_demand" jdbcType="VARCHAR"/>
+            <result property="onlyView" column="only_view" jdbcType="TINYINT"/>
+            <result property="contactPhoneMd5" column="contact_phone_md5" jdbcType="CHAR"/>
+            <result property="mediaInvolved" column="media_involved" jdbcType="TINYINT"/>
+            <result property="mediaLink" column="media_link" jdbcType="VARCHAR"/>
+            <result property="upgradeTime" column="upgrade_time" jdbcType="TIMESTAMP"/>
+            <result property="createSource" column="create_source" jdbcType="TINYINT"/>
+            <result property="reviewed" column="reviewed" jdbcType="TINYINT"/>
+            <result property="exemptionApplyTimes" column="exemption_apply_times" jdbcType="TINYINT"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,idempotent_key,complaint_no,
+        complaint_type,risk_level,vid,
+        car_no,car_type,responsibility,super_ticket_no,
+        so_no,org_id,contact_name_c,
+        contact_gender,contact_phone_c,contact_phone_sufix,
+        vin_sufix,status,problem_desc,
+        complaint_content,reminder_times,customer_service_mid,
+        operator_mid,create_mid,finish_time,first_response_time,
+        create_time,update_time,city_id,
+        zone_id,little_zone_id,test_tag,problem_category,
+        user_demand,only_view,contact_phone_md5,media_involved,media_link,upgrade_time,
+        create_source,reviewed,exemption_apply_times
+    </sql>
+    <insert id="insertSelective">
+        insert into complaint_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="idempotentKey != null">
+                idempotent_key,
+            </if>
+            <if test="complaintNo != null">
+                complaint_no,
+            </if>
+            <if test="complaintType != null">
+                complaint_type,
+            </if>
+            <if test="riskLevel != null">
+                risk_level,
+            </if>
+            <if test="vid != null">
+                vid,
+            </if>
+            <if test="carNo != null">
+                car_no,
+            </if>
+            <if test="carType != null">
+                car_type,
+            </if>
+            <if test="responsibility != null">
+                responsibility,
+            </if>
+            <if test="superTicketNo != null">
+                super_ticket_no,
+            </if>
+            <if test="soNo != null">
+                so_no,
+            </if>
+            <if test="orgId != null">
+                org_id,
+            </if>
+            <if test="contactNameC != null">
+                contact_name_c,
+            </if>
+            <if test="contactGender != null">
+                contact_gender,
+            </if>
+            <if test="contactPhoneC != null">
+                contact_phone_c,
+            </if>
+            <if test="contactPhoneSufix != null">
+                contact_phone_sufix,
+            </if>
+            <if test="vinSufix != null">
+                vin_sufix,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="problemDesc != null">
+                problem_desc,
+            </if>
+            <if test="complaintContent != null">
+                complaint_content,
+            </if>
+            <if test="reminderTimes != null">
+                reminder_times,
+            </if>
+            <if test="customerServiceMid != null">
+                customer_service_mid,
+            </if>
+            <if test="operatorMid != null">
+                operator_mid,
+            </if>
+            <if test="createMid != null">
+                create_mid,
+            </if>
+            <if test="finishTime != null">
+                finish_time,
+            </if>
+            <if test="firstResponseTime != null">
+                first_response_time,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="cityId != null">
+                city_id,
+            </if>
+            <if test="zoneId != null">
+                zone_id,
+            </if>
+            <if test="littleZoneId != null">
+                little_zone_id,
+            </if>
+            <if test="testTag != null">
+                test_tag,
+            </if>
+            <if test="problemCategory != null">
+                problem_category,
+            </if>
+            <if test="userDemand != null">
+                user_demand,
+            </if>
+            <if test="onlyView != null">
+                only_view,
+            </if>
+            <if test="contactPhoneMd5 != null">
+                contact_phone_md5,
+            </if>
+            <if test="mediaInvolved != null">
+                media_involved,
+            </if>
+            <if test="mediaLink != null">
+                media_link,
+            </if>
+            <if test="upgradeTime != null">
+                upgrade_time,
+            </if>
+            <if test="createSource != null">
+                create_source,
+            </if>
+            <if test="reviewed != null">
+                reviewed,
+            </if>
+            <if test="exemptionApplyTimes != null">
+                exemption_apply_times,
+            </if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="idempotentKey != null">
+                #{idempotentKey,jdbcType=VARCHAR},
+            </if>
+            <if test="complaintNo != null">
+                #{complaintNo,jdbcType=VARCHAR},
+            </if>
+            <if test="complaintType != null">
+                #{complaintType,jdbcType=INTEGER},
+            </if>
+            <if test="riskLevel != null">
+                #{riskLevel,jdbcType=INTEGER},
+            </if>
+            <if test="vid != null">
+                #{vid,jdbcType=VARCHAR},
+            </if>
+            <if test="carNo != null">
+                #{carNo,jdbcType=VARCHAR},
+            </if>
+            <if test="carType != null">
+                #{carType,jdbcType=VARCHAR},
+            </if>
+            <if test="responsibility != null">
+                #{responsibility,jdbcType=INTEGER},
+            </if>
+            <if test="superTicketNo != null">
+                #{superTicketNo,jdbcType=VARCHAR},
+            </if>
+            <if test="soNo != null">
+                #{soNo,jdbcType=VARCHAR},
+            </if>
+            <if test="orgId != null">
+                #{orgId,jdbcType=VARCHAR},
+            </if>
+            <if test="contactNameC != null">
+                #{contactNameC,jdbcType=VARCHAR},
+            </if>
+            <if test="contactGender != null">
+                #{contactGender,jdbcType=INTEGER},
+            </if>
+            <if test="contactPhoneC != null">
+                #{contactPhoneC,jdbcType=VARCHAR},
+            </if>
+            <if test="contactPhoneSufix != null">
+                #{contactPhoneSufix,jdbcType=INTEGER},
+            </if>
+            <if test="vinSufix != null">
+                #{vinSufix},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=INTEGER},
+            </if>
+            <if test="problemDesc != null">
+                #{problemDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="complaintContent != null">
+                #{complaintContent,jdbcType=VARCHAR},
+            </if>
+            <if test="reminderTimes != null">
+                #{reminderTimes,jdbcType=INTEGER},
+            </if>
+            <if test="customerServiceMid != null">
+                #{customerServiceMid,jdbcType=BIGINT},
+            </if>
+            <if test="operatorMid != null">
+                #{operatorMid,jdbcType=BIGINT},
+            </if>
+            <if test="createMid != null">
+                #{createMid,jdbcType=BIGINT},
+            </if>
+            <if test="finishTime != null">
+                #{finishTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="firstResponseTime != null">
+                #{firstResponseTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="cityId != null">
+                #{cityId,jdbcType=VARCHAR},
+            </if>
+            <if test="zoneId != null">
+                #{zoneId,jdbcType=VARCHAR},
+            </if>
+            <if test="littleZoneId != null">
+                #{littleZoneId,jdbcType=VARCHAR},
+            </if>
+            <if test="testTag != null">
+                #{testTag,jdbcType=INTEGER},
+            </if>
+            <if test="problemCategory != null">
+                #{problemCategory,jdbcType=VARCHAR},
+            </if>
+            <if test="userDemand != null">
+                #{userDemand,jdbcType=VARCHAR},
+            </if>
+            <if test="onlyView != null">
+                #{onlyView,jdbcType=INTEGER},
+            </if>
+            <if test="contactPhoneMd5 != null">
+                #{contactPhoneMd5,jdbcType=CHAR},
+            </if>
+            <if test="mediaInvolved != null">
+                #{mediaInvolved,jdbcType=INTEGER},
+            </if>
+            <if test="mediaLink != null">
+                #{mediaLink,jdbcType=VARCHAR},
+            </if>
+            <if test="upgradeTime != null">
+                #{upgradeTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createSource != null">
+                #{createSource,jdbcType=TINYINT},
+            </if>
+            <if test="reviewed != null">
+                #{reviewed,jdbcType=TINYINT},
+            </if>
+            <if test="exemptionApplyTimes != null">
+                #{exemptionApplyTimes,jdbcType=TINYINT},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByComplaintNo">
+        update complaint_order
+        <set>
+            <if test="complaintType != null">
+                complaint_type = #{complaintType,jdbcType=INTEGER},
+            </if>
+            <if test="riskLevel != null">
+                risk_level = #{riskLevel,jdbcType=INTEGER},
+            </if>
+            <if test="vid != null">
+                vid = #{vid,jdbcType=VARCHAR},
+            </if>
+            <if test="carNo != null">
+                car_no = #{carNo,jdbcType=VARCHAR},
+            </if>
+            <if test="carType != null">
+                car_type = #{carType,jdbcType=VARCHAR},
+            </if>
+            <if test="responsibility != null">
+                responsibility = #{responsibility,jdbcType=INTEGER},
+            </if>
+            <if test="superTicketNo != null">
+                super_ticket_no = #{superTicketNo,jdbcType=VARCHAR},
+            </if>
+            <if test="soNo != null">
+                so_no = #{soNo,jdbcType=VARCHAR},
+            </if>
+            <if test="orgId != null">
+                org_id = #{orgId,jdbcType=VARCHAR},
+            </if>
+            <if test="contactNameC != null">
+                contact_name_c = #{contactNameC,jdbcType=VARCHAR},
+            </if>
+            <if test="contactGender != null">
+                contact_gender = #{contactGender,jdbcType=INTEGER},
+            </if>
+            <if test="contactPhoneC != null">
+                contact_phone_c = #{contactPhoneC,jdbcType=VARCHAR},
+            </if>
+            <if test="contactPhoneSufix != null">
+                contact_phone_sufix = #{contactPhoneSufix,jdbcType=INTEGER},
+            </if>
+            <if test="vinSufix != null">
+                vin_sufix = #{vinSufix},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=INTEGER},
+            </if>
+            <if test="problemDesc != null">
+                problem_desc = #{problemDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="complaintContent != null">
+                complaint_content = #{complaintContent,jdbcType=VARCHAR},
+            </if>
+            <if test="reminderTimes != null">
+                reminder_times = #{reminderTimes,jdbcType=INTEGER},
+            </if>
+            <if test="customerServiceMid != null">
+                customer_service_mid = #{customerServiceMid,jdbcType=BIGINT},
+            </if>
+            <if test="operatorMid != null">
+                operator_mid = #{operatorMid,jdbcType=BIGINT},
+            </if>
+            <if test="finishTime != null">
+                finish_time = #{finishTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="firstResponseTime != null">
+                first_response_time = #{firstResponseTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="cityId != null">
+                city_id = #{cityId,jdbcType=VARCHAR},
+            </if>
+            <if test="zoneId != null">
+                zone_id = #{zoneId,jdbcType=VARCHAR},
+            </if>
+            <if test="littleZoneId != null">
+                little_zone_id = #{littleZoneId,jdbcType=VARCHAR},
+            </if>
+            <if test="testTag != null">
+                test_tag = #{testTag,jdbcType=INTEGER},
+            </if>
+            <if test="problemCategory != null">
+                problem_category = #{problemCategory,jdbcType=VARCHAR},
+            </if>
+            <if test="userDemand != null">
+                user_demand = #{userDemand,jdbcType=VARCHAR},
+            </if>
+            <if test="onlyView != null">
+                only_view = #{onlyView,jdbcType=INTEGER},
+            </if>
+            <if test="contactPhoneMd5 != null">
+                contact_phone_md5 = #{contactPhoneMd5,jdbcType=CHAR},
+            </if>
+            <if test="mediaInvolved != null">
+                media_involved = #{mediaInvolved,jdbcType=INTEGER},
+            </if>
+            <if test="mediaLink != null">
+                media_link = #{mediaLink,jdbcType=VARCHAR},
+            </if>
+            <if test="upgradeTime != null">
+                upgrade_time = #{upgradeTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="exemptionApplyTimes != null">
+                exemption_apply_times = #{exemptionApplyTimes,jdbcType=TINYINT},
+            </if>
+            <if test="createSource != null">
+                create_source = #{createSource,jdbcType=TINYINT},
+            </if>
+            <if test="reviewed != null">
+                reviewed = #{reviewed,jdbcType=TINYINT},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where complaint_no = #{complaintNo}
+    </update>
+    <update id="batchUpdateByComplaintNo"
+            parameterType="java.util.List">
+        UPDATE complaint_order
+        <trim prefix="SET" suffixOverrides=",">
+            <trim prefix="complaint_type = CASE" suffix="END,">
+                <foreach collection="list" item="item">
+                    <if test="item.complaintType != null">
+                        WHEN complaint_no = #{item.complaintNo,jdbcType=VARCHAR} THEN #{item.complaintType,jdbcType=INTEGER}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="risk_level = CASE" suffix="END,">
+                <foreach collection="list" item="item">
+                    <if test="item.riskLevel != null">
+                        WHEN complaint_no = #{item.complaintNo,jdbcType=VARCHAR} THEN #{item.riskLevel,jdbcType=INTEGER}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="vid = CASE" suffix="END,">
+                <foreach collection="list" item="item">
+                    <if test="item.vid != null">
+                        WHEN complaint_no = #{item.complaintNo,jdbcType=VARCHAR} THEN #{item.vid,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="car_no = CASE" suffix="END,">
+                <foreach collection="list" item="item">
+                    <if test="item.carNo != null">
+                        WHEN complaint_no = #{item.complaintNo,jdbcType=VARCHAR} THEN #{item.carNo,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="car_type = CASE" suffix="END,">
+                <foreach collection="list" item="item">
+                    <if test="item.carType != null">
+                        WHEN complaint_no = #{item.complaintNo,jdbcType=VARCHAR} THEN #{item.carType,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="responsibility = CASE" suffix="END,">
+                <foreach collection="list" item="item">
+                    <if test="item.responsibility != null">
+                        WHEN complaint_no = #{item.complaintNo,jdbcType=VARCHAR} THEN #{item.responsibility,jdbcType=TINYINT}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="super_ticket_no = CASE" suffix="END,">
+                <foreach collection="list" item="item">
+                    <if test="item.superTicketNo != null">
+                        WHEN complaint_no = #{item.complaintNo,jdbcType=VARCHAR} THEN #{item.superTicketNo,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="so_no = CASE" suffix="END,">
+                <foreach collection="list" item="item">
+                    <if test="item.soNo != null">
+                        WHEN complaint_no = #{item.complaintNo,jdbcType=VARCHAR} THEN #{item.soNo,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="org_id = CASE" suffix="END,">
+                <foreach collection="list" item="item">
+                    <if test="item.orgId != null">
+                        WHEN complaint_no = #{item.complaintNo,jdbcType=VARCHAR} THEN #{item.orgId,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="contact_name_c = CASE" suffix="END,">
+                <foreach collection="list" item="item">
+                    <if test="item.contactNameC != null">
+                        WHEN complaint_no = #{item.complaintNo,jdbcType=VARCHAR} THEN #{item.contactNameC,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="contact_gender = CASE" suffix="END,">
+                <foreach collection="list" item="item">
+                    <if test="item.contactGender != null">
+                        WHEN complaint_no = #{item.complaintNo,jdbcType=VARCHAR} THEN #{item.contactGender,jdbcType=TINYINT}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="contact_phone_c = CASE" suffix="END,">
+                <foreach collection="list" item="item">
+                    <if test="item.contactPhoneC != null">
+                        WHEN complaint_no = #{item.complaintNo,jdbcType=VARCHAR} THEN #{item.contactPhoneC,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="contact_phone_sufix = CASE" suffix="END,">
+                <foreach collection="list" item="item">
+                    <if test="item.contactPhoneSufix != null">
+                        WHEN complaint_no = #{item.complaintNo,jdbcType=VARCHAR} THEN #{item.contactPhoneSufix,jdbcType=INTEGER}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="vin_sufix = CASE" suffix="END,">
+                <foreach collection="list" item="item">
+                    <if test="item.vinSufix != null">
+                        WHEN complaint_no = #{item.complaintNo,jdbcType=VARCHAR} THEN #{item.vinSufix}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="status = CASE" suffix="END,">
+                <foreach collection="list" item="item">
+                    <if test="item.status != null">
+                        WHEN complaint_no = #{item.complaintNo,jdbcType=VARCHAR} THEN #{item.status,jdbcType=TINYINT}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="problem_desc = CASE" suffix="END,">
+                <foreach collection="list" item="item">
+                    <if test="item.problemDesc != null">
+                        WHEN complaint_no = #{item.complaintNo,jdbcType=VARCHAR} THEN #{item.problemDesc,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="complaint_content = CASE" suffix="END,">
+                <foreach collection="list" item="item">
+                    <if test="item.complaintContent != null">
+                        WHEN complaint_no = #{item.complaintNo,jdbcType=VARCHAR} THEN #{item.complaintContent,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="reminder_times = CASE" suffix="END,">
+                <foreach collection="list" item="item">
+                    <if test="item.reminderTimes != null">
+                        WHEN complaint_no = #{item.complaintNo,jdbcType=VARCHAR} THEN #{item.reminderTimes,jdbcType=INTEGER}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="customer_service_mid = CASE" suffix="END,">
+                <foreach collection="list" item="item">
+                    <if test="item.customerServiceMid != null">
+                        WHEN complaint_no = #{item.complaintNo,jdbcType=VARCHAR} THEN #{item.customerServiceMid,jdbcType=BIGINT}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="operator_mid = CASE" suffix="END,">
+                <foreach collection="list" item="item">
+                    <if test="item.operatorMid != null">
+                        WHEN complaint_no = #{item.complaintNo,jdbcType=VARCHAR} THEN #{item.operatorMid,jdbcType=BIGINT}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="finish_time = CASE" suffix="END,">
+                <foreach collection="list" item="item">
+                    <if test="item.finishTime != null">
+                        WHEN complaint_no = #{item.complaintNo,jdbcType=VARCHAR} THEN #{item.finishTime,jdbcType=TIMESTAMP}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="first_response_time = CASE" suffix="END,">
+                <foreach collection="list" item="item">
+                    <if test="item.firstResponseTime != null">
+                        WHEN complaint_no = #{item.complaintNo,jdbcType=VARCHAR} THEN #{item.firstResponseTime,jdbcType=TIMESTAMP}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="create_time = CASE" suffix="END,">
+                <foreach collection="list" item="item">
+                    <if test="item.createTime != null">
+                        WHEN complaint_no = #{item.complaintNo,jdbcType=VARCHAR} THEN #{item.createTime,jdbcType=TIMESTAMP}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="update_time = CASE" suffix="END,">
+                <foreach collection="list" item="item">
+                    <if test="item.updateTime != null">
+                        WHEN complaint_no = #{item.complaintNo,jdbcType=VARCHAR} THEN #{item.updateTime,jdbcType=TIMESTAMP}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="city_id = CASE" suffix="END,">
+                <foreach collection="list" item="item">
+                    <if test="item.cityId != null">
+                        WHEN complaint_no = #{item.complaintNo,jdbcType=VARCHAR} THEN #{item.cityId,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="zone_id = CASE" suffix="END,">
+                <foreach collection="list" item="item">
+                    <if test="item.zoneId != null">
+                        WHEN complaint_no = #{item.complaintNo,jdbcType=VARCHAR} THEN #{item.zoneId,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="little_zone_id = CASE" suffix="END,">
+                <foreach collection="list" item="item">
+                    <if test="item.littleZoneId != null">
+                        WHEN complaint_no = #{item.complaintNo,jdbcType=VARCHAR} THEN #{item.littleZoneId,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="test_tag = CASE" suffix="END,">
+                <foreach collection="list" item="item">
+                    <if test="item.testTag != null">
+                        WHEN complaint_no = #{item.complaintNo,jdbcType=VARCHAR} THEN #{item.testTag,jdbcType=TINYINT}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="problem_category = CASE" suffix="END,">
+                <foreach collection="list" item="item">
+                    <if test="item.problemCategory != null">
+                        WHEN complaint_no = #{item.complaintNo,jdbcType=VARCHAR} THEN #{item.problemCategory,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="user_demand = CASE" suffix="END,">
+                <foreach collection="list" item="item">
+                    <if test="item.userDemand != null">
+                        WHEN complaint_no = #{item.complaintNo,jdbcType=VARCHAR} THEN #{item.problemCategory,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="only_view = CASE" suffix="END,">
+                <foreach collection="list" item="item">
+                    <if test="item.onlyView != null">
+                        WHEN complaint_no = #{item.complaintNo,jdbcType=VARCHAR} THEN #{item.onlyView,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="contact_phone_md5 = CASE" suffix="END,">
+                <foreach collection="list" item="item">
+                    <if test="item.contactPhoneMd5 != null">
+                        WHEN complaint_no = #{item.complaintNo,jdbcType=VARCHAR} THEN #{item.contactPhoneMd5,jdbcType=CHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="media_involved = CASE" suffix="END,">
+                <foreach collection="list" item="item">
+                    <if test="item.mediaInvolved != null">
+                        WHEN complaint_no = #{item.complaintNo,jdbcType=VARCHAR} THEN #{item.mediaInvolved,jdbcType=INTEGER}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="media_link = CASE" suffix="END,">
+                <foreach collection="list" item="item">
+                    <if test="item.mediaLink != null">
+                        WHEN complaint_no = #{item.complaintNo,jdbcType=VARCHAR} THEN #{item.mediaLink,jdbcType=VARCHAR}
+                    </if>
+                </foreach>
+            </trim>
+            <trim prefix="upgrade_time = CASE" suffix="END,">
+                <foreach collection="list" item="item">
+                    <if test="item.upgradeTime != null">
+                        WHEN complaint_no = #{item.complaintNo,jdbcType=VARCHAR} THEN #{item.upgradeTime,jdbcType=TIMESTAMP}
+                    </if>
+                </foreach>
+            </trim>
+        </trim>
+        WHERE complaint_no IN
+        <foreach collection="list" item="item" open="(" separator="," close=")">
+            #{item.complaintNo,jdbcType=VARCHAR}
+        </foreach>
+    </update>
+    <select id="selectByComplaintNo"
+            resultType="com.wt.complaint.manage.infrastructure.model.ComplaintOrderDO">
+        select /*master*/
+        <include refid="Base_Column_List"/>
+        from complaint_order
+        where complaint_no = #{comlaintNo}
+    </select>
+
+
+    <sql id="List_Base_Column">
+        co.id, co.idempotent_key, co.complaint_no,
+        co.complaint_type, co.risk_level, co.vid,
+        co.car_no, co.car_type, co.responsibility, co.super_ticket_no,
+        co.so_no, co.org_id, co.contact_name_c,
+        co.contact_gender, co.contact_phone_c, co.contact_phone_sufix,
+        co.vin_sufix, co.status, co.problem_desc,
+        co.complaint_content, co.reminder_times, co.customer_service_mid,
+        co.operator_mid, co.finish_time, co.first_response_time,
+        co.create_time, co.update_time, co.city_id,
+        co.zone_id, co.little_zone_id, co.test_tag, co.problem_category,
+        co.user_demand, co.only_view, contact_phone_md5,
+        co.media_involved, co.media_link, co.upgrade_time,
+        co.create_source, co.reviewed, co.exemption_apply_times
+    </sql>
+    <select id="selectPageByParam"
+            resultType="com.wt.complaint.manage.infrastructure.model.ComplaintOrderDO">
+        select
+        <include refid="List_Base_Column"/>
+        from complaint_order co
+        <if test="params.tagList != null and params.tagList.size() > 0">
+            left join complaint_tag ct on co.complaint_no = ct.complaint_no
+        </if>
+        <if test="params.padRelateListGroup != null and params.padRelateListGroup.tagList != null and params.padRelateListGroup.tagList.size() > 0">
+            left join complaint_relation_closing_tag cr on co.complaint_no = cr.complaint_no
+        </if>
+        <include refid="selectByParamCondition"/>
+        order by co.id desc
+        limit #{params.start,jdbcType=INTEGER},#{params.pageSize,jdbcType=INTEGER}
+    </select>
+
+    <select id="countByParam" resultType="java.lang.Integer">
+        select
+        count(co.id)
+        from complaint_order co
+        <if test="params.tagList!= null and params.tagList.size() > 0">
+            left join complaint_tag ct on co.complaint_no = ct.complaint_no
+        </if>
+        <if test="params.padRelateListGroup != null and params.padRelateListGroup.tagList != null and params.padRelateListGroup.tagList.size() > 0">
+            left join complaint_relation_closing_tag cr on co.complaint_no = cr.complaint_no
+        </if>
+        <include refid="selectByParamCondition"/>
+    </select>
+
+    <sql id="selectByParamCondition">
+        <where>
+            <if test="params.orgId != null and params.orgId != ''">
+                and co.org_id = #{params.orgId,jdbcType=VARCHAR}
+            </if>
+            <if test="params.statusList != null and params.statusList.size() > 0">
+                and co.status in
+                <foreach collection="params.statusList" item="item" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="params.complaintNo != null and params.complaintNo != '' ">
+                and co.complaint_no = #{params.complaintNo,jdbcType=VARCHAR}
+            </if>
+            <if test="params.contactPhoneSuffix != null and params.contactPhoneSuffix != ''">
+                and co.contact_phone_sufix = #{params.contactPhoneSuffix,jdbcType=VARCHAR}
+            </if>
+            <if test="params.vinSuffix != null and params.vinSuffix != ''">
+                and co.vin_sufix = #{params.vinSuffix,jdbcType=VARCHAR}
+            </if>
+            <if test="params.carNo != null and params.carNo != ''">
+                and co.car_no = #{params.carNo,jdbcType=VARCHAR}
+            </if>
+            <if test="params.operatorMid != null">
+                and co.operator_mid = #{params.operatorMid,jdbcType=BIGINT}
+            </if>
+            <if test="params.createTimeStart != null and params.createTimeStart !=''">
+                and co.create_time <![CDATA[>=]]> #{params.createTimeStart, jdbcType=VARCHAR}
+            </if>
+            <if test="params.createTimeEnd != null and params.createTimeEnd != ''">
+                and co.create_time <![CDATA[<=]]> #{params.createTimeEnd, jdbcType=VARCHAR}
+            </if>
+            <if test="params.finishTimeStart != null and params.finishTimeStart != ''">
+                and co.finish_time <![CDATA[>=]]> #{params.finishTimeStart, jdbcType=VARCHAR}
+            </if>
+            <if test="params.finishTimeEnd != null and params.finishTimeEnd != ''">
+                and co.finish_time <![CDATA[<=]]> #{params.finishTimeEnd, jdbcType=VARCHAR}
+            </if>
+            <if test="params.firstResponseTimeStart != null and params.firstResponseTimeStart != ''">
+                and co.first_response_time <![CDATA[>=]]> #{params.firstResponseTimeStart, jdbcType=VARCHAR}
+            </if>
+            <if test="params.firstResponseTimeEnd != null and params.firstResponseTimeEnd != ''">
+                and co.first_response_time <![CDATA[<=]]> #{params.firstResponseTimeEnd, jdbcType=VARCHAR}
+            </if>
+            <if test="params.complaintType != null">
+                and co.complaint_type = #{params.complaintType, jdbcType=INTEGER}
+            </if>
+            <if test="params.vin != null and params.vin != '' ">
+                and co.vid = #{params.vin,jdbcType=VARCHAR}
+            </if>
+            <if test="params.contactPhone != null and params.contactPhone != ''">
+                and co.contact_phone_md5 = #{params.contactPhone,jdbcType=VARCHAR}
+            </if>
+            <if test="params.cityList != null and params.cityList.size() > 0">
+                and co.city_id in
+                <foreach collection="params.cityList" item="item" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="params.orgIdList != null and params.orgIdList.size() > 0">
+                and co.org_id in
+                <foreach collection="params.orgIdList" item="item" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="params.zoneIdList != null and params.zoneIdList.size() > 0">
+                and co.zone_id in
+                <foreach collection="params.zoneIdList" item="item" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="params.problemDesc != null and params.problemDesc != ''">
+                and co.problem_desc LIKE CONCAT('%', #{params.problemDesc,jdbcType=VARCHAR}, '%')
+            </if>
+            <if test="params.reminderTimes != null and params.reminderTimes != ''">
+                <choose>
+                    <when test="params.reminderTimes >=3">
+                        and co.reminder_times <![CDATA[>=]]> #{params.reminderTimes,jdbcType=INTEGER}
+                    </when>
+                    <otherwise>
+                        and co.reminder_times = #{params.reminderTimes,jdbcType=INTEGER}
+                    </otherwise>
+                </choose>
+            </if>
+            <if test="params.riskLevelList != null and params.riskLevelList.size() > 0">
+                and co.risk_level in
+                <foreach collection="params.riskLevelList" item="item" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <!-- 客诉三期废弃：门店是否有责不再作为筛选条�?-->
+            <if test="params.responsibility != null">
+                and co.responsibility = #{params.responsibility, jdbcType=INTEGER}
+            </if>
+            <if test="params.reviewed != null">
+                and co.reviewed = #{params.reviewed, jdbcType=INTEGER}
+            </if>
+            <if test="params.createSource != null">
+                and co.create_source = #{params.createSource,jdbcType=INTEGER}
+            </if>
+            <if test="params.mediaInvolved != null">
+                and co.media_involved = #{params.mediaInvolved,jdbcType=INTEGER}
+            </if>
+            <if test="params.afterSaleWorkbenchPermissionGroup != null">
+                <choose>
+                    <when test="params.afterSaleWorkbenchPermissionGroup.afterSaleWorkbenchPermissionType != null and params.afterSaleWorkbenchPermissionGroup.afterSaleWorkbenchPermissionType == 1">
+                        and co.zone_id in
+                        <foreach collection="params.afterSaleWorkbenchPermissionGroup.bigZonePositionsInfoList" item="item" index="index" open="(" separator="," close=")">
+                            #{item.zoneId}
+                        </foreach>
+                    </when>
+                    <when test="params.afterSaleWorkbenchPermissionGroup.afterSaleWorkbenchPermissionType != null and params.afterSaleWorkbenchPermissionGroup.afterSaleWorkbenchPermissionType == 2">
+                        and co.little_zone_id in
+                        <foreach collection="params.afterSaleWorkbenchPermissionGroup.littleZonePositionsInfoList" item="item" index="index" open="(" separator="," close=")">
+                            #{item.zoneId}
+                        </foreach>
+                    </when>
+                    <otherwise>
+                    </otherwise>
+                </choose>
+            </if>
+            <if test="params.padRelateListGroup != null">
+                and ((co.create_time <![CDATA[>=]]> #{params.padRelateListGroup.createTimeStart} and co.create_time <![CDATA[<=]]> #{params.padRelateListGroup.createTimeEnd}
+                and co.status in
+                <foreach collection="params.padRelateListGroup.inProgressStatus" item="item" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+                ) or (cr.closing_tag_name_link in
+                <foreach collection="params.padRelateListGroup.tagList" item="item" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach> and co.status in
+                <foreach collection="params.padRelateListGroup.completeStatus" item="item" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+                and cr.is_deleted = 0))
+            </if>
+            <if test="params.tagList != null and params.tagList.size() > 0">
+                and (ct.tag_type in
+                <foreach collection="params.tagList" item="item" index="index" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+                and ct.is_deleted = 0)
+            </if>
+            <if test="params.tab != null">
+                <choose>
+                    <when test="params.tab == 1">
+                    </when>
+                    <when test="params.tab == 2">
+                        and co.status = #{params.statusList[0]}
+                    </when>
+                    <when test="params.tab == 3">
+                        and co.status in
+                        <foreach collection="params.statusList" item="status" open="(" close=")" separator=",">
+                            #{status}
+                        </foreach>
+                    </when>
+                    <when test="params.tab == 4">
+                        and (
+                        (co.upgrade_time BETWEEN DATE_SUB(NOW(), INTERVAL 24 HOUR) AND DATE_SUB(NOW(), INTERVAL 20 HOUR) and co.status in
+                        <foreach collection="params.conditionGroups[0].statusList" item="status" open="(" close=")" separator=",">
+                            #{status}
+                        </foreach>)
+                        or
+                        (co.upgrade_time  BETWEEN DATE_SUB(NOW(), INTERVAL 72 HOUR) AND DATE_SUB(NOW(), INTERVAL 60 HOUR) and co.status in
+                        <foreach collection="params.conditionGroups[2].statusList" item="status" open="(" close=")" separator=",">
+                            #{status}
+                        </foreach>)
+                        )
+                    </when>
+                    <when test="params.tab == 5">
+                        and co.status = #{params.statusList[0]}
+                    </when>
+
+                    <when test="params.tab == 6">
+                        and co.only_view = #{params.onlyView}
+                    </when>
+                    <!-- 客诉三期：待复盘，服务投诉未复盘�?reviewed=0 -->
+                    <when test="params.tab == 8">
+                        and co.reviewed = 0
+                    </when>
+                </choose>
+            </if>
+            <if test="params.onlyShowMyCompositeOrder==true">
+                and co.operator_mid = #{params.mid, jdbcType=BIGINT}
+            </if>
+            <if test="params.testTag != null">
+                and co.test_tag = #{params.testTag,jdbcType=INTEGER}
+            </if>
+        </where>
+    </sql>
+
+    <select id="list" resultType="com.wt.complaint.manage.infrastructure.model.ComplaintOrderDO">
+        select
+            <include refid="Base_Column_List"></include>
+            from complaint_order
+        <where>
+            <if test="complaintNo != null">
+                and complaint_no = #{complaintNo}
+            </if>
+            <if test="orgId != null">
+                and org_id = #{orgId}
+            </if>
+            <if test="complaintNoList != null and complaintNoList.size()>0">
+                and complaint_no in
+                <foreach collection="complaintNoList" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="stNoList != null and stNoList.size()>0">
+                and super_ticket_no in
+                <foreach collection="stNoList" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="complaintStatusList != null and complaintStatusList.size()>0">
+                and status in
+                <foreach collection="complaintStatusList" item="item" open="(" close=")" separator=",">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="idempotentId != null">
+                and idempotent_key = #{idempotentId}
+            </if>
+        </where>
+    </select>
+    <select id="selectComplaintTimeoutList"
+            resultType="com.wt.complaint.manage.infrastructure.model.ComplaintOrderDO">
+        SELECT /*master*/
+        <include refid="Base_Column_List"/>
+        FROM complaint_order
+        WHERE
+        (
+        (upgrade_time BETWEEN DATE_SUB(NOW(), INTERVAL 24 HOUR) AND DATE_SUB(NOW(), INTERVAL 20 HOUR))
+        OR
+        (upgrade_time BETWEEN DATE_SUB(NOW(), INTERVAL 72 HOUR) AND DATE_SUB(NOW(), INTERVAL 60 HOUR))
+        )
+    </select>
+    <select id="selectFirstResponseToTimeoutList"
+            resultType="com.wt.complaint.manage.infrastructure.model.ComplaintOrderDO">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM complaint_order
+        WHERE
+        status in
+        <foreach collection="statusList" item="item" open="(" close=")" separator=",">
+            #{item}
+        </foreach>
+        AND
+        (
+        (upgrade_time BETWEEN DATE_SUB(NOW(), INTERVAL 24 HOUR) AND DATE_SUB(NOW(), INTERVAL 20
+        HOUR))
+        )
+        order by id asc
+    </select>
+    <select id="selectFinishToTimeoutList"
+            resultType="com.wt.complaint.manage.infrastructure.model.ComplaintOrderDO">
+        SELECT
+        <include refid="List_Base_Column"/>
+        FROM complaint_order co
+        LEFT JOIN complaint_tag ct ON co.complaint_no = ct.complaint_no
+        WHERE
+        co.status != 90
+        AND
+        co.upgrade_time BETWEEN DATE_SUB(NOW(), INTERVAL 72 HOUR) AND DATE_SUB(NOW(), INTERVAL 60 HOUR)
+        AND
+        ct.tag_type != 'FINISH_72H_ASSESSMENT_FREE'
+        AND
+        ct.is_deleted = 0
+        order by co.id asc
+    </select>
+
+    <select id="selectUnFinishedToTimeoutList"
+            resultType="com.wt.complaint.manage.infrastructure.model.ComplaintOrderDO">
+        SELECT
+        <include refid="List_Base_Column"/>
+        FROM complaint_order co
+        WHERE
+        co.status in (1, 30, 50, 70)
+        AND
+        co.upgrade_time BETWEEN DATE_SUB(NOW(), INTERVAL 180 DAY) AND DATE_SUB(NOW(), INTERVAL 15 DAY)
+        order by co.id asc
+    </select>
+
+</mapper>

@@ -1,0 +1,195 @@
+{
+  "vid": "MOCKD899399999969",
+  "workType": 20,
+  "soNo": "MKSO255022235654925",
+  "superTicketNo": "MKST255162082005153",
+  "idempotentId": "6905",
+  "contactName": "尚韧初",
+  "contactTel": "15001159987",
+  "contactTitle": 1,
+  "testTag": 1,
+  "createMid": 2776215961,
+  "expand": {
+    "customerServiceMid": "2776215961",
+    "carNo": "111",
+    "complaintInfo": [
+      {
+        "groupName": "基本信息",
+        "groupOrder": 1,
+        "fields": [
+          {
+            "id": 17,
+            "order": 1,
+            "required": 1,
+            "fieldType": 3,
+            "fieldName": "问题分类",
+            "fieldCode": "issueType",
+            "value": [
+              {
+                "code": "4806",
+                "desc": "轮眉与其他部位缝隙大",
+                "pathId": "1/2/3/4806",
+                "pathName": "产品/外饰/轮眉/轮眉与其他部位缝隙大"
+              }
+            ]
+          },
+          {
+            "id": 24,
+            "order": 2,
+            "required": 1,
+            "fieldType": 2,
+            "fieldName": "门店是否跟进",
+            "fieldCode": "orgFollowTag",
+            "value": [
+              {
+                "code": "1",
+                "desc": "是"
+              }
+            ]
+          },
+          {
+            "id": 25,
+            "order": 3,
+            "required": 1,
+            "fieldType": 2,
+            "fieldName": "门店是否有责",
+            "fieldCode": "responsibility",
+            "value": [
+              {
+                "code": "0",
+                "desc": "否"
+              }
+            ]
+          },
+          {
+            "id": 26,
+            "order": 4,
+            "required": 1,
+            "fieldType": 2,
+            "fieldName": "风险等级",
+            "fieldCode": "riskLevel",
+            "value": [
+              {
+                "code": "3",
+                "desc": "L3"
+              }
+            ],
+            "attachments": [
+
+            ]
+          },
+          {
+            "id": 20,
+            "order": 5,
+            "required": 1,
+            "fieldType": 2,
+            "fieldName": "选择门店",
+            "fieldCode": "orgId",
+            "value": [
+              {
+                "code": "F0004",
+                "desc": "我是一家授权服务门店"
+              }
+            ],
+            "attachments": [
+
+            ]
+          },
+          {
+            "id": 28,
+            "order": 6,
+            "required": 1,
+            "fieldType": 2,
+            "fieldName": "投诉分类",
+            "fieldCode": "complaintType",
+            "value": [
+              {
+                "code": "2",
+                "desc": "服务投诉"
+              }
+            ],
+            "attachments": [
+
+            ]
+          },
+          {
+            "id": 27,
+            "order": 7,
+            "required": 1,
+            "fieldType": 4,
+            "fieldName": "问题详情",
+            "fieldCode": "problemDesc",
+            "value": [
+              {
+                "code": "",
+                "desc": "预填的"
+              }
+            ]
+          },
+          {
+            "id": 21,
+            "order": 8,
+            "required": 1,
+            "fieldType": 5,
+            "fieldName": "附件",
+            "fieldCode": "attachments",
+            "value": [
+              {
+                "code": "",
+                "desc": ""
+              }
+            ],
+            "attachments": [
+              {
+                "id": 63607039,
+                "type": 2
+              }
+            ]
+          },
+          {
+            "id": 31,
+            "order": 9,
+            "required": 1,
+            "fieldType": 4,
+            "fieldName": "用户诉求",
+            "fieldCode": "userDemand",
+            "value": [
+              {
+                "code": "",
+                "desc": "，，"
+              }
+            ],
+            "attachments": [
+
+            ]
+          }
+        ]
+      },
+      {
+        "groupName": "新分组 3",
+        "groupOrder": 2,
+        "fields": [
+          {
+            "id": 36,
+            "order": 1,
+            "required": 1,
+            "fieldType": 3,
+            "fieldName": "测试级联选择框",
+            "fieldCode": "",
+            "value": [
+              {
+                "code": "26",
+                "desc": "四级2",
+                "pathId": "16/22/24/26",
+                "pathName": "一级类目测试禁用/二级分身1/三级分身11/四级2"
+              }
+            ],
+            "attachments": [
+
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

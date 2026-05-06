@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>complaint-manage</artifactId>
+        <groupId>com.wt</groupId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <artifactId>complaint-manage-server</artifactId>
+    <version>${complaint-manage-server-version}</version>
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>2.7.5</version>
+                <configuration>
+                    <mainClass>com.wt.complaint.manage.bootstrap.ComplaintManageBootstrap</mainClass>
+                </configuration>
+                
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <groupId>org.springframework.boot</groupId>
+            </plugin>
+        
+        </plugins>
+        
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+            <resource>
+                <directory>src/main/resources/META-INF</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>app.properties</include>
+                </includes>
+                <targetPath>META-INF/</targetPath>
+            </resource>
+        </resources>
+    </build>
+    
+    <dependencies>
+        <dependency>
+            <artifactId>keycenter-new-spring-boot-starter</artifactId>
+            <groupId>com.wt</groupId>
+            <version>keycenter3x-1.0.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>com.wt</groupId>
+            <artifactId>keycenter-youpinlog-proretail-spring-boot-starter</artifactId>
+        </dependency>
+        <dependency>
+            <artifactId>spring-boot-starter-web</artifactId>
+            <groupId>org.springframework.boot</groupId>
+        </dependency>
+        
+        <!--单元测试-->
+        <dependency>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <groupId>org.springframework.boot</groupId>
+        </dependency>
+        
+        <dependency>
+            <artifactId>mockito-core</artifactId>
+            <groupId>org.mockito</groupId>
+        </dependency>
+        <dependency>
+            <artifactId>complaint-manage-app</artifactId>
+            <groupId>com.wt</groupId>
+            <version>${complaint-manage-app-version}</version>
+        </dependency>
+        
+        <dependency>
+            <artifactId>complaint-manage-infrastructure</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>market-common</artifactId>
+                    <groupId>market</groupId>
+                </exclusion>
+                
+                <exclusion>
+                    <artifactId>jackson-core</artifactId>
+                    <groupId>com.fasterxml.jackson.core</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>dubbo-server-registry</artifactId>
+                    <groupId>com.xiaomi.mone</groupId>
+                </exclusion>
+            </exclusions>
+            <groupId>com.wt</groupId>
+            <version>${complaint-manage-infrastructure-version}</version>
+        </dependency>
+        <dependency>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+            <groupId>org.springframework.boot</groupId>
+        </dependency>
+        <dependency>
+            <artifactId>micrometer-registry-prometheus</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>simpleclient_common</artifactId>
+                    <groupId>io.prometheus</groupId>
+                </exclusion>
+            </exclusions>
+            <groupId>io.micrometer</groupId>
+        </dependency>
+        <dependency>
+            <groupId>io.prometheus</groupId>
+            <artifactId>simpleclient</artifactId>
+            <version>0.10.0</version>
+        </dependency>
+        <dependency>
+            <artifactId>micrometer-core</artifactId>
+            <groupId>io.micrometer</groupId>
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.xiaomi.mone</groupId>-->
+<!--            <artifactId>dubbo-mock</artifactId>-->
+<!--        </dependency>-->
+    
+        <!--    日志格式�?logback.xml appender日志格式控制    -->
+        <dependency>
+            <groupId>com.wt</groupId>
+            <artifactId>proretail-common-log-pattern</artifactId>
+            <version>1.0.0-SNAPSHOT</version>
+        </dependency>
+    
+    </dependencies>
+    <modelVersion>4.0.0</modelVersion>
+    
+    
+
+    
+    
+    <profiles>
+        
+        <profile>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <filters>
+                    <filter>src/main/resources/config/dev.properties</filter>
+                </filters>
+            </build>
+            <id>dev</id>
+            <properties>
+                <profiles.active>dev</profiles.active>
+            </properties>
+        </profile>
+        
+        <profile>
+            <build>
+                <filters>
+                    <filter>src/main/resources/config/staging.properties</filter>
+                </filters>
+            </build>
+            <id>staging</id>
+            <properties>
+                <profiles.active>staging</profiles.active>
+            </properties>
+        </profile>
+        
+        <profile>
+            <build>
+                <filters>
+                    <filter>src/main/resources/config/c3.properties</filter>
+                </filters>
+            </build>
+            <id>c3</id>
+            <properties>
+                <profiles.active>c3</profiles.active>
+            </properties>
+        </profile>
+        
+        <profile>
+            <build>
+                <filters>
+                    <filter>src/main/resources/config/preview.properties</filter>
+                </filters>
+            </build>
+            <id>preview</id>
+            <properties>
+                <profiles.active>preview</profiles.active>
+            </properties>
+        </profile>
+    </profiles>
+
+</project>

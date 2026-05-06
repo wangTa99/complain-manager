@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wt.complaint.manage.infrastructure.mapper.ComplaintTagMapper">
+
+    <resultMap id="BaseResultMap" type="com.wt.complaint.manage.infrastructure.model.ComplaintTagDO">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="complaintNo" column="complaint_no" jdbcType="VARCHAR"/>
+            <result property="tagType" column="tag_type" jdbcType="VARCHAR"/>
+            <result property="isDeleted" column="is_deleted" jdbcType="TINYINT"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,complaint_no,tag_type,
+        is_deleted,create_time
+    </sql>
+    <insert id="insertSelective"
+            parameterType="com.wt.complaint.manage.infrastructure.model.ComplaintTagDO">
+        INSERT INTO complaint_tag
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="complaintNo != null">
+                complaint_no,
+            </if>
+            <if test="tagType != null">
+                tag_type,
+            </if>
+            <if test="isDeleted != null">
+                is_deleted,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="complaintNo != null">
+                #{complaintNo},
+            </if>
+            <if test="tagType != null">
+                #{tagType},
+            </if>
+            <if test="isDeleted != null">
+                #{isDeleted},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+        </trim>
+    </insert>
+    <insert id="batchInsert">
+        INSERT INTO complaint_tag (complaint_no, tag_type)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (#{item.complaintNo}, #{item.tagType})
+        </foreach>
+    </insert>
+
+    <select id="selectByComplaintNoList"
+            resultType="com.wt.complaint.manage.infrastructure.model.ComplaintTagDO">
+        select
+        <include refid="Base_Column_List"/>
+        from complaint_tag
+        where complaint_no in
+        <foreach collection="complaintNoList" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+        and is_deleted = 0
+        order by id desc
+    </select>
+    <select id="selectTag" resultType="com.wt.complaint.manage.infrastructure.model.ComplaintTagDO">
+        select
+        <include refid="Base_Column_List"/>
+        from complaint_tag
+        where complaint_no = #{complaintNo, jdbcType=VARCHAR}
+        and tag_type = #{tagType, jdbcType=VARCHAR}
+        and is_deleted = 0
+        order by id desc
+    </select>
+    <update id="deleteTag">
+        update complaint_tag
+        set is_deleted = 1
+        where complaint_no = #{complaintNo, jdbcType=VARCHAR}
+        and tag_type = #{tagType, jdbcType=VARCHAR}
+        and is_deleted = 0
+    </update>
+</mapper>

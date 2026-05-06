@@ -1,0 +1,438 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wt.complaint.manage.infrastructure.mapper.ComplaintAuditMapper">
+
+    <resultMap id="BaseResultMap" type="com.wt.complaint.manage.infrastructure.model.ComplaintAuditDO">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="complaintNo" column="complaint_no" jdbcType="VARCHAR"/>
+        <result property="vid" column="vid" jdbcType="VARCHAR"/>
+        <result property="carNo" column="car_no" jdbcType="VARCHAR"/>
+        <result property="orgId" column="org_id" jdbcType="VARCHAR"/>
+        <result property="orgName" column="org_name" jdbcType="VARCHAR"/>
+        <result property="zoneId" column="zone_id" jdbcType="VARCHAR"/>
+        <result property="littleZoneId" column="little_zone_id" jdbcType="VARCHAR"/>
+        <result property="contactNameC" column="contact_name_c" jdbcType="VARCHAR"/>
+        <result property="contactPhoneC" column="contact_phone_c" jdbcType="VARCHAR"/>
+        <result property="applyContent" column="apply_content" jdbcType="VARCHAR"/>
+        <result property="auditType" column="audit_type" jdbcType="INTEGER"/>
+        <result property="auditStatus" column="audit_status" jdbcType="INTEGER"/>
+        <result property="auditMid" column="audit_mid" jdbcType="BIGINT"/>
+        <result property="createMid" column="create_mid" jdbcType="BIGINT"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="auditComment" column="audit_comment" jdbcType="VARCHAR"/>
+        <result property="contactPhoneMd5" column="contact_phone_md5" jdbcType="VARCHAR"/>
+        <result property="userAgreement" column="user_agreement" jdbcType="INTEGER"/>
+        <result property="vehicleRepaired" column="vehicle_repaired" jdbcType="INTEGER"/>
+        <result property="mediaInfo" column="media_info" jdbcType="INTEGER"/>
+        <result property="currentNode" column="current_node" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        au.id,au.complaint_no,au.vid,
+        au.car_no,au.org_id,au.org_name,au.zone_id,au.little_zone_id,
+        au.contact_name_c,au.contact_phone_c,au.apply_content,
+        au.audit_type,au.audit_status,au.audit_mid,
+        au.create_mid,au.create_time,au.update_time,
+        au.audit_comment,au.contact_phone_md5,
+        au.user_agreement,au.vehicle_repaired,au.media_info,
+        au.current_node
+    </sql>
+
+    <select id="selectPageByParam"
+            parameterType="com.wt.complaint.manage.domain.api.service.parameter.in.approve.ComplaintAuditListSoIn"
+            resultType="com.wt.complaint.manage.infrastructure.model.ComplaintAuditDO">
+        select
+        <include refid="Base_Column_List"/>
+        from complaint_audit au join complaint_order co on au.complaint_no = co.complaint_no
+        <include refid="selectPageByParamCondition"/>
+        order by au.id desc
+    </select>
+
+    <sql id="selectPageByParamCondition">
+        <where>
+            <if test="auditStatusList != null and auditStatusList.size()>0">
+                AND au.audit_status IN
+                <foreach collection="auditStatusList" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="auditTypeList != null and auditTypeList.size()>0">
+                AND au.audit_type IN
+                <foreach collection="auditTypeList" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="complaintNo != null and complaintNo != ''">
+                AND au.complaint_no = #{complaintNo}
+            </if>
+            <if test="orgIdList != null and orgIdList.size() > 0">
+                AND au.org_id IN
+                <foreach collection="orgIdList" item="orgId" open="(" separator="," close=")">
+                    #{orgId}
+                </foreach>
+            </if>
+            <if test="contactPhoneMd5 != null and contactPhoneMd5 != ''">
+                AND au.contact_phone_md5 = #{contactPhoneMd5}
+            </if>
+            <if test="carNo != null and carNo != ''">
+                AND au.car_no = #{carNo}
+            </if>
+            <if test="vid != null and vid != ''">
+                AND au.vid = #{vid}
+            </if>
+            <if test="createTimeStart != null and createTimeStart != ''">
+                AND au.create_time <![CDATA[>=]]> #{createTimeStart}
+            </if>
+            <if test="createTimeEnd != null and createTimeEnd != ''">
+                AND au.create_time <![CDATA[<=]]> #{createTimeEnd}
+            </if>
+            <if test="auditMid != null and auditMid != ''">
+                AND au.audit_mid = #{auditMid}
+            </if>
+            <if test="zoneIdList != null and zoneIdList.size() > 0">
+                AND au.zone_id IN
+                <foreach collection="zoneIdList" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="littleZoneIdList != null and littleZoneIdList.size() > 0">
+                AND au.little_zone_id IN
+                <foreach collection="littleZoneIdList" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="testTag != null">
+                AND co.test_tag = #{testTag,jdbcType=INTEGER}
+            </if>
+        </where>
+    </sql>
+    <insert id="insertSelective">
+        insert into complaint_audit
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="complaintNo != null">
+                complaint_no,
+            </if>
+            <if test="vid != null">
+                vid,
+            </if>
+            <if test="carNo != null">
+                car_no,
+            </if>
+            <if test="orgId != null">
+                org_id,
+            </if>
+            <if test="orgName != null">
+                org_name,
+            </if>
+            <if test="zoneId != null">
+                zone_id,
+            </if>
+            <if test="littleZoneId != null">
+                little_zone_id,
+            </if>
+            <if test="contactNameC != null">
+                contact_name_c,
+            </if>
+            <if test="contactPhoneC != null">
+                contact_phone_c,
+            </if>
+            <if test="applyContent != null">
+                apply_content,
+            </if>
+            <if test="auditType != null">
+                audit_type,
+            </if>
+            <if test="auditStatus != null">
+                audit_status,
+            </if>
+            <if test="auditMid != null">
+                audit_mid,
+            </if>
+            <if test="createMid != null">
+                create_mid,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="auditComment != null">
+                audit_comment,
+            </if>
+            <if test="contactPhoneMd5 != null">
+                contact_phone_md5,
+            </if>
+            <if test="userAgreement != null">
+                user_agreement,
+            </if>
+            <if test="vehicleRepaired != null">
+                vehicle_repaired,
+            </if>
+            <if test="mediaInfo != null">
+                media_info,
+            </if>
+            <if test="currentNode != null">
+                current_node,
+            </if>
+        </trim>
+        values
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="complaintNo != null">
+                #{complaintNo,jdbcType=VARCHAR},
+            </if>
+            <if test="vid != null">
+                #{vid,jdbcType=VARCHAR},
+            </if>
+            <if test="carNo != null">
+                #{carNo,jdbcType=VARCHAR},
+            </if>
+            <if test="orgId != null">
+                #{orgId,jdbcType=VARCHAR},
+            </if>
+            <if test="orgName != null">
+                #{orgName,jdbcType=VARCHAR},
+            </if>
+            <if test="zoneId != null">
+                #{zoneId,jdbcType=VARCHAR},
+            </if>
+            <if test="littleZoneId != null">
+                #{littleZoneId,jdbcType=VARCHAR},
+            </if>
+            <if test="contactNameC != null">
+                #{contactNameC,jdbcType=VARCHAR},
+            </if>
+            <if test="contactPhoneC != null">
+                #{contactPhoneC,jdbcType=VARCHAR},
+            </if>
+            <if test="applyContent != null">
+                #{applyContent,jdbcType=VARCHAR},
+            </if>
+            <if test="auditType != null">
+                #{auditType,jdbcType=INTEGER},
+            </if>
+            <if test="auditStatus != null">
+                #{auditStatus,jdbcType=INTEGER},
+            </if>
+            <if test="auditMid != null">
+                #{auditMid,jdbcType=BIGINT},
+            </if>
+            <if test="createMid != null">
+                #{createMid,jdbcType=BIGINT},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="auditComment != null">
+                #{auditComment,jdbcType=VARCHAR},
+            </if>
+            <if test="contactPhoneMd5 != null">
+                #{contactPhoneMd5,jdbcType=VARCHAR},
+            </if>
+            <if test="userAgreement != null">
+                #{userAgreement,jdbcType=INTEGER},
+            </if>
+            <if test="vehicleRepaired != null">
+                #{vehicleRepaired,jdbcType=INTEGER},
+            </if>
+            <if test="mediaInfo != null">
+                #{mediaInfo,jdbcType=INTEGER},
+            </if>
+            <if test="currentNode != null">
+                #{currentNode,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <select id="list" resultType="com.wt.complaint.manage.infrastructure.model.ComplaintAuditDO">
+            select
+            <include refid="Base_Column_List"></include>
+            from complaint_audit au
+            <where>
+                <if test="complaintNo != null">
+                    and au.complaint_no = #{complaintNo}
+                </if>
+                <if test="auditType != null">
+                    and au.audit_type = #{auditType}
+                </if>
+                <if test="auditStatus != null">
+                    and au.audit_status = #{auditStatus}
+                </if>
+            </where>
+
+    </select>
+    <select id="selectPreAndAfter"
+            parameterType="com.wt.complaint.manage.domain.api.service.parameter.in.approve.ComplaintPreNextSoIn"
+            resultType="java.lang.Long">
+        select id from complaint_audit
+        where id = (select min(id) from complaint_audit <include refid="selectPreAndAfterWhereDetailMin"/>)
+        or id = (select max(id) from complaint_audit <include refid="selectPreAndAfterWhereDetailMax"/>)
+        order by id desc
+    </select>
+    <select id="selectById"
+            resultType="com.wt.complaint.manage.infrastructure.model.ComplaintAuditDO">
+        select
+        <include refid="Base_Column_List"/>
+        from complaint_audit au
+        where au.id = #{id, jdbcType=BIGINT}
+    </select>
+    <select id="selectByComplaintNo"
+            resultType="com.wt.complaint.manage.infrastructure.model.ComplaintAuditDO">
+        select
+        <include refid="Base_Column_List"/>
+        from complaint_audit au
+        where au.complaint_no = #{complaintNo}
+        and au.audit_type = #{auditType}
+        order by au.id desc limit 1
+    </select>
+
+    <sql id="selectPreAndAfterWhereDetailMin">
+        <where>
+            <if test="auditStatus != null">
+                and audit_status=#{auditStatus}
+            </if>
+            <if test="zoneIdList != null and zoneIdList.size() > 0">
+                and zone_id in
+                <foreach collection="zoneIdList" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="littleZoneIdList != null and littleZoneIdList.size() > 0">
+                and little_zone_id in
+                <foreach collection="littleZoneIdList" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="auditTypeList != null and auditTypeList.size() > 0">
+                and audit_type in
+                <foreach collection="auditTypeList" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <!-- 申请免责(3)按节点过滤：非申请免责或 current_node 在允许范围内 -->
+            <if test="waiverCurrentNodeList != null and waiverCurrentNodeList.size() > 0">
+                and (audit_type != 3 or current_node in
+                <foreach collection="waiverCurrentNodeList" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+                )
+            </if>
+            and id <![CDATA[>]]> #{id} limit 1
+        </where>
+    </sql>
+
+    <sql id="selectPreAndAfterWhereDetailMax">
+        <where>
+            <if test="auditStatus != null">
+                and audit_status=#{auditStatus}
+            </if>
+            <if test="zoneIdList != null and zoneIdList.size() > 0">
+                and zone_id in
+                <foreach collection="zoneIdList" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="littleZoneIdList != null and littleZoneIdList.size() > 0">
+                and little_zone_id in
+                <foreach collection="littleZoneIdList" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <if test="auditTypeList != null and auditTypeList.size() > 0">
+                and audit_type in
+                <foreach collection="auditTypeList" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+            </if>
+            <!-- 申请免责(3)按节点过滤：非申请免责或 current_node 在允许范围内 -->
+            <if test="waiverCurrentNodeList != null and waiverCurrentNodeList.size() > 0">
+                and (audit_type != 3 or current_node in
+                <foreach collection="waiverCurrentNodeList" item="item" open="(" separator="," close=")">
+                    #{item}
+                </foreach>
+                )
+            </if>
+            and id <![CDATA[<]]> #{id} limit 1
+        </where>
+    </sql>
+
+
+    <update id="updateById" parameterType="com.wt.complaint.manage.infrastructure.model.ComplaintAuditDO">
+        UPDATE complaint_audit
+        <set>
+            <if test="complaintNo != null and complaintNo != ''">
+                complaint_no = #{complaintNo},
+            </if>
+            <if test="vid != null and vid != ''">
+                vid = #{vid},
+            </if>
+            <if test="carNo != null and carNo != ''">
+                car_no = #{carNo},
+            </if>
+            <if test="orgId != null and orgId != ''">
+                org_id = #{orgId},
+            </if>
+            <if test="orgName != null and orgName != ''">
+                org_name = #{orgName},
+            </if>
+            <if test="zoneId != null and zoneId != ''">
+                zone_id = #{zoneId},
+            </if>
+            <if test="littleZoneId != null and littleZoneId != ''">
+                little_zone_id = #{littleZoneId},
+            </if>
+            <if test="contactNameC != null and contactNameC != ''">
+                contact_name_c = #{contactNameC},
+            </if>
+            <if test="contactPhoneC != null and contactPhoneC != ''">
+                contact_phone_c = #{contactPhoneC},
+            </if>
+            <if test="applyContent != null and applyContent != ''">
+                apply_content = #{applyContent},
+            </if>
+            <if test="auditType != null">
+                audit_type = #{auditType},
+            </if>
+            <if test="auditStatus != null">
+                audit_status = #{auditStatus},
+            </if>
+            <if test="auditMid != null">
+                audit_mid = #{auditMid},
+            </if>
+            <if test="createMid != null">
+                create_mid = #{createMid},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="auditComment != null and auditComment != ''">
+                audit_comment = #{auditComment},
+            </if>
+            <if test="contactPhoneMd5 != null and contactPhoneMd5 != ''">
+                contact_phone_md5 = #{contactPhoneMd5},
+            </if>
+            <if test="userAgreement != null">
+                user_agreement = #{userAgreement},
+            </if>
+            <if test="vehicleRepaired != null">
+                vehicle_repaired = #{vehicleRepaired},
+            </if>
+            <if test="mediaInfo != null">
+                media_info = #{mediaInfo},
+            </if>
+            <if test="currentNode != null">
+                current_node = #{currentNode},
+            </if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+</mapper>

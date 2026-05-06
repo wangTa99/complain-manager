@@ -1,0 +1,40 @@
+package com.wt.complaint.manage.api.model.resp.deliver;
+
+import com.xiaomi.mone.docs.annotations.dubbo.ApiDocClassDefine;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import java.io.Serializable;
+/**
+ * 客诉单统计信息响应体
+ *
+ * @author huxiankang
+ * @date 2025/6/12
+ */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class StatisticsItemResp implements Serializable {
+
+    @ApiDocClassDefine(value = "pendingFirstResponseCount", description = "待首响数�?)
+    private Integer pendingFirstResponseCount;
+
+    @ApiDocClassDefine(value = "handlingCount", description = "跟进中数�?)
+    private Integer handlingCount;
+
+    @ApiDocClassDefine(value = "pendingResponsibilityCount", description = "待判责数�?)
+    private Integer pendingResponsibilityCount;
+
+    @ApiDocClassDefine(value = "remindCount", description = "用户催单数量")
+    private Integer remindCount;
+
+    @ApiDocClassDefine(value = "firstResponseTimeoutCount", description = "首响超时数量")
+    private Integer firstResponseTimeoutCount;
+
+    @ApiDocClassDefine(value = "closingTimeoutCount", description = "结案超时数量")
+    private Integer finishTimeoutCount;
+
+}

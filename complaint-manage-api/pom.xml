@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>com.wt</groupId>
+        <artifactId>complaint-manage</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+    <artifactId>complaint-manage-api</artifactId>
+    <version>${complaint-manage-api-version}</version>
+
+    <dependencies>
+        <dependency>
+            <artifactId>youpin-infra-rpc</artifactId>
+            <groupId>com.xiaomi.youpin</groupId>
+        </dependency>
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>2.0.1.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>com.xiaomi.newretail</groupId>
+            <artifactId>bpm-api</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>nacos</artifactId>
+                    <groupId>com.xiaomi.youpin</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>dubbo-server-registry</artifactId>
+                    <groupId>com.xiaomi.mone</groupId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <artifactId>coloregg</artifactId>
+            <groupId>com.xiaomi.youpin</groupId>
+        </dependency>
+        <dependency>
+            <groupId>com.xiaomi.mone</groupId>
+            <artifactId>miapi-doc-annos</artifactId>
+        </dependency>
+        <dependency>
+            <artifactId>aop</artifactId>
+            <groupId>com.xiaomi.youpin</groupId>
+        </dependency>
+
+        <dependency>
+            <artifactId>common</artifactId>
+            <groupId>com.xiaomi.youpin</groupId>
+        </dependency>
+
+        <dependency>
+            <artifactId>soc-api</artifactId>
+            <groupId>com.wt.car.soc</groupId>
+        </dependency>
+        <dependency>
+            <groupId>com.wt.car.common</groupId>
+            <artifactId>car-service-privacy-api</artifactId>
+            <version>1.0.3-RELEASE</version>
+        </dependency>
+    </dependencies>
+
+
+
+</project>

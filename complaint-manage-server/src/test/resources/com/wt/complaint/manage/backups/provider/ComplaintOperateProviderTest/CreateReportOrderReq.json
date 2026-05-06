@@ -1,0 +1,101 @@
+{
+  "vid": "LKBQ5UA4PX3EF3GU8",
+  "workType": 25,
+  "soNo": "MKSO255022235654925",
+  "superTicketNo": "MKST255162082005153",
+  "idempotentId": "6910",
+  "contactName": "尚韧初",
+  "contactTel": "15001159987",
+  "contactTitle": 1,
+  "testTag": 1,
+  "createMid": 2776215961,
+  "expand": {
+    "carNo": "111",
+    "complaintInfo": [
+      {
+        "groupName": "基本信息",
+        "groupOrder": 1,
+        "fields": [
+          {
+            "id": 20,
+            "order": 2,
+            "required": 1,
+            "fieldType": 2,
+            "fieldName": "选择门店",
+            "fieldCode": "orgId",
+            "value": [
+              {
+                "code": "F0004",
+                "desc": "我是一家授权服务门店"
+              }
+            ],
+            "attachments": [
+
+            ]
+          },
+          {
+            "id": 149,
+            "order": 1,
+            "required": 1,
+            "fieldType": 2,
+            "fieldName": "服务类型",
+            "fieldCode": "serviceScene",
+            "value": [
+              {
+                "code": "1",
+                "desc": "过度维修"
+              },
+              {
+                "code": "2",
+                "desc": "以次充好"
+              }
+            ],
+            "attachments": [
+
+            ]
+          },
+          {
+            "id": 150,
+            "order": 3,
+            "required": 1,
+            "fieldType": 2,
+            "fieldName": "关联单号",
+            "fieldCode": "relatedOrder",
+            "value": [
+              {
+                "code": "DD237431002018149",
+                "desc": "维保单号"
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "groupName": "扩展分组",
+        "groupOrder": 2,
+        "fields": [
+          {
+            "id": 21,
+            "order": 8,
+            "required": 1,
+            "fieldType": 5,
+            "fieldName": "附件",
+            "fieldCode": "attachments",
+            "value": [
+              {
+                "code": "",
+                "desc": ""
+              }
+            ],
+            "attachments": [
+              {
+                "id": 63607039,
+                "type": 2
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

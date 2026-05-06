@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="5 seconds">
+    
+    <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="fileAppender">
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="com.wt.proretail.newcommon.logplus.ProretailPatternLayout">
+                <pattern>%d|%-5level|%tid|%thread|%logger|%M|%L|%msg%n</pattern>
+            </layout>
+        </encoder>
+        <file>${log.path}/complaint-manage/server.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <MaxHistory>120</MaxHistory>
+            <fileNamePattern>${log.path}/complaint-manage/server.log.%d{yyyy-MM-dd-HH}</fileNamePattern>
+        </rollingPolicy>
+    </appender>
+    
+    <appender class="ch.qos.logback.classic.AsyncAppender" name="asyncAppender">
+        <appender-ref ref="fileAppender"/>
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>60000</queueSize>
+    </appender>
+    
+    
+    <appender class="ch.qos.logback.core.rolling.RollingFileAppender" name="errorAppender">
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="com.wt.proretail.newcommon.logplus.ProretailPatternLayout">
+                <pattern>%d|%-5level|%tid|%thread|%logger|%M|%L|%msg%n</pattern>
+            </layout>
+        </encoder>
+        <file>${log.path}/complaint-manage/error.log</file>
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <MaxHistory>120</MaxHistory>
+            <fileNamePattern>${log.path}/complaint-manage/error.log.%d{yyyy-MM-dd-HH}</fileNamePattern>
+        </rollingPolicy>
+    </appender>
+    
+    <appender class="ch.qos.logback.core.ConsoleAppender" name="stdout">
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="com.wt.proretail.newcommon.logplus.ProretailPatternLayout">
+                <pattern>%d|%-5level|%tid|%thread|%logger|%M|%L|%msg%n</pattern>
+            </layout>
+        </encoder>
+    </appender>
+    
+    <logger level="ERROR" name="org.springframework"/>
+    
+    <logger level="ERROR" name="ch.qos.logback"/>
+    
+    <logger level="ERROR" name="com.xiaomi.data.push.service.state"/>
+    <logger level="ERROR" name="org.reflections.Reflections"/>
+    <logger name="com.alibaba.druid" level="DEBUG"/>
+    <logger level="DEBUG" name="druid.sql.Statement"/>
+    <property resource="application.properties"/>
+    <property name="MAX_HISTORY" value="120"/>
+    
+    <root level="INFO">
+        <appender-ref ref="stdout"/>
+        <appender-ref ref="errorAppender"/>
+        <appender-ref ref="fileAppender"/>
+    </root>
+
+</configuration>

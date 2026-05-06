@@ -1,0 +1,87 @@
+package com.wt.complaint.manage.api.model.req.consult;
+
+import com.wt.complaint.manage.api.model.Attachment;
+import com.wt.complaint.manage.api.model.enums.HandleResultEnum;
+import com.xiaomi.mone.docs.annotations.dubbo.ApiDocClassDefine;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.util.CollectionUtils;
+
+import javax.validation.constraints.NotBlank;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+/**
+ * 咨询单结案请�?
+ */
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class ConsultFinishReq implements Serializable {
+
+    @ApiDocClassDefine(value = "consultNo", description = "咨询单号", required = true)
+    @NotBlank(message = "consultNo不能为空")
+    private String consultNo;
+
+    @ApiDocClassDefine(value = "applyOrgId", description = "申请门店id")
+    @NotBlank(message = "申请门店 ID 字段不能为空")
+    private String applyOrgId;
+
+    @ApiDocClassDefine(value = "finishDesc", description = "结案描述", required = true)
+    @NotBlank(message = "finishDesc不能为空")
+    private String finishDesc;
+
+    @ApiDocClassDefine(value = "handleType", description = "处理类型 1 已处�?2 无需门店处理", required = true)
+    @NotBlank(message = "handleType不能为空")
+    private Integer handleType;
+
+    @ApiDocClassDefine(value = "finishAttachmentList", description = "结案附件")
+    private List<Attachment> finishAttachmentList;
+
+    /**
+     *  入参检�?
+     */
+    public void check() {
+        if (!this.consultNo.startsWith("ZX")) {
+            throw new IllegalArgumentException("不是咨询�? 请联系管理员");
+        }
+        if (StringUtils.isBlank(this.finishDesc)) {
+            throw new IllegalArgumentException("结案描述必填");
+        }
+        if (this.finishDesc.length() > 300) {
+            throw new IllegalArgumentException("结案描述请保�?300 字以�?);
+        }
+        if (this.handleType == null) {
+            throw new IllegalArgumentException("处理类型必填");
+        }
+        if (!this.handleType.equals(HandleResultEnum.NO_NEED_HANDLE.getCode()) && !this.handleType.equals(HandleResultEnum.HANDLED.getCode())) {
+            throw new IllegalArgumentException("处理类型只能是无需门店处理或已处理");
+        }
+        if (!CollectionUtils.isEmpty(this.finishAttachmentList)) {
+/*            if (this.finishAttachmentList.stream().map(Attachment::getUrl).anyMatch(StringUtils::isNotEmpty)) {
+                throw new IllegalArgumentException("无需上传附件url");
+            }*/
+            if (this.finishAttachmentList.size() > 10) {
+                throw new IllegalArgumentException("无法上传超过10个附�?);
+            }
+        }
+    }
+
+    /**
+     *  获取文件ID
+     */
+    public List<Long> getFileIds() {
+        List<Long> fileIds = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(this.finishAttachmentList)) {
+            fileIds = this.finishAttachmentList.stream().map(Attachment::getId).collect(Collectors.toList());
+        }
+        return fileIds;
+    }
+
+}
